@@ -1,0 +1,52 @@
+[
+  {
+    "id": "inc-101",
+    "buildingId": "b-42",
+    "buildingName": "Skyline plaza",
+    "severity": "medium",
+    "title": "HVAC Airflow Deviation",
+    "description": "+12% deviation vs historical data due to overcast weather and sudden pressure shift.",
+    "time": "10 mins ago",
+    "status": "Open"
+  },
+  {
+    "id": "inc-102",
+    "buildingId": "d-15",
+    "buildingName": "Cybernetics Bio-Labs",
+    "severity": "critical",
+    "title": "Sub-Pump Pressure Drop",
+    "description": "Main water valve sub-pump pressure dropped below 3.0 Bar threshold.",
+    "time": "25 mins ago",
+    "status": "Investigating"
+  },
+  {
+    "id": "inc-103",
+    "buildingId": "a-12",
+    "buildingName": "Apex Innovation Tower",
+    "severity": "high",
+    "title": "Thermal Output Spike",
+    "description": "Elevated server room thermal output logged in East Wing Level 4.",
+    "time": "1 hour ago",
+    "status": "Investigating"
+  },
+  {
+    "id": "inc-104",
+    "buildingId": "h-18",
+    "buildingName": "Vanguard Trade Center",
+    "severity": "low",
+    "title": "Visitor Traffic Exchange Surge",
+    "description": "Zone 3 ventilation fans automatically stepped up to 85% capacity.",
+    "time": "2 hours ago",
+    "status": "Resolved"
+  },
+  {
+    "id": "inc-105",
+    "buildingId": "e-22",
+    "buildingName": "Solaria Green Tower",
+    "severity": "low",
+    "title": "Solar Inverter Calibration",
+    "description": "Planned maintenance sync for rooftop photovolatic arrays.",
+    "time": "3 hours ago",
+    "status": "Resolved"
+  }
+]
