@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import { NavTab } from '../../types/city';
 import { Search, Bell, Moon, Sun, Volume2, VolumeX, HelpCircle } from 'lucide-react';
@@ -19,6 +19,30 @@ export const Navbar: React.FC = () => {
   const incrementLogoClicks = useCityStore((state) => state.incrementLogoClicks);
 
   const tabs: NavTab[] = ['Dashboard', 'Grid', 'Analytics', 'Incidents', 'Users'];
+  const activeIndex = Math.max(0, tabs.indexOf(activeTab));
+
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [pillStyle, setPillStyle] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
+
+  // Update sliding pill position and dynamic width based on exact active tab button dimensions
+  const updatePill = () => {
+    const activeEl = tabRefs.current[activeIndex];
+    if (activeEl) {
+      setPillStyle({
+        left: activeEl.offsetLeft,
+        width: activeEl.offsetWidth,
+      });
+    }
+  };
+
+  useLayoutEffect(() => {
+    updatePill();
+  }, [activeTab, activeIndex]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updatePill);
+    return () => window.removeEventListener('resize', updatePill);
+  }, [activeTab, activeIndex]);
 
   const handleTabClick = (tab: NavTab) => {
     setActiveTab(tab);
@@ -43,18 +67,28 @@ export const Navbar: React.FC = () => {
         </span>
       </div>
 
-      {/* Responsive Navigation Tabs (Horizontal scroll on mobile) */}
-      <nav className="flex items-center space-x-1 bg-slate-100/60 dark:bg-slate-800/60 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50 overflow-x-auto no-scrollbar max-w-[50vw] sm:max-w-none">
-        {tabs.map((tab) => {
+      {/* Animated Dynamic-Width Sliding Pill Navigation Segment Control */}
+      <nav className="relative flex items-center space-x-1 bg-slate-100/70 dark:bg-slate-800/70 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50 overflow-x-auto no-scrollbar max-w-[50vw] sm:max-w-none">
+        {/* Dynamic Width Sliding Active Pill Background Indicator */}
+        <div
+          className="absolute top-1 bottom-1 rounded-lg bg-blue-500 shadow-md shadow-blue-500/30 transition-all duration-300 ease-out pointer-events-none"
+          style={{
+            left: `${pillStyle.left}px`,
+            width: `${pillStyle.width}px`,
+          }}
+        />
+
+        {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
           return (
             <button
               key={tab}
+              ref={(el) => (tabRefs.current[idx] = el)}
               onClick={() => handleTabClick(tab)}
-              className={`px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+              className={`relative z-10 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 text-center select-none ${
                 isActive
-                  ? 'bg-blue-500 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
+                  ? 'text-white'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {tab}
