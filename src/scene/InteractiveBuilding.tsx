@@ -47,11 +47,23 @@ const GLTFModelRenderer: React.FC<{
       const scaleY = (targetH * 1.3) / (size.y || 1);
       scaleFactor = Math.min(scaleX, scaleZ, scaleY);
     } else if (url.includes('pasar') || url.includes('market')) {
-      // Specifically for Pasar GLB model: fit width & depth strictly so it doesn't collide with Indorama or STIE Wikara
-      const scaleX = (targetW * 0.78) / (size.x || 1);
-      const scaleZ = (targetD * 0.78) / (size.z || 1);
+      // Scale Pasar GLB model properly so it fills its lot space beautifully
+      const scaleX = (targetW * 1.15) / (size.x || 1);
+      const scaleZ = (targetD * 1.15) / (size.z || 1);
+      const scaleY = (targetH * 1.1) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('indorama')) {
+      // Scale Indorama GLB model neatly within plot bounds
+      const scaleX = (targetW * 1.05) / (size.x || 1);
+      const scaleZ = (targetD * 1.05) / (size.z || 1);
       const scaleY = targetH / (size.y || 1);
-      scaleFactor = Math.min(scaleX, scaleZ, scaleY * 0.95);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('wikara')) {
+      // Scale STIE Wikara GLB model nicely
+      const scaleX = (targetW * 1.15) / (size.x || 1);
+      const scaleZ = (targetD * 1.15) / (size.z || 1);
+      const scaleY = (targetH * 1.1) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
     } else if (url.includes('harper')) {
       // Specifically for Harper Hotel GLB model: scale up significantly so it looks tall and grand
       const scaleY = (targetH * 1.45) / (size.y || 1);

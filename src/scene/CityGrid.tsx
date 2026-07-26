@@ -259,7 +259,7 @@ export const CityGrid: React.FC = () => {
             rotation={[-Math.PI / 2, 0, 0]}
             position={[px, 0.005, pz]}
           >
-            <planeGeometry args={[9.4, 9.4]} />
+            <planeGeometry args={[10.6, 10.6]} />
             <meshStandardMaterial
               color={isNightMode ? '#132E1E' : '#478044'}
               roughness={0.9}
@@ -271,7 +271,7 @@ export const CityGrid: React.FC = () => {
             rotation={[-Math.PI / 2, 0, 0]}
             position={[px, 0.01, pz]}
           >
-            <planeGeometry args={[8.4, 8.4]} />
+            <planeGeometry args={[9.8, 9.8]} />
             <meshStandardMaterial
               color={isNightMode ? '#1A2638' : '#DDE4ED'}
               roughness={0.8}
