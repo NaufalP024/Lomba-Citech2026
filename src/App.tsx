@@ -18,6 +18,7 @@ import { ShortcutHelpModal } from './components/ui/ShortcutHelpModal';
 import { BuildingContextMenu } from './components/building/BuildingContextMenu';
 import { SplashScreen } from './components/ui/SplashScreen';
 import { LiveNotificationStack } from './components/ui/LiveNotificationStack';
+import { OnboardingTour } from './components/ui/OnboardingTour';
 import { useCityStore } from './store/useCityStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { BuildingData } from './types/city';
@@ -26,6 +27,7 @@ export function App() {
   const [isLoading, setIsLoading] = useState(true);
   const isNightMode = useCityStore((state) => state.isNightMode);
   const simulateLiveUpdate = useCityStore((state) => state.simulateLiveUpdate);
+  const setTourOpen = useCityStore((state) => state.setTourOpen);
 
   // Activate hotkeys
   useKeyboardShortcuts();
@@ -39,6 +41,14 @@ export function App() {
     return () => clearInterval(interval);
   }, [isLoading, simulateLiveUpdate]);
 
+  // Handle splash screen completion & auto-trigger onboarding tour every time web app loads
+  const handleSplashComplete = () => {
+    setIsLoading(false);
+    setTimeout(() => {
+      setTourOpen(true);
+    }, 400);
+  };
+
   // Context menu state
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; building: BuildingData | null } | null>(null);
 
@@ -51,7 +61,7 @@ export function App() {
     <div className={`relative w-screen h-screen overflow-hidden select-none ${isNightMode ? 'dark' : ''}`}>
       {/* Splash Screen */}
       {isLoading ? (
-        <SplashScreen onComplete={() => setIsLoading(false)} />
+        <SplashScreen onComplete={handleSplashComplete} />
       ) : (
         <>
           {/* Main 3D Canvas Background */}
@@ -84,6 +94,9 @@ export function App() {
           <DeveloperModeModal />
           <ShortcutHelpModal />
 
+          {/* Onboarding Feature Tour Modal */}
+          <OnboardingTour />
+
           {/* Right-click Context Menu */}
           {contextMenu && (
             <BuildingContextMenu
@@ -100,6 +113,6 @@ export function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

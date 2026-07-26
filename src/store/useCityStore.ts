@@ -19,6 +19,14 @@ interface CityState {
   isExportModalOpen: boolean;
   isShortcutHelpOpen: boolean;
   
+  // Onboarding Tour
+  isTourOpen: boolean;
+  tourStep: number;
+  setTourOpen: (open: boolean) => void;
+  setTourStep: (step: number) => void;
+  nextTourStep: () => void;
+  prevTourStep: () => void;
+
   // Dev & Sound
   logoClickCount: number;
   isDeveloperMode: boolean;
@@ -73,6 +81,14 @@ export const useCityStore = create<CityState>((set, get) => ({
   isManageAssetOpen: false,
   isExportModalOpen: false,
   isShortcutHelpOpen: false,
+
+  // Onboarding Tour Defaults
+  isTourOpen: false,
+  tourStep: 0,
+  setTourOpen: (open) => set({ isTourOpen: open, tourStep: 0 }),
+  setTourStep: (step) => set({ tourStep: step }),
+  nextTourStep: () => set((state) => ({ tourStep: state.tourStep + 1 })),
+  prevTourStep: () => set((state) => ({ tourStep: Math.max(0, state.tourStep - 1) })),
 
   logoClickCount: 0,
   isDeveloperMode: false,
@@ -202,7 +218,7 @@ export const useCityStore = create<CityState>((set, get) => ({
       powerHistory: updatedHistory,
     });
 
-    // Randomly push live notification (20% chance)
+    // Randomly push live notification (25% chance)
     if (Math.random() < 0.25) {
       const types: ('info' | 'warning' | 'error' | 'success')[] = ['info', 'warning', 'success', 'info'];
       const randomType = types[Math.floor(Math.random() * types.length)];

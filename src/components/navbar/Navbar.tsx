@@ -1,7 +1,7 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import { NavTab } from '../../types/city';
-import { Search, Bell, Moon, Sun, Volume2, VolumeX, HelpCircle } from 'lucide-react';
+import { Search, Bell, Moon, Sun, Volume2, VolumeX, HelpCircle, Compass } from 'lucide-react';
 import { playClickSound } from '../../utils/sound';
 
 export const Navbar: React.FC = () => {
@@ -16,6 +16,7 @@ export const Navbar: React.FC = () => {
   const toggleNotifications = useCityStore((state) => state.toggleNotifications);
   const notifications = useCityStore((state) => state.notifications);
   const setShortcutHelpOpen = useCityStore((state) => state.setShortcutHelpOpen);
+  const setTourOpen = useCityStore((state) => state.setTourOpen);
   const incrementLogoClicks = useCityStore((state) => state.incrementLogoClicks);
 
   const tabs: NavTab[] = ['Dashboard', 'Grid', 'Analytics', 'Incidents', 'Users'];
@@ -68,7 +69,10 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/* Animated Dynamic-Width Sliding Pill Navigation Segment Control */}
-      <nav className="relative flex items-center space-x-1 bg-slate-100/70 dark:bg-slate-800/70 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50 overflow-x-auto no-scrollbar max-w-[50vw] sm:max-w-none">
+      <nav
+        id="tour-navbar-tabs"
+        className="relative flex items-center space-x-1 bg-slate-100/70 dark:bg-slate-800/70 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50 overflow-x-auto no-scrollbar max-w-[50vw] sm:max-w-none"
+      >
         {/* Dynamic Width Sliding Active Pill Background Indicator */}
         <div
           className="absolute top-1 bottom-1 rounded-lg bg-blue-500 shadow-md shadow-blue-500/30 transition-all duration-300 ease-out pointer-events-none"
@@ -99,8 +103,18 @@ export const Navbar: React.FC = () => {
 
       {/* Right Controls */}
       <div className="flex items-center space-x-1 sm:space-x-2.5 shrink-0">
+        {/* Onboarding Tutorial Tour Trigger */}
+        <button
+          onClick={() => setTourOpen(true)}
+          className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors flex items-center space-x-1"
+          title="Panduan Interaktif Fitur (Tutorial Tour)"
+        >
+          <Compass className="w-4 h-4 text-blue-500 animate-pulse" />
+        </button>
+
         {/* Day/Night Toggle */}
         <button
+          id="tour-night-mode-toggle"
           onClick={toggleNightMode}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
           title={isNightMode ? 'Switch to Day Mode' : 'Switch to Night Mode'}
@@ -128,6 +142,7 @@ export const Navbar: React.FC = () => {
 
         {/* Search Modal Trigger */}
         <button
+          id="tour-search-button"
           onClick={() => setSearchOpen(true)}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
           title="Search Buildings"

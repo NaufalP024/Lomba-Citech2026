@@ -19,7 +19,10 @@ export const RightDashboardPanel: React.FC = () => {
   if (activeTab !== 'Dashboard') return null;
 
   return (
-    <aside className="fixed bottom-4 left-3 right-3 lg:top-20 lg:right-6 lg:left-auto lg:bottom-6 z-30 lg:w-[380px] flex flex-col pointer-events-auto transition-all duration-300 max-h-[calc(100vh-100px)] lg:max-h-[calc(100vh-104px)]">
+    <aside
+      id="tour-analytics-panel"
+      className="fixed bottom-4 left-3 right-3 lg:top-20 lg:right-6 lg:left-auto lg:bottom-6 z-30 lg:w-[380px] flex flex-col pointer-events-auto transition-all duration-300 max-h-[calc(100vh-100px)] lg:max-h-[calc(100vh-104px)]"
+    >
       {/* Mobile Drawer Header Toggle Button (Visible only on < lg screens) */}
       <div className="lg:hidden mb-2 flex justify-end shrink-0">
         <button

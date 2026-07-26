@@ -4,6 +4,8 @@ export type InfraLayer = 'electricity' | 'water' | 'hvac' | 'occupancy' | 'fire'
 
 export type NavTab = 'Dashboard' | 'Grid' | 'Analytics' | 'Incidents' | 'Users';
 
+export type ArchitectureType = 'box' | 'stepped' | 'cylinder' | 'pyramid' | 'twin' | 'l-shaped' | 'gltf';
+
 export interface LoadDistribution {
   lighting: number;
   hvac: number;
@@ -36,9 +38,12 @@ export interface BuildingData {
   alertsCount: number;
   alertMessage: string;
   position: [number, number, number];
+  rotation?: [number, number, number]; // [rotX, rotY, rotZ] rotation angles
   dimensions: [number, number, number]; // [width, height, depth]
   color?: string;
   roofType: 'helipad' | 'hvac' | 'solar' | 'spire' | 'terrace';
+  architectureType?: ArchitectureType;
+  modelUrl?: string; // Path to custom 3D GLTF/GLB model
   loadDistribution: LoadDistribution;
   powerHistory: number[];
 }
