@@ -1,5 +1,6 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
+import * as THREE from 'three';
 import { Lights } from './Lights';
 import { EnvironmentSky } from './EnvironmentSky';
 import { CityGrid } from './CityGrid';
@@ -21,9 +22,10 @@ export const CityScene: React.FC<CitySceneProps> = ({ onContextMenu }) => {
   return (
     <div className="w-full h-full absolute inset-0 z-0 bg-[#EEF3F8]">
       <Canvas
-        shadows
+        dpr={[1, 1.5]}
+        shadows={{ type: THREE.PCFSoftShadowMap }}
         camera={{ position: [16, 18, 22], fov: 40, near: 0.1, far: 200 }}
-        gl={{ antialias: true, alpha: false, preserveDrawingBuffer: true }}
+        gl={{ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: true }}
       >
         <EnvironmentSky />
         <Lights />

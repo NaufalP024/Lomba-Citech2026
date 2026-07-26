@@ -2,129 +2,205 @@ import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useCityStore } from '../store/useCityStore';
+import { BuildingData } from '../types/city';
+
+// Helper to calculate exact roof peak Y position for both custom GLTF models & procedural shapes
+function getRoofHeight(b: BuildingData): number {
+  const h = b.dimensions[1];
+  if (b.architectureType === 'gltf') {
+    // Tuned roof top clearance height for custom 3D GLTF building models
+    return h * 0.65 + 0.2;
+  }
+  return h + 0.35;
+}
 
 export const InfrastructureLayerOverlay: React.FC = () => {
   const activeLayer = useCityStore((state) => state.activeLayer);
   const buildings = useCityStore((state) => state.buildings);
-  const linesGroupRef = useRef<THREE.Group>(null);
+  const layerGroupRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (!linesGroupRef.current) return;
+    if (!layerGroupRef.current) return;
     const t = state.clock.getElapsedTime();
-    linesGroupRef.current.rotation.y = Math.sin(t * 0.2) * 0.05;
+    layerGroupRef.current.rotation.y = Math.sin(t * 0.15) * 0.03;
   });
 
   if (!activeLayer) return null;
 
   return (
-    <group ref={linesGroupRef}>
-      {/* ELECTRICITY LAYER: Glowing power lines connecting roof tops */}
+    <group ref={layerGroupRef}>
+      {/* 1. ELECTRICITY LAYER: Arced Power Grid Lines Connecting Roof Peaks */}
       {activeLayer === 'electricity' && (
         <group>
           {buildings.map((b, idx) => {
             const nextB = buildings[(idx + 1) % buildings.length];
-            const start = new THREE.Vector3(b.position[0], b.dimensions[1] + 0.5, b.position[2]);
-            const end = new THREE.Vector3(nextB.position[0], nextB.dimensions[1] + 0.5, nextB.position[2]);
+            const startY = getRoofHeight(b);
+            const endY = getRoofHeight(nextB);
 
-            // Curve points
+            const start = new THREE.Vector3(b.position[0], startY, b.position[2]);
+            const end = new THREE.Vector3(nextB.position[0], endY, nextB.position[2]);
+
+            // Gentle catenary curve mid-point
             const mid = new THREE.Vector3()
               .addVectors(start, end)
               .multiplyScalar(0.5)
-              .add(new THREE.Vector3(0, 3, 0));
+              .add(new THREE.Vector3(0, 2.2, 0));
 
             const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-            const points = curve.getPoints(20);
+            const points = curve.getPoints(24);
             const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
             return (
-              <line key={`power-${b.id}`}>
-                <bufferGeometry attach="geometry" {...geometry} />
-                <lineBasicMaterial attach="material" color="#00D8FF" linewidth={3} />
-              </line>
+              <React.Fragment key={`power-group-${b.id}`}>
+                <line>
+                  <bufferGeometry attach="geometry" {...geometry} />
+                  <lineBasicMaterial attach="material" color="#00D8FF" linewidth={3} transparent opacity={0.85} />
+                </line>
+                {/* Roof Node Beacon */}
+                <mesh position={[b.position[0], startY, b.position[2]]}>
+                  <sphereGeometry args={[0.22, 12, 12]} />
+                  <meshBasicMaterial color="#00D8FF" />
+                </mesh>
+              </React.Fragment>
             );
           })}
         </group>
       )}
 
-      {/* WATER LAYER: Underground/surface cyan water pipes */}
+      {/* 2. WATER LAYER: Pipeline Flow Rings Centered Around Building Foundations */}
       {activeLayer === 'water' && (
         <group>
-          {buildings.map((b) => (
-            <mesh
-              key={`pipe-${b.id}`}
-              position={[b.position[0], 0.15, b.position[2]]}
-              rotation={[Math.PI / 2, 0, 0]}
-            >
-              <ringGeometry args={[0.8, 1.2, 16]} />
-              <meshBasicMaterial color="#06B6D4" transparent opacity={0.7} />
-            </mesh>
-          ))}
+          {buildings.map((b) => {
+            const radius = Math.max(b.dimensions[0], b.dimensions[2]) * 0.55;
+            return (
+              <group key={`water-${b.id}`} position={[b.position[0], 0.03, b.position[2]]}>
+                <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                  <ringGeometry args={[radius * 0.7, radius, 32]} />
+                  <meshBasicMaterial color="#06B6D4" transparent opacity={0.65} side={THREE.DoubleSide} />
+                </mesh>
+                <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                  <ringGeometry args={[radius * 1.1, radius * 1.25, 32]} />
+                  <meshBasicMaterial color="#38BDF8" transparent opacity={0.4} side={THREE.DoubleSide} />
+                </mesh>
+              </group>
+            );
+          })}
         </group>
       )}
 
-      {/* HVAC LAYER: Rising cooling thermal indicators */}
+      {/* 3. HVAC LAYER: Thermal Ventilation Cylinders Placed Right at Rooftop Peak */}
       {activeLayer === 'hvac' && (
         <group>
-          {buildings.map((b) => (
-            <mesh key={`hvac-thermal-${b.id}`} position={[b.position[0], b.dimensions[1] + 1.2, b.position[2]]}>
-              <cylinderGeometry args={[1.2, 0.4, 1.8, 16, 1, true]} />
-              <meshBasicMaterial color="#60A5FA" transparent opacity={0.35} wireframe />
-            </mesh>
-          ))}
+          {buildings.map((b) => {
+            const roofY = getRoofHeight(b);
+            const radius = Math.min(b.dimensions[0], b.dimensions[2]) * 0.35;
+            return (
+              <mesh
+                key={`hvac-${b.id}`}
+                position={[b.position[0], roofY + 0.6, b.position[2]]}
+              >
+                <cylinderGeometry args={[radius, radius * 0.6, 1.2, 16, 1, true]} />
+                <meshBasicMaterial color="#60A5FA" transparent opacity={0.5} wireframe />
+              </mesh>
+            );
+          })}
         </group>
       )}
 
-      {/* OCCUPANCY HEATMAP LAYER */}
+      {/* 4. OCCUPANCY HEATMAP LAYER: Scaled Pedestrian Heatmap Pads Matched to Model Footprint */}
       {activeLayer === 'occupancy' && (
         <group>
-          {buildings.map((b) => (
-            <mesh key={`occ-${b.id}`} position={[b.position[0], 0.05, b.position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
-              <circleGeometry args={[b.occupancy > 90 ? 3.8 : 2.8, 24]} />
-              <meshBasicMaterial
-                color={b.occupancy > 90 ? '#EF4444' : b.occupancy > 80 ? '#F59E0B' : '#34D399'}
-                transparent
-                opacity={0.5}
-              />
-            </mesh>
-          ))}
+          {buildings.map((b) => {
+            const w = b.dimensions[0] * 1.1;
+            const d = b.dimensions[2] * 1.1;
+            const heatColor =
+              b.occupancy > 90 ? '#EF4444' : b.occupancy > 75 ? '#F59E0B' : '#34D399';
+
+            return (
+              <mesh
+                key={`occ-${b.id}`}
+                position={[b.position[0], 0.025, b.position[2]]}
+                rotation={[-Math.PI / 2, 0, 0]}
+              >
+                <planeGeometry args={[w, d]} />
+                <meshBasicMaterial color={heatColor} transparent opacity={0.45} />
+              </mesh>
+            );
+          })}
         </group>
       )}
 
-      {/* FIRE SAFETY LAYER */}
+      {/* 5. FIRE SAFETY LAYER: Hovering Safety Beacons Aligned to Rooftops */}
       {activeLayer === 'fire' && (
         <group>
-          {buildings.map((b) => (
-            <group key={`fire-${b.id}`} position={[b.position[0], b.dimensions[1] + 0.8, b.position[2]]}>
-              <mesh>
-                <sphereGeometry args={[0.35, 12, 12]} />
-                <meshBasicMaterial color={b.fireSafetyHealth < 50 ? '#EF4444' : '#34D399'} />
-              </mesh>
-            </group>
-          ))}
+          {buildings.map((b) => {
+            const roofY = getRoofHeight(b);
+            const isSafe = b.fireSafetyHealth >= 80;
+            return (
+              <group key={`fire-${b.id}`} position={[b.position[0], roofY + 0.5, b.position[2]]}>
+                <mesh>
+                  <sphereGeometry args={[0.3, 16, 16]} />
+                  <meshBasicMaterial color={isSafe ? '#10B981' : '#EF4444'} />
+                </mesh>
+                <mesh>
+                  <ringGeometry args={[0.4, 0.6, 16]} />
+                  <meshBasicMaterial color={isSafe ? '#34D399' : '#F87171'} transparent opacity={0.6} side={THREE.DoubleSide} />
+                </mesh>
+              </group>
+            );
+          })}
         </group>
       )}
 
-      {/* SOLAR LAYER */}
+      {/* 6. SOLAR LAYER: Solar Hologram Arrays Aligned Directly on Building Roof Peak */}
       {activeLayer === 'solar' && (
         <group>
-          {buildings.map((b) => (
-            <mesh key={`solar-node-${b.id}`} position={[b.position[0], b.dimensions[1] + 0.4, b.position[2]]}>
-              <boxGeometry args={[b.dimensions[0] * 0.8, 0.1, b.dimensions[2] * 0.8]} />
-              <meshBasicMaterial color="#FBBF24" transparent opacity={0.65} />
-            </mesh>
-          ))}
+          {buildings.map((b) => {
+            const roofY = getRoofHeight(b);
+            const w = b.dimensions[0] * 0.75;
+            const d = b.dimensions[2] * 0.75;
+
+            return (
+              <mesh
+                key={`solar-${b.id}`}
+                position={[b.position[0], roofY + 0.08, b.position[2]]}
+              >
+                <boxGeometry args={[w, 0.06, d]} />
+                <meshBasicMaterial color="#FBBF24" transparent opacity={0.7} />
+              </mesh>
+            );
+          })}
         </group>
       )}
 
-      {/* INTERNET MESH LAYER */}
+      {/* 7. INTERNET MESH LAYER: 3D Diamond Nodes Connected by Cyber Mesh Lines */}
       {activeLayer === 'internet' && (
-        <group position={[0, 16, 0]}>
-          {buildings.map((b) => (
-            <mesh key={`net-${b.id}`} position={[b.position[0], 0, b.position[2]]}>
-              <octahedronGeometry args={[0.6]} />
-              <meshBasicMaterial color="#8B5CF6" wireframe />
-            </mesh>
-          ))}
+        <group>
+          {buildings.map((b, idx) => {
+            const nextB = buildings[(idx + 1) % buildings.length];
+            const roofY = getRoofHeight(b) + 1.2;
+            const nextRoofY = getRoofHeight(nextB) + 1.2;
+
+            const posA = new THREE.Vector3(b.position[0], roofY, b.position[2]);
+            const posB = new THREE.Vector3(nextB.position[0], nextRoofY, nextB.position[2]);
+
+            const geometry = new THREE.BufferGeometry().setFromPoints([posA, posB]);
+
+            return (
+              <React.Fragment key={`net-${b.id}`}>
+                {/* Node */}
+                <mesh position={posA.toArray()}>
+                  <octahedronGeometry args={[0.55]} />
+                  <meshBasicMaterial color="#8B5CF6" wireframe />
+                </mesh>
+                {/* Connecting Laser Line */}
+                <line>
+                  <bufferGeometry attach="geometry" {...geometry} />
+                  <lineBasicMaterial attach="material" color="#C084FC" linewidth={2} transparent opacity={0.75} />
+                </line>
+              </React.Fragment>
+            );
+          })}
         </group>
       )}
     </group>

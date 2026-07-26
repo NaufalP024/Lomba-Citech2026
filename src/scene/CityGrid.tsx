@@ -1,8 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
+import * as THREE from 'three';
 import { useCityStore } from '../store/useCityStore';
 
 export const CityGrid: React.FC = () => {
   const isNightMode = useCityStore((state) => state.isNightMode);
+
+  // InstancedMesh references for maximum rendering performance (60 FPS)
+  const blackCurbsRef = useRef<THREE.InstancedMesh>(null);
+  const whiteCurbsRef = useRef<THREE.InstancedMesh>(null);
+  const treeTrunksRef = useRef<THREE.InstancedMesh>(null);
+  const treeFoliageLowRef = useRef<THREE.InstancedMesh>(null);
+  const treeFoliageMidRef = useRef<THREE.InstancedMesh>(null);
+  const treeFoliageTopRef = useRef<THREE.InstancedMesh>(null);
 
   // Calculate 4 intersection positions: [-6.5, -6.5], [6.5, -6.5], [-6.5, 6.5], [6.5, 6.5]
   const intersections: [number, number][] = [
@@ -54,10 +63,9 @@ export const CityGrid: React.FC = () => {
     const lines: { pos: [number, number, number]; size: [number, number] }[] = [];
     const step = 2.5;
 
-      // N-S Roads (X = -6.5, X = 6.5)
+    // N-S Roads (X = -6.5, X = 6.5)
     [-6.5, 6.5].forEach((rx) => {
       for (let z = -42; z <= 42; z += step) {
-        // Skip intersection boxes (around z = -6.5 and z = 6.5)
         if (Math.abs(z - (-6.5)) < 3.2 || Math.abs(z - 6.5) < 3.2) continue;
         lines.push({
           pos: [rx, 0.025, z],
@@ -69,7 +77,6 @@ export const CityGrid: React.FC = () => {
     // E-W Roads (Z = -6.5, Z = 6.5)
     [-6.5, 6.5].forEach((rz) => {
       for (let x = -42; x <= 42; x += step) {
-        // Skip intersection boxes (around x = -6.5 and x = 6.5)
         if (Math.abs(x - (-6.5)) < 3.2 || Math.abs(x - 6.5) < 3.2) continue;
         lines.push({
           pos: [x, 0.025, rz],
@@ -81,79 +88,63 @@ export const CityGrid: React.FC = () => {
     return lines;
   }, []);
 
-  // Helper to generate alternating Black & White Roadside Sidewalk Curbs (Trotoar Hitam Putih - Seamless & Continuous)
-  const blackWhiteCurbs = useMemo(() => {
-    const curbs: { pos: [number, number, number]; size: [number, number]; isBlack: boolean }[] = [];
+  // Calculate Black and White Curb Instances
+  const { blackCurbsData, whiteCurbsData } = useMemo(() => {
+    const black: { pos: [number, number, number]; size: [number, number] }[] = [];
+    const white: { pos: [number, number, number]; size: [number, number] }[] = [];
     const segLength = 1.0;
     const curbWidth = 0.22;
 
-    // N-S Road Curbs (X = -6.5, X = 6.5) - Extended from -45 to 45 with full corner connection
+    // N-S Road Curbs
     [-6.5, 6.5].forEach((rx) => {
       [-1.95, 1.95].forEach((dx) => {
-        let count = 0;
         for (let z = -45; z <= 45; z += segLength) {
-          // Skip only inner crosswalk box (around z = -6.5 and z = 6.5)
           if (Math.abs(z - (-6.5)) < 1.9 || Math.abs(z - 6.5) < 1.9) continue;
-          curbs.push({
-            pos: [rx + dx, 0.025, z],
-            size: [curbWidth, segLength * 0.98],
-            isBlack: Math.abs(Math.floor(z)) % 2 === 0,
-          });
-          count++;
+          const item = { pos: [rx + dx, 0.025, z] as [number, number, number], size: [curbWidth, segLength * 0.98] as [number, number] };
+          if (Math.abs(Math.floor(z)) % 2 === 0) black.push(item);
+          else white.push(item);
         }
       });
     });
 
-    // E-W Road Curbs (Z = -6.5, Z = 6.5) - Extended from -45 to 45 with full corner connection
+    // E-W Road Curbs
     [-6.5, 6.5].forEach((rz) => {
       [-1.95, 1.95].forEach((dz) => {
-        let count = 0;
         for (let x = -45; x <= 45; x += segLength) {
-          // Skip only inner crosswalk box (around x = -6.5 and x = 6.5)
           if (Math.abs(x - (-6.5)) < 1.9 || Math.abs(x - 6.5) < 1.9) continue;
-          curbs.push({
-            pos: [x, 0.025, rz + dz],
-            size: [segLength * 0.98, curbWidth],
-            isBlack: Math.abs(Math.floor(x)) % 2 === 0,
-          });
-          count++;
+          const item = { pos: [x, 0.025, rz + dz] as [number, number, number], size: [segLength * 0.98, curbWidth] as [number, number] };
+          if (Math.abs(Math.floor(x)) % 2 === 0) black.push(item);
+          else white.push(item);
         }
       });
     });
 
-    // Intersection 90-degree Corner Joiner Pads at all 4 main intersections
+    // Intersection 90° Corner Joiners
     const intersectionPoints = [-6.5, 6.5];
     intersectionPoints.forEach((ix) => {
       intersectionPoints.forEach((iz) => {
         [-1.95, 1.95].forEach((dx) => {
           [-1.95, 1.95].forEach((dz) => {
-            curbs.push({
-              pos: [ix + dx, 0.025, iz + dz],
-              size: [curbWidth * 1.2, curbWidth * 1.2],
-              isBlack: Math.abs(Math.floor(ix + dx + iz + dz)) % 2 === 0,
-            });
+            const item = { pos: [ix + dx, 0.025, iz + dz] as [number, number, number], size: [curbWidth * 1.2, curbWidth * 1.2] as [number, number] };
+            if (Math.abs(Math.floor(ix + dx + iz + dz)) % 2 === 0) black.push(item);
+            else white.push(item);
           });
         });
       });
     });
 
-    return curbs;
+    return { blackCurbsData: black, whiteCurbsData: white };
   }, []);
 
-  // Helper to generate 3D Tree Positions throughout the city green park belts
+  // Calculate 3D Tree Positions
   const trees = useMemo(() => {
     const treeList: { pos: [number, number, number]; scale: number }[] = [];
-
-    // Tree placement along N-S and E-W sidewalk green buffers
     const treeRows = [-22, -18, -12, -2, 2, 12, 18, 22];
 
     [-9.2, 9.2].forEach((x) => {
       treeRows.forEach((z) => {
         if (Math.abs(z - (-6.5)) > 3.0 && Math.abs(z - 6.5) > 3.0) {
-          treeList.push({
-            pos: [x, 0, z],
-            scale: 0.85 + (Math.abs(x + z) % 5) * 0.08,
-          });
+          treeList.push({ pos: [x, 0, z], scale: 0.85 + (Math.abs(x + z) % 5) * 0.08 });
         }
       });
     });
@@ -161,15 +152,11 @@ export const CityGrid: React.FC = () => {
     treeRows.forEach((x) => {
       [-9.2, 9.2].forEach((z) => {
         if (Math.abs(x - (-6.5)) > 3.0 && Math.abs(x - 6.5) > 3.0) {
-          treeList.push({
-            pos: [x, 0, z],
-            scale: 0.85 + (Math.abs(x * z) % 5) * 0.08,
-          });
+          treeList.push({ pos: [x, 0, z], scale: 0.85 + (Math.abs(x * z) % 5) * 0.08 });
         }
       });
     });
 
-    // Park corner trees in outer lawns
     const outerTreeCoords = [
       [-20, -20], [-20, 20], [20, -20], [20, 20],
       [-22, 0],   [22, 0],   [0, -22],   [0, 22],
@@ -177,18 +164,75 @@ export const CityGrid: React.FC = () => {
     ];
 
     outerTreeCoords.forEach(([tx, tz], i) => {
-      treeList.push({
-        pos: [tx, 0, tz],
-        scale: 1.0 + (i % 3) * 0.15,
-      });
-      treeList.push({
-        pos: [tx + 1.8, 0, tz + 1.5],
-        scale: 0.8 + (i % 2) * 0.1,
-      });
+      treeList.push({ pos: [tx, 0, tz], scale: 1.0 + (i % 3) * 0.15 });
+      treeList.push({ pos: [tx + 1.8, 0, tz + 1.5], scale: 0.8 + (i % 2) * 0.1 });
     });
 
     return treeList;
   }, []);
+
+  // Update InstancedMesh matrices once on mount / update (Reduces Draw Calls by 95%!)
+  useLayoutEffect(() => {
+    const dummy = new THREE.Object3D();
+
+    // Black Curbs
+    if (blackCurbsRef.current) {
+      blackCurbsData.forEach((curb, i) => {
+        dummy.position.set(...curb.pos);
+        dummy.rotation.set(-Math.PI / 2, 0, 0);
+        dummy.scale.set(curb.size[0], curb.size[1], 1);
+        dummy.updateMatrix();
+        blackCurbsRef.current!.setMatrixAt(i, dummy.matrix);
+      });
+      blackCurbsRef.current.instanceMatrix.needsUpdate = true;
+    }
+
+    // White Curbs
+    if (whiteCurbsRef.current) {
+      whiteCurbsData.forEach((curb, i) => {
+        dummy.position.set(...curb.pos);
+        dummy.rotation.set(-Math.PI / 2, 0, 0);
+        dummy.scale.set(curb.size[0], curb.size[1], 1);
+        dummy.updateMatrix();
+        whiteCurbsRef.current!.setMatrixAt(i, dummy.matrix);
+      });
+      whiteCurbsRef.current.instanceMatrix.needsUpdate = true;
+    }
+
+    // Trees
+    if (treeTrunksRef.current && treeFoliageLowRef.current && treeFoliageMidRef.current && treeFoliageTopRef.current) {
+      trees.forEach((tree, i) => {
+        const s = tree.scale;
+        
+        // Trunk
+        dummy.position.set(tree.pos[0], 0.35 * s, tree.pos[2]);
+        dummy.rotation.set(0, 0, 0);
+        dummy.scale.set(s, s, s);
+        dummy.updateMatrix();
+        treeTrunksRef.current!.setMatrixAt(i, dummy.matrix);
+
+        // Lower Foliage
+        dummy.position.set(tree.pos[0], 0.75 * s, tree.pos[2]);
+        dummy.updateMatrix();
+        treeFoliageLowRef.current!.setMatrixAt(i, dummy.matrix);
+
+        // Mid Foliage
+        dummy.position.set(tree.pos[0], 1.1 * s, tree.pos[2]);
+        dummy.updateMatrix();
+        treeFoliageMidRef.current!.setMatrixAt(i, dummy.matrix);
+
+        // Top Foliage
+        dummy.position.set(tree.pos[0], 1.4 * s, tree.pos[2]);
+        dummy.updateMatrix();
+        treeFoliageTopRef.current!.setMatrixAt(i, dummy.matrix);
+      });
+
+      treeTrunksRef.current.instanceMatrix.needsUpdate = true;
+      treeFoliageLowRef.current.instanceMatrix.needsUpdate = true;
+      treeFoliageMidRef.current.instanceMatrix.needsUpdate = true;
+      treeFoliageTopRef.current.instanceMatrix.needsUpdate = true;
+    }
+  }, [blackCurbsData, whiteCurbsData, trees]);
 
   return (
     <group position={[0, -0.01, 0]}>
@@ -258,19 +302,23 @@ export const CityGrid: React.FC = () => {
         <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} metalness={0.1} />
       </mesh>
 
-      {/* Alternating Black & White Roadside Sidewalk Curbs (Trotoar Hitam Putih) */}
-      {blackWhiteCurbs.map((curb, idx) => (
-        <mesh
-          key={`curb-bw-${idx}`}
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={curb.pos}
-        >
-          <planeGeometry args={curb.size} />
-          <meshBasicMaterial
-            color={curb.isBlack ? (isNightMode ? '#0F172A' : '#1E293B') : '#F8FAFC'}
-          />
-        </mesh>
-      ))}
+      {/* High-Performance Instanced Black Curbs (Only 1 Draw Call!) */}
+      <instancedMesh
+        ref={blackCurbsRef}
+        args={[undefined, undefined, blackCurbsData.length]}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshBasicMaterial color={isNightMode ? '#0F172A' : '#1E293B'} />
+      </instancedMesh>
+
+      {/* High-Performance Instanced White Curbs (Only 1 Draw Call!) */}
+      <instancedMesh
+        ref={whiteCurbsRef}
+        args={[undefined, undefined, whiteCurbsData.length]}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshBasicMaterial color="#F8FAFC" />
+      </instancedMesh>
 
       {/* White Dashed Center Lane Lines */}
       {dashedLaneMarkings.map((line, idx) => (
@@ -296,40 +344,27 @@ export const CityGrid: React.FC = () => {
         </mesh>
       ))}
 
-      {/* 3D Trees Decoration (Pepohonan Hijau Rindang) */}
-      {trees.map((tree, idx) => (
-        <group key={`tree-${idx}`} position={tree.pos} scale={[tree.scale, tree.scale, tree.scale]}>
-          {/* Tree Trunk */}
-          <mesh castShadow position={[0, 0.35, 0]}>
-            <cylinderGeometry args={[0.07, 0.12, 0.7, 8]} />
-            <meshStandardMaterial color="#4A2E1B" roughness={0.9} />
-          </mesh>
-          {/* Lower Foliage */}
-          <mesh castShadow position={[0, 0.75, 0]}>
-            <coneGeometry args={[0.55, 0.7, 8]} />
-            <meshStandardMaterial
-              color={isNightMode ? '#0F3818' : '#2D6E37'}
-              roughness={0.8}
-            />
-          </mesh>
-          {/* Middle Foliage */}
-          <mesh castShadow position={[0, 1.1, 0]}>
-            <coneGeometry args={[0.42, 0.6, 8]} />
-            <meshStandardMaterial
-              color={isNightMode ? '#13471E' : '#3A8A48'}
-              roughness={0.8}
-            />
-          </mesh>
-          {/* Top Foliage */}
-          <mesh castShadow position={[0, 1.4, 0]}>
-            <coneGeometry args={[0.28, 0.5, 8]} />
-            <meshStandardMaterial
-              color={isNightMode ? '#195425' : '#45A354'}
-              roughness={0.7}
-            />
-          </mesh>
-        </group>
-      ))}
+      {/* High-Performance Instanced 3D Trees (Only 4 Draw Calls total instead of 240+!) */}
+      {/* Tree Trunks */}
+      <instancedMesh ref={treeTrunksRef} args={[undefined, undefined, trees.length]} castShadow>
+        <cylinderGeometry args={[0.07, 0.12, 0.7, 8]} />
+        <meshStandardMaterial color="#4A2E1B" roughness={0.9} />
+      </instancedMesh>
+      {/* Lower Foliage */}
+      <instancedMesh ref={treeFoliageLowRef} args={[undefined, undefined, trees.length]} castShadow>
+        <coneGeometry args={[0.55, 0.7, 8]} />
+        <meshStandardMaterial color={isNightMode ? '#0F3818' : '#2D6E37'} roughness={0.8} />
+      </instancedMesh>
+      {/* Middle Foliage */}
+      <instancedMesh ref={treeFoliageMidRef} args={[undefined, undefined, trees.length]} castShadow>
+        <coneGeometry args={[0.42, 0.6, 8]} />
+        <meshStandardMaterial color={isNightMode ? '#13471E' : '#3A8A48'} roughness={0.8} />
+      </instancedMesh>
+      {/* Top Foliage */}
+      <instancedMesh ref={treeFoliageTopRef} args={[undefined, undefined, trees.length]} castShadow>
+        <coneGeometry args={[0.28, 0.5, 8]} />
+        <meshStandardMaterial color={isNightMode ? '#195425' : '#45A354'} roughness={0.7} />
+      </instancedMesh>
 
     </group>
   );

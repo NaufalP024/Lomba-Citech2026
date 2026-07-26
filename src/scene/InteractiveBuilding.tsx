@@ -19,7 +19,7 @@ const GLTFModelRenderer: React.FC<{
   isHovered: boolean;
   targetDimensions: [number, number, number];
   nightWindowTexture: THREE.CanvasTexture;
-}> = ({ url, isNightMode, isSelected, isHovered, targetDimensions, nightWindowTexture }) => {
+}> = React.memo(({ url, isNightMode, isSelected, isHovered, targetDimensions, nightWindowTexture }) => {
   const { scene } = useGLTF(url);
   const [targetW, targetH, targetD] = targetDimensions;
 
@@ -155,7 +155,7 @@ const GLTFModelRenderer: React.FC<{
       scale={[scaleFactor, scaleFactor, scaleFactor]}
     />
   );
-};
+});
 
 // Preload models for instant rendering
 useGLTF.preload('/models/gedung.glb');
@@ -182,7 +182,7 @@ useGLTF.preload('/models/kartamulia.glb');
 useGLTF.preload('/models/keramik_anjun.glb');
 useGLTF.preload('/models/kerami_anjun.glb');
 
-export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = ({ building, onContextMenu }) => {
+export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.memo(({ building, onContextMenu }) => {
   const meshRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
@@ -574,4 +574,4 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = ({ buildi
       )}
     </group>
   );
-};
+});
