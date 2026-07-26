@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { BuildingData, BuildingStatus, InfraLayer, NavTab, SmartNotification } from '../types/city';
 import initialBuildingsData from '../data/buildings.json';
+import { calculateBuildingStatus } from '../utils/buildingStatusEngine';
 
 interface CityState {
   buildings: BuildingData[];
@@ -171,7 +172,17 @@ export const useCityStore = create<CityState>((set, get) => ({
 
   updateBuildingData: (id, updates) => {
     set((state) => ({
-      buildings: state.buildings.map((b) => (b.id === id ? { ...b, ...updates } : b)),
+      buildings: state.buildings.map((b) => {
+        if (b.id !== id) return b;
+        const merged = { ...b, ...updates };
+        const derived = calculateBuildingStatus(merged);
+        return {
+          ...merged,
+          status: derived.status,
+          statusLabel: derived.statusLabel,
+          alertMessage: derived.alertMessage,
+        };
+      }),
     }));
   },
 
