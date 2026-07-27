@@ -336,7 +336,7 @@
     "color": "#D9E2ED",
     "roofType": "solar",
     "architectureType": "gltf",
-    "modelUrl": "/models/hotel_harper.glb",
+    "modelUrl": "/models/harper.glb",
     "loadDistribution": {
       "lighting": 45,
       "hvac": 25,
