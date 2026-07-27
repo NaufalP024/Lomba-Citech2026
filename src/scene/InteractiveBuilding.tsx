@@ -11,6 +11,29 @@ interface InteractiveBuildingProps {
   onContextMenu?: (e: React.MouseEvent, building: BuildingData) => void;
 }
 
+// Error boundary to catch missing/corrupted GLTF model loading failures and prevent white screen crashes
+class GLTFErrorBoundary extends React.Component<{ fallback: React.ReactNode; children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any) {
+    console.warn('GLTF load failed, activating fallback mesh:', error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
 // Custom Sub-Component to render GLTF/GLB 3D Building Models with Auto-Scale, Unchanged Building Colors & Night Mode Yellow Window Lights
 const GLTFModelRenderer: React.FC<{
   url: string;
@@ -41,36 +64,34 @@ const GLTFModelRenderer: React.FC<{
 
     let scaleFactor: number;
     if (url.includes('rumah_sakit') || url.includes('hospital')) {
-      // Specifically for hospital GLB model: scale up nicely while keeping within lot bounds
       const scaleX = (targetW * 1.25) / (size.x || 1);
       const scaleZ = (targetD * 1.3) / (size.z || 1);
       const scaleY = (targetH * 1.3) / (size.y || 1);
       scaleFactor = Math.min(scaleX, scaleZ, scaleY);
-    } else if (url.includes('pasar') || url.includes('market')) {
-      // Scale Pasar GLB model properly so it fills its lot space beautifully
-      const scaleX = (targetW * 1.15) / (size.x || 1);
-      const scaleZ = (targetD * 1.15) / (size.z || 1);
-      const scaleY = (targetH * 1.1) / (size.y || 1);
-      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
-    } else if (url.includes('indorama')) {
-      // Scale Indorama GLB model neatly within plot bounds
-      const scaleX = (targetW * 1.05) / (size.x || 1);
-      const scaleZ = (targetD * 1.05) / (size.z || 1);
-      const scaleY = targetH / (size.y || 1);
-      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
-    } else if (url.includes('wikara')) {
-      // Scale STIE Wikara GLB model nicely
-      const scaleX = (targetW * 1.15) / (size.x || 1);
-      const scaleZ = (targetD * 1.15) / (size.z || 1);
-      const scaleY = (targetH * 1.1) / (size.y || 1);
-      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
     } else if (url.includes('harper')) {
-      // Specifically for Harper Hotel GLB model: scale up significantly so it looks tall and grand
       const scaleY = (targetH * 1.45) / (size.y || 1);
       const scaleXZ = Math.max((targetW * 1.35) / (size.x || 1), (targetD * 1.35) / (size.z || 1));
       scaleFactor = Math.min(scaleY, scaleXZ);
+    } else if (url.includes('wikara')) {
+      // Balanced scaling for Politeknik Enjinering Indorama
+      const scaleX = (targetW * 1.05) / (size.x || 1);
+      const scaleZ = (targetD * 1.05) / (size.z || 1);
+      const scaleY = (targetH * 1.05) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('bupati')) {
+      // Grand scaling for Kantor Bupati as sole government center landmark
+      const scaleX = (targetW * 1.3) / (size.x || 1);
+      const scaleZ = (targetD * 1.3) / (size.z || 1);
+      const scaleY = (targetH * 1.2) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('masjid')) {
+      // Grand scaling for Masjid Agung Purwakarta landmark
+      const scaleX = (targetW * 1.15) / (size.x || 1);
+      const scaleZ = (targetD * 1.15) / (size.z || 1);
+      const scaleY = (targetH * 1.1) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
     } else {
-      // Default scaling formula for all other GLTF buildings
+      // Original grand scaling formula for all buildings
       const scaleY = targetH / (size.y || 1);
       const scaleXZ = Math.max(targetW / (size.x || 1), targetD / (size.z || 1));
       scaleFactor = Math.min(scaleY * 1.05, scaleXZ * 1.15);
@@ -78,8 +99,13 @@ const GLTFModelRenderer: React.FC<{
 
     // Align base of GLTF model to ground level
     const offsetX = -center.x * scaleFactor;
-    const offsetY = -bbox.min.y * scaleFactor - targetH / 2;
+    let offsetY = -bbox.min.y * scaleFactor - targetH / 2;
     const offsetZ = -center.z * scaleFactor;
+
+    // Elevate Pasar Rebo model slightly so it never dips below ground level
+    if (url.includes('pasar') || url.includes('market')) {
+      offsetY += 0.35;
+    }
 
     let index = 0;
     cloned.traverse((child) => {
@@ -173,9 +199,6 @@ const GLTFModelRenderer: React.FC<{
 useGLTF.preload('/models/gedung.glb');
 useGLTF.preload('/models/panyawangan.glb');
 useGLTF.preload('/models/bupati.glb');
-useGLTF.preload('/models/kembar.glb');
-useGLTF.preload('/models/masjid.glb');
-useGLTF.preload('/models/masjid_agung.glb');
 useGLTF.preload('/models/rumah_sakit.glb');
 useGLTF.preload('/models/dprd.glb');
 useGLTF.preload('/models/gedung_dprd.glb');
@@ -187,10 +210,7 @@ useGLTF.preload('/models/stasiun.glb');
 useGLTF.preload('/models/harper.glb');
 useGLTF.preload('/models/hotel_harper.glb');
 useGLTF.preload('/models/polres.glb');
-useGLTF.preload('/models/pasar.glb');
 useGLTF.preload('/models/wikara.glb');
-useGLTF.preload('/models/indorama.glb');
-useGLTF.preload('/models/kartamulia.glb');
 useGLTF.preload('/models/keramik_anjun.glb');
 useGLTF.preload('/models/kerami_anjun.glb');
 
@@ -375,25 +395,20 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
     hoverBuilding(null);
   };
 
-  // Building rotation (default [0, 0, 0] unless custom rotation is specified)
-  const buildingRotation = useMemo((): [number, number, number] => {
-    return building.rotation || [0, 0, 0];
-  }, [building.rotation]);
-
   return (
     <group
       ref={meshRef}
       position={[building.position[0], halfH, building.position[2]]}
-      rotation={buildingRotation}
+      rotation={building.rotation || [0, 0, 0]}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
       onContextMenu={(e) => onContextMenu && onContextMenu(e as unknown as React.MouseEvent, building)}
     >
-      {/* Custom 3D Model GLTF / GLB renderer for Disnakertrans, Bale Panyawangan, Kantor Bupati, Gedung Kembar, Tajug Gede & RSUD Bayu Asih */}
+      {/* Custom 3D Model GLTF / GLB renderer with ErrorBoundary safety */}
       {archType === 'gltf' && building.modelUrl ? (
-        <Suspense
+        <GLTFErrorBoundary
           fallback={
             <mesh castShadow receiveShadow position={[0, 0, 0]}>
               <boxGeometry args={[w, h, d]} />
@@ -401,19 +416,48 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
             </mesh>
           }
         >
-          <GLTFModelRenderer
-            url={building.modelUrl}
-            isNightMode={isNightMode}
-            isSelected={isSelected}
-            isHovered={isHovered}
-            targetDimensions={[w, h, d]}
-            nightWindowTexture={nightWindowTexture}
-          />
-        </Suspense>
+          <Suspense
+            fallback={
+              <mesh castShadow receiveShadow position={[0, 0, 0]}>
+                <boxGeometry args={[w, h, d]} />
+                {createSubMeshMaterial(h)}
+              </mesh>
+            }
+          >
+            <GLTFModelRenderer
+              url={building.modelUrl}
+              isNightMode={isNightMode}
+              isSelected={isSelected}
+              isHovered={isHovered}
+              targetDimensions={[w, h, d]}
+              nightWindowTexture={nightWindowTexture}
+            />
+          </Suspense>
+        </GLTFErrorBoundary>
       ) : (
         <>
-          {/* Dynamic Architectural Mesh Renderer (6 Distinct 3D Procedural Shapes) */}
-          {archType === 'box' && (
+          {/* Procedural Mosque / Grand Dome architecture */}
+          {(archType as string) === 'mosque' && (
+            <group>
+              <mesh castShadow receiveShadow position={[0, -h * 0.15, 0]}>
+                <boxGeometry args={[w, h * 0.7, d]} />
+                {createSubMeshMaterial(h * 0.7)}
+              </mesh>
+              {/* Grand Central Dome */}
+              <mesh castShadow receiveShadow position={[0, h * 0.35, 0]}>
+                <sphereGeometry args={[w * 0.35, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.65]} />
+                <meshStandardMaterial color={isNightMode ? '#38BDF8' : '#0D9488'} roughness={0.2} metalness={0.8} />
+              </mesh>
+              {/* Minaret */}
+              <mesh castShadow receiveShadow position={[w * 0.4, h * 0.2, d * 0.4]}>
+                <cylinderGeometry args={[w * 0.06, w * 0.08, h * 1.2, 16]} />
+                <meshStandardMaterial color={isNightMode ? '#334155' : '#CBD5E1'} roughness={0.3} />
+              </mesh>
+            </group>
+          )}
+
+          {/* Dynamic Architectural Mesh Renderer */}
+          {(archType === 'box' || (archType !== 'stepped' && archType !== 'cylinder' && archType !== 'pyramid' && archType !== 'twin' && archType !== 'l-shaped' && (archType as string) !== 'mosque')) && (
             <mesh castShadow receiveShadow position={[0, 0, 0]}>
               <boxGeometry args={[w, h, d]} />
               {createSubMeshMaterial(h)}

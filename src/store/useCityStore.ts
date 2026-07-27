@@ -3,12 +3,13 @@ import { BuildingData, BuildingStatus, InfraLayer, NavTab, SmartNotification } f
 import initialBuildingsData from '../data/buildings.json';
 import { calculateBuildingStatus } from '../utils/buildingStatusEngine';
 
+// City store Zustand state
 interface CityState {
   buildings: BuildingData[];
   selectedBuildingId: string | null;
   hoveredBuildingId: string | null;
   focusedBuildingId: string | null;
-  
+
   // Navigation & View
   activeTab: NavTab;
   activeLayer: InfraLayer | null;
@@ -19,7 +20,7 @@ interface CityState {
   isManageAssetOpen: boolean;
   isExportModalOpen: boolean;
   isShortcutHelpOpen: boolean;
-  
+
   // Onboarding Tour
   isTourOpen: boolean;
   tourStep: number;

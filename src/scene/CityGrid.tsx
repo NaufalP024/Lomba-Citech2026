@@ -100,6 +100,12 @@ export const CityGrid: React.FC = () => {
       [-1.95, 1.95].forEach((dx) => {
         for (let z = -45; z <= 45; z += segLength) {
           if (Math.abs(z - (-6.5)) < 1.9 || Math.abs(z - 6.5) < 1.9) continue;
+          // Skip road curb across campus entrance gate gap (Z: 12.0 to 15.0)
+          if (Math.abs((rx + dx) - (-8.45)) < 0.2 && z >= 12.0 && z <= 15.0) continue;
+          // Skip road curb across Harper Hotel parking entrance gap (Z: 1.0 to 3.4)
+          if (Math.abs((rx + dx) - (-8.45)) < 0.2 && z >= 1.0 && z <= 3.4) continue;
+          // Skip road curb across Puskesmas entrance gap (Z: -3.2 to -1.2)
+          if (Math.abs((rx + dx) - (-8.45)) < 0.2 && z >= -3.2 && z <= -1.2) continue;
           const item = { pos: [rx + dx, 0.025, z] as [number, number, number], size: [curbWidth, segLength * 0.98] as [number, number] };
           if (Math.abs(Math.floor(z)) % 2 === 0) black.push(item);
           else white.push(item);
@@ -144,6 +150,16 @@ export const CityGrid: React.FC = () => {
     [-9.2, 9.2].forEach((x) => {
       treeRows.forEach((z) => {
         if (Math.abs(z - (-6.5)) > 3.0 && Math.abs(z - 6.5) > 3.0) {
+          // Filter out tree in front of Harper Hotel parking gate (x = -9.2, z = 2)
+          if (Math.abs(x - (-9.2)) < 0.5 && Math.abs(z - 2.0) < 2.5) return;
+          // Filter out tree in front of Prime Plaza parking gate (x = 9.2, z = 13.5)
+          if (Math.abs(x - 9.2) < 1.0 && Math.abs(z - 13.5) < 2.5) return;
+          // Filter out tree in front of Kantor Bupati parking gate (x = -9.2, z = -12.0)
+          if (Math.abs(x - (-9.2)) < 0.5 && Math.abs(z - (-12.0)) < 2.5) return;
+          // Filter out tree in front of Sadang Terminal Square parking gate (x = 9.2, z = -12.0)
+          if (Math.abs(x - 9.2) < 0.5 && Math.abs(z - (-12.0)) < 2.5) return;
+          // Filter out tree in front of Disnaker parking gate (x = 9.2, z = 0.0)
+          if (Math.abs(x - 9.2) < 0.5 && Math.abs(z - 0.0) < 2.5) return;
           treeList.push({ pos: [x, 0, z], scale: 0.85 + (Math.abs(x + z) % 5) * 0.08 });
         }
       });
@@ -152,6 +168,10 @@ export const CityGrid: React.FC = () => {
     treeRows.forEach((x) => {
       [-9.2, 9.2].forEach((z) => {
         if (Math.abs(x - (-6.5)) > 3.0 && Math.abs(x - 6.5) > 3.0) {
+          // Filter out tree in front of Harper Hotel parking gate (x = -9.2, z = 2)
+          if (Math.abs(x - (-9.2)) < 1.0 && Math.abs(z - 2.0) < 2.5) return;
+          // Filter out tree behind campus building
+          if (Math.abs(x - (-14.5)) < 2.0 && Math.abs(z - 11.2) < 2.0) return;
           treeList.push({ pos: [x, 0, z], scale: 0.85 + (Math.abs(x * z) % 5) * 0.08 });
         }
       });
@@ -159,7 +179,7 @@ export const CityGrid: React.FC = () => {
 
     const outerTreeCoords = [
       [-20, -20], [-20, 20], [20, -20], [20, 20],
-      [-22, 0],   [22, 0],   [0, -22],   [0, 22],
+      [-22, 0], [22, 0], [0, -22], [0, 22],
       [-20, -10], [-20, 10], [20, -10], [20, 10],
     ];
 
@@ -169,6 +189,28 @@ export const CityGrid: React.FC = () => {
     });
 
     return treeList;
+  }, []);
+
+  // Paving Block Grid lines for Masjid Agung plot [14.5, 14.5]
+  const masjidPavingTiles = useMemo(() => {
+    const tiles: { pos: [number, number, number]; size: [number, number]; isAccent: boolean }[] = [];
+    const step = 0.6;
+    const startX = 14.5 - 4.2;
+    const endX = 14.5 + 4.2;
+    const startZ = 14.5 - 4.2;
+    const endZ = 14.5 + 4.2;
+
+    for (let x = startX; x <= endX; x += step) {
+      for (let z = startZ; z <= endZ; z += step) {
+        const isAccent = (Math.round((x - startX) / step) + Math.round((z - startZ) / step)) % 2 === 0;
+        tiles.push({
+          pos: [x, 0.015, z],
+          size: [0.56, 0.56],
+          isAccent,
+        });
+      }
+    }
+    return tiles;
   }, []);
 
   // Update InstancedMesh matrices once on mount / update (Reduces Draw Calls by 95%!)
@@ -203,7 +245,7 @@ export const CityGrid: React.FC = () => {
     if (treeTrunksRef.current && treeFoliageLowRef.current && treeFoliageMidRef.current && treeFoliageTopRef.current) {
       trees.forEach((tree, i) => {
         const s = tree.scale;
-        
+
         // Trunk
         dummy.position.set(tree.pos[0], 0.35 * s, tree.pos[2]);
         dummy.rotation.set(0, 0, 0);
@@ -249,36 +291,119 @@ export const CityGrid: React.FC = () => {
       {/* Block Sidewalk Foundations under building lots */}
       {[
         [-14.5, -14.5], [0, -14.5], [14.5, -14.5],
-        [-14.5, 0],     [0, 0],     [14.5, 0],
-        [-14.5, 14.5],  [0, 14.5],  [14.5, 14.5],
-      ].map(([px, pz], idx) => (
-        <React.Fragment key={`plaza-group-${idx}`}>
-          {/* Manicured Lawn Border */}
-          <mesh
-            receiveShadow
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[px, 0.005, pz]}
-          >
-            <planeGeometry args={[10.6, 10.6]} />
-            <meshStandardMaterial
-              color={isNightMode ? '#132E1E' : '#478044'}
-              roughness={0.9}
-            />
-          </mesh>
-          {/* Pedestrian Sidewalk Pad */}
-          <mesh
-            receiveShadow
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[px, 0.01, pz]}
-          >
-            <planeGeometry args={[9.8, 9.8]} />
-            <meshStandardMaterial
-              color={isNightMode ? '#1A2638' : '#DDE4ED'}
-              roughness={0.8}
-            />
-          </mesh>
-        </React.Fragment>
-      ))}
+        [-14.5, 0], [0, 0], [14.5, 0],
+        [-14.5, 14.5], [0, 14.5], [14.5, 14.5],
+      ].map(([px, pz], idx) => {
+        const isMasjidAgungPlot = px === 14.5 && pz === 14.5;
+
+        if (isMasjidAgungPlot) {
+          return (
+            <React.Fragment key={`plaza-group-${idx}`}>
+              {/* Manicured Lawn Border */}
+              <mesh
+                receiveShadow
+                rotation={[-Math.PI / 2, 0, 0]}
+                position={[px, 0.005, pz]}
+              >
+                <planeGeometry args={[10.6, 10.6]} />
+                <meshStandardMaterial
+                  color={isNightMode ? '#132E1E' : '#478044'}
+                  roughness={0.9}
+                />
+              </mesh>
+              {/* Pavingblock Outer Border Trim */}
+              <mesh
+                receiveShadow
+                rotation={[-Math.PI / 2, 0, 0]}
+                position={[px, 0.01, pz]}
+              >
+                <planeGeometry args={[9.8, 9.8]} />
+                <meshStandardMaterial
+                  color={isNightMode ? '#1E293B' : '#64748B'}
+                  roughness={0.7}
+                />
+              </mesh>
+              {/* Pavingblock Base Surface */}
+              <mesh
+                receiveShadow
+                rotation={[-Math.PI / 2, 0, 0]}
+                position={[px, 0.012, pz]}
+              >
+                <planeGeometry args={[9.4, 9.4]} />
+                <meshStandardMaterial
+                  color={isNightMode ? '#0F172A' : '#94A3B8'}
+                  roughness={0.65}
+                />
+              </mesh>
+
+              {/* Interlocking Pavingblock Grid Tiles (Herringbone / Dual-Tone Pavers) */}
+              {masjidPavingTiles.map((tile, tIdx) => (
+                <mesh
+                  key={`paving-tile-${tIdx}`}
+                  receiveShadow
+                  rotation={[-Math.PI / 2, 0, 0]}
+                  position={tile.pos}
+                >
+                  <planeGeometry args={tile.size} />
+                  <meshStandardMaterial
+                    color={
+                      isNightMode
+                        ? tile.isAccent ? '#1E293B' : '#334155'
+                        : tile.isAccent ? '#F8FAFC' : '#E2E8F0'
+                    }
+                    roughness={0.55}
+                  />
+                </mesh>
+              ))}
+
+              {/* Central Islamic Diamond Paver Medallion */}
+              <group position={[px, 0.018, pz]}>
+                <mesh rotation={[-Math.PI / 2, 0, Math.PI / 4]}>
+                  <planeGeometry args={[3.2, 3.2]} />
+                  <meshStandardMaterial color={isNightMode ? '#1E293B' : '#CBD5E1'} roughness={0.5} />
+                </mesh>
+                <mesh rotation={[-Math.PI / 2, 0, Math.PI / 4]}>
+                  <planeGeometry args={[2.6, 2.6]} />
+                  <meshStandardMaterial color={isNightMode ? '#0F172A' : '#94A3B8'} roughness={0.5} />
+                </mesh>
+                <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                  <planeGeometry args={[1.8, 1.8]} />
+                  <meshStandardMaterial color={isNightMode ? '#1E293B' : '#E2E8F0'} roughness={0.5} />
+                </mesh>
+              </group>
+            </React.Fragment>
+          );
+        }
+
+        return (
+          <React.Fragment key={`plaza-group-${idx}`}>
+            {/* Manicured Lawn Border */}
+            <mesh
+              receiveShadow
+              rotation={[-Math.PI / 2, 0, 0]}
+              position={[px, 0.005, pz]}
+            >
+              <planeGeometry args={[10.6, 10.6]} />
+              <meshStandardMaterial
+                color={isNightMode ? '#132E1E' : '#478044'}
+                roughness={0.9}
+              />
+            </mesh>
+            {/* Pedestrian Sidewalk Pad */}
+            <mesh
+              receiveShadow
+              rotation={[-Math.PI / 2, 0, 0]}
+              position={[px, 0.01, pz]}
+            >
+              <planeGeometry args={[9.8, 9.8]} />
+              <meshStandardMaterial
+                color={isNightMode ? '#1A2638' : '#DDE4ED'}
+                roughness={0.8}
+              />
+            </mesh>
+          </React.Fragment>
+        );
+      })}
 
       {/* Asphalt Roads Network (Full Length Extended to Edges) */}
       {/* North-South Road 1 */}

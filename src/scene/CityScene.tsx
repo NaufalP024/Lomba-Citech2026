@@ -4,6 +4,17 @@ import * as THREE from 'three';
 import { Lights } from './Lights';
 import { EnvironmentSky } from './EnvironmentSky';
 import { CityGrid } from './CityGrid';
+import { CampusFence } from './CampusFence';
+import { HarperFence } from './HarperFence';
+import { PuskesmasFence } from './PuskesmasFence';
+import { PrimePlazaFence } from './PrimePlazaFence';
+import { PanyawanganFence } from './PanyawanganFence';
+import { BupatiFence } from './BupatiFence';
+import { BayuAsihFence } from './BayuAsihFence';
+import { SadangFence } from './SadangFence';
+import { DisnakerFence } from './DisnakerFence';
+import { MasjidAgungEntrance } from './MasjidAgungEntrance';
+import { CampusParkingLot } from './CampusParkingLot';
 import { InteractiveBuilding } from './InteractiveBuilding';
 import { InfrastructureLayerOverlay } from './InfrastructureLayerOverlay';
 import { MovingVehicles } from './MovingVehicles';
@@ -30,7 +41,18 @@ export const CityScene: React.FC<CitySceneProps> = ({ onContextMenu }) => {
         <EnvironmentSky />
         <Lights />
         <CityGrid />
-        
+        <CampusFence />
+        <HarperFence />
+        <PuskesmasFence />
+        <PrimePlazaFence />
+        <PanyawanganFence />
+        <BupatiFence />
+        <BayuAsihFence />
+        <SadangFence />
+        <DisnakerFence />
+        <MasjidAgungEntrance />
+        <CampusParkingLot />
+
         {/* Render interactive city buildings */}
         <group>
           {buildings.map((building) => (
