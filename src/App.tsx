@@ -59,14 +59,15 @@ export function App() {
 
   return (
     <div className={`relative w-screen h-screen overflow-hidden select-none ${isNightMode ? 'dark' : ''}`}>
-      {/* Splash Screen */}
-      {isLoading ? (
-        <SplashScreen onComplete={handleSplashComplete} />
-      ) : (
-        <>
-          {/* Main 3D Canvas Background */}
-          <CityScene onContextMenu={handleContextMenu} />
+      {/* 3D Scene rendered in background so models pre-load during Splash Loading Screen */}
+      <CityScene onContextMenu={handleContextMenu} />
 
+      {/* Loading Splash Screen Overlay */}
+      {isLoading && <SplashScreen onComplete={handleSplashComplete} />}
+
+      {/* Main UI Overlay Controls & Modals */}
+      {!isLoading && (
+        <>
           {/* Top Navbar */}
           <Navbar />
 

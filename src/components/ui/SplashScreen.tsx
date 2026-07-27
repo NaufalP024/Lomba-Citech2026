@@ -1,30 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Building2 } from 'lucide-react';
+import { useProgress } from '@react-three/drei';
+import { Sparkles } from 'lucide-react';
 
 interface SplashScreenProps {
   onComplete: () => void;
 }
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
-  const [progress, setProgress] = useState(0);
+  const { progress: dreiProgress, active } = useProgress();
+  const [displayProgress, setDisplayProgress] = useState(0);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
+      setDisplayProgress((prev) => {
+        // Target progress based on real 3D asset loading progress from useProgress
+        const target = active ? Math.min(95, Math.max(prev + 5, Math.floor(dreiProgress))) : 100;
+        if (prev >= 100 || (prev >= 98 && !active)) {
           clearInterval(interval);
-          setTimeout(onComplete, 400);
+          setIsFadingOut(true);
+          setTimeout(onComplete, 600);
           return 100;
         }
-        return prev + Math.floor(Math.random() * 20 + 10);
+        return Math.min(100, prev + Math.max(4, Math.floor((target - prev) * 0.3)));
       });
-    }, 150);
+    }, 80);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [dreiProgress, active, onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#EEF3F8] dark:bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div
+      className={`fixed inset-0 z-50 bg-[#EEF3F8] dark:bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-auto ${
+        isFadingOut ? 'opacity-0' : 'opacity-100'
+      }`}
+    >
       <div className="text-center space-y-6 max-w-sm px-6">
         {/* Animated Brand Logo Icon */}
         <div className="relative mx-auto w-20 h-20 rounded-3xl bg-blue-500 text-white flex items-center justify-center shadow-2xl shadow-blue-500/40 animate-bounce">
@@ -34,27 +44,27 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           <Sparkles className="w-6 h-6 text-cyan-300 absolute -top-2 -right-2 animate-spin" />
         </div>
 
-        {/* Title */}
+        {/* Title & Subtitle */}
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            City<span className="text-blue-500">OS</span> Digital Twin
+            SmartCity<span className="text-blue-500"> Vision</span>
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
-            Initializing 3D spatial web application environment...
+            Memuat aset 3D & telemetri kota Purwakarta...
           </p>
         </div>
 
         {/* Progress Bar */}
         <div className="space-y-2">
-          <div className="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden p-0.5">
+          <div className="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 shadow-inner">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-200"
-              style={{ width: `${progress}%` }}
+              className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-full transition-all duration-150"
+              style={{ width: `${displayProgress}%` }}
             />
           </div>
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
-            <span>Loading 3D mesh assets</span>
-            <span className="font-bold text-blue-500">{progress}%</span>
+            <span>{displayProgress < 100 ? 'Rendering 3D Digital Twin...' : 'Siap! Membuka Dashboard...'}</span>
+            <span className="font-bold text-blue-500">{displayProgress}%</span>
           </div>
         </div>
       </div>
