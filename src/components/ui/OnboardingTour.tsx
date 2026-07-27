@@ -9,6 +9,10 @@ import {
   Moon,
   Search,
   CheckCircle2,
+  Sparkles,
+  Layers,
+  MousePointerClick,
+  Building2,
 } from 'lucide-react';
 
 interface FeatureStep {
@@ -35,47 +39,57 @@ export const OnboardingTour: React.FC = () => {
     height: number;
   } | null>(null);
 
-  // 4 Essential Targeted Key Features for concise, high-impact tour
+  // 5 Step Onboarding Tour: Welcome Greeting & Key Application Features
   const steps: FeatureStep[] = [
+    {
+      targetId: null,
+      title: 'Selamat Datang di SmartCity Vision!',
+      subtitle: 'Purwakarta 3D Digital Twin Platform',
+      description:
+        'Selamat datang di platform Digital Twin SmartCity Purwakarta! Dashboard interaktif ini menyajikan monitoring 3D real-time untuk jaringan listrik, pasokan air, HVAC, keamanan, serta infrastruktur publik kota.',
+      icon: <Sparkles className="w-5 h-5 text-amber-500" />,
+      badge: 'Selamat Datang',
+      arrowPosition: 'center',
+    },
     {
       targetId: 'tour-navbar-tabs',
       title: 'Navigasi Tab Perkotaan',
       subtitle: 'Beralih Tampilan Utama',
       description:
-        'Gunakan tab ini untuk berpindah antara Dashboard 3D, Grid Listrik, Analitik, Insiden, dan Personel.',
+        'Gunakan tab navbar ini untuk berpindah secara cepat antara Dashboard 3D, Grid Listrik, Analitik, Insiden, dan Manajemen Personel.',
       icon: <MapPin className="w-5 h-5 text-blue-500" />,
       badge: 'Navbar Utama',
       arrowPosition: 'top-center',
+    },
+    {
+      targetId: null,
+      title: 'Interaksi Gedung & Kamera 3D',
+      subtitle: 'Rotasi, Zoom & Detail Gedung',
+      description:
+        'Klik pada gedung 3D mana pun di peta untuk membuka panel telemetri real-time. Tahan drag mouse untuk memutar sudut pandang dan scroll untuk zoom.',
+      icon: <MousePointerClick className="w-5 h-5 text-emerald-500" />,
+      badge: 'Kontrol 3D',
+      arrowPosition: 'center',
     },
     {
       targetId: 'tour-night-mode-toggle',
       title: 'Mode Malam & Window Light',
       subtitle: 'Pencahayaan Gedung Realistis',
       description:
-        'Klik ikon ini untuk mengaktifkan Mode Malam dengan pendar titik cahaya jendela gedung yang realistis.',
+        'Klik ikon ini untuk mengaktifkan Mode Malam dengan pendar titik cahaya jendela gedung dan efek lingkungan malam yang realistis.',
       icon: <Moon className="w-5 h-5 text-purple-500" />,
       badge: 'Visual 3D',
       arrowPosition: 'top-right',
     },
     {
       targetId: 'tour-analytics-panel',
-      title: 'Panel Analitik & Telemetri',
-      subtitle: 'Monitoring Real-Time',
+      title: 'Panel Telemetri Real-Time',
+      subtitle: 'Monitoring & Analitik Lengkap',
       description:
-        'Pantau tingkat daya (kW), tekanan air, dan okupansi gedung terpilih secara langsung dari panel ini.',
-      icon: <BarChart3 className="w-5 h-5 text-amber-500" />,
+        'Pantau tingkat konsumsi daya (kW), tekanan air, efisiensi HVAC, dan okupansi gedung terpilih secara langsung dari panel ini. Selamat menjelajah!',
+      icon: <BarChart3 className="w-5 h-5 text-cyan-500" />,
       badge: 'Telemetri',
       arrowPosition: 'right-center',
-    },
-    {
-      targetId: 'tour-search-button',
-      title: 'Pencarian Cepat Gedung',
-      subtitle: 'Temukan Lokasi Instan',
-      description:
-        'Cari gedung spesifik berdasarkan nama atau sektor dengan menekan ikon pencarian ini.',
-      icon: <Search className="w-5 h-5 text-cyan-500" />,
-      badge: 'Fitur Cari',
-      arrowPosition: 'top-right',
     },
   ];
 
