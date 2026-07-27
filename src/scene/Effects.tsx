@@ -6,11 +6,12 @@ export const Effects: React.FC = () => {
   const isNightMode = useCityStore((state) => state.isNightMode);
 
   return (
-    <EffectComposer multisampling={4}>
+    <EffectComposer multisampling={0}>
       <Bloom
-        luminanceThreshold={isNightMode ? 0.4 : 0.82}
-        luminanceSmoothing={0.65}
-        intensity={isNightMode ? 1.4 : 0.55}
+        luminanceThreshold={isNightMode ? 0.45 : 0.85}
+        luminanceSmoothing={0.7}
+        intensity={isNightMode ? 1.2 : 0.45}
+        mipmapBlur
       />
     </EffectComposer>
   );
