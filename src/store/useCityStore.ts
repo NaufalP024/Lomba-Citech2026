@@ -110,15 +110,15 @@ export const useCityStore = create<CityState>((set, get) => ({
     {
       id: 'n-1',
       type: 'warning',
-      title: 'Power Load Spike',
-      message: 'Skyline plaza (asset #B-42) power draw reached 412 kW.',
+      title: 'Lonjakan Beban Listrik',
+      message: 'Bale Panyawangan (Aset #PWK-01) konsumsi daya mencapai 412 kW.',
       timestamp: '19:40',
     },
     {
       id: 'n-2',
       type: 'info',
-      title: 'Grid Optimization',
-      message: 'Solar sub-grid active in sector East-4.',
+      title: 'Optimalisasi Jaringan',
+      message: 'Mikro-grid surya aktif di Sektor Purwakarta Kota.',
       timestamp: '19:35',
     },
   ],
@@ -235,10 +235,10 @@ export const useCityStore = create<CityState>((set, get) => ({
       const types: ('info' | 'warning' | 'error' | 'success')[] = ['info', 'warning', 'success', 'info'];
       const randomType = types[Math.floor(Math.random() * types.length)];
       const sampleEvents = [
-        { title: '⚡ Power Fluctuated', msg: `${target.name} grid draw adjusted to ${newConsumption} kW.` },
-        { title: '💧 Pressure Valve Sync', msg: `${target.name} water supply stabilized at ${target.waterPressure} Bar.` },
-        { title: '🏢 Occupancy Update', msg: `${target.name} reported active HVAC balancing.` },
-        { title: '☀️ Solar Cell Feed', msg: `Sector roof arrays feeding ${Math.floor(Math.random() * 50 + 20)} kW.` },
+        { title: '⚡ Fluktuasi Beban Listrik', msg: `Konsumsi daya ${target.name} menyesuaikan ke ${newConsumption} kW.` },
+        { title: '💧 Sinkronisasi Katup Air', msg: `Pasokan air ${target.name} stabil pada ${target.waterPressure} Bar.` },
+        { title: '🏢 Pembaruan Okupansi', msg: `Sistem pendingin ${target.name} melakukan penyesuaian suhu otomatis.` },
+        { title: '☀️ Pasokan Energi Surya', msg: `Panel surya sektor memasok ${Math.floor(Math.random() * 50 + 20)} kW.` },
       ];
       const ev = sampleEvents[Math.floor(Math.random() * sampleEvents.length)];
       addNotification({

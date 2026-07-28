@@ -36,7 +36,7 @@ export const TopHeaderOverlay: React.FC = () => {
         <button
           onClick={handleBack}
           className="w-7 h-7 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-colors shrink-0"
-          title="Reset Camera View"
+          title="Reset Tampilan Kamera"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
         </button>
@@ -48,25 +48,15 @@ export const TopHeaderOverlay: React.FC = () => {
               {timeStr}
             </span>
             <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium hidden xs:inline">
-              Oct 26, 2025
+              26 Okt 2025
             </span>
           </div>
         </div>
 
-        {/* Location Dropdown */}
-        <div className="flex items-center space-x-1 sm:space-x-1.5 text-[11px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200">
+        {/* Fixed Location Badge: Purwakarta, Jawa Barat */}
+        <div className="flex items-center space-x-1.5 text-[11px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200">
           <MapPin className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-          <select
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
-            className="bg-transparent appearance-none max-w-[110px] xs:max-w-[150px] sm:max-w-[190px] truncate pr-3.5 focus:outline-none cursor-pointer"
-          >
-            <option value="Purwakarta, Jawa Barat">Purwakarta, Jawa Barat</option>
-            <option value="Kab. Purwakarta, Jabar">Kab. Purwakarta, Jabar</option>
-            <option value="Bandung, Jawa Barat">Bandung, Jawa Barat</option>
-            <option value="Jakarta, Indonesia">Jakarta, Indonesia</option>
-          </select>
-          <ChevronDown className="w-3 h-3 text-slate-400 pointer-events-none -ml-3" />
+          <span className="truncate">Purwakarta, Jawa Barat</span>
         </div>
       </div>
 
@@ -81,7 +71,7 @@ export const TopHeaderOverlay: React.FC = () => {
           className="bg-white/85 dark:bg-slate-900/90 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl border border-white/60 dark:border-slate-700 shadow-md flex items-center space-x-1 transition-all hover:scale-105"
         >
           <FileText className="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" />
-          <span className="hidden xs:inline">Export Data</span>
+          <span className="hidden xs:inline">Ekspor Data</span>
         </button>
 
         {/* Manage Asset Button */}
@@ -93,7 +83,7 @@ export const TopHeaderOverlay: React.FC = () => {
           className="bg-blue-500 hover:bg-blue-600 text-white text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl shadow-md shadow-blue-500/30 flex items-center space-x-1 transition-all hover:scale-105"
         >
           <Settings className="w-3.5 h-3.5" />
-          <span className="hidden xs:inline">Manage Asset</span>
+          <span className="hidden xs:inline">Kelola Aset</span>
         </button>
       </div>
     </div>

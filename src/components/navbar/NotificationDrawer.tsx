@@ -17,7 +17,7 @@ export const NotificationDrawer: React.FC = () => {
         <div className="flex items-center space-x-2">
           <Bell className="w-4 h-4 text-blue-500" />
           <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
-            Live City Alerts ({notifications.length})
+            Notifikasi Sistem ({notifications.length})
           </h3>
         </div>
         <button
@@ -32,7 +32,7 @@ export const NotificationDrawer: React.FC = () => {
       <div className="max-h-96 overflow-y-auto p-3 space-y-2.5">
         {notifications.length === 0 ? (
           <div className="py-10 text-center text-xs text-slate-400">
-            No active notifications.
+            Tidak ada notifikasi aktif saat ini.
           </div>
         ) : (
           notifications.map((n) => (
@@ -69,7 +69,7 @@ export const NotificationDrawer: React.FC = () => {
               <button
                 onClick={() => dismissNotification(n.id)}
                 className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-rose-500 transition-all absolute top-3 right-3"
-                title="Dismiss"
+                title="Hapus"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>

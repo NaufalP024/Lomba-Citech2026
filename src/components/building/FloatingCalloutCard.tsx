@@ -42,24 +42,34 @@ export const FloatingCalloutCard: React.FC = () => {
         {/* Key Metrics List */}
         <div className="space-y-1.5 sm:space-y-2 text-[11px] sm:text-xs border-t border-slate-200/60 dark:border-slate-800 pt-2 sm:pt-2.5">
           <div className="flex justify-between items-center">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Consumption:</span>
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Konsumsi Daya:</span>
             <span className="font-bold text-slate-800 dark:text-slate-100 flex items-center space-x-1">
               <span className="font-mono text-blue-600 dark:text-blue-400">{selectedBuilding.currentConsumption} kW</span>
-              <span className="text-[10px] sm:text-[11px] text-slate-500 font-normal">({selectedBuilding.loadTrend})</span>
+              <span className="text-[10px] sm:text-[11px] text-slate-500 font-normal">({selectedBuilding.loadTrend === 'Rising' ? 'Meningkat' : selectedBuilding.loadTrend === 'Falling' ? 'Menurun' : 'Stabil'})</span>
             </span>
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Exterior Light:</span>
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Penerangan Luar:</span>
             <span className="font-bold text-slate-800 dark:text-slate-100 font-mono">
               {selectedBuilding.exteriorLight}
             </span>
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Water Pressure:</span>
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Tekanan Air:</span>
             <span className="font-bold text-slate-800 dark:text-slate-100 font-mono">
               {selectedBuilding.waterPressure} Bar
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center pt-1 border-t border-slate-100 dark:border-slate-800/60">
+            <span className="text-slate-500 dark:text-slate-400 font-medium flex items-center space-x-1">
+              <span>🍃</span>
+              <span>Jejak Karbon:</span>
+            </span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+              {selectedBuilding.carbonEmission ?? Math.round(selectedBuilding.currentConsumption * 0.45)} kg/hari
             </span>
           </div>
         </div>

@@ -12,10 +12,10 @@ export const UsersViewModal: React.FC = () => {
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-            Tim Operasional Smart City ({analyticsData.users.length} Personel)
+            Tim Pengelola Smart City ({analyticsData.users.length} Personel)
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Daftar pengelola sistem digital twin Kabupaten Purwakarta.
+            Direktori teknisi dan pengelola sistem digital twin Kabupaten Purwakarta.
           </p>
         </div>
       </div>
@@ -35,7 +35,7 @@ export const UsersViewModal: React.FC = () => {
               </div>
               <span
                 className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white dark:border-slate-900 ${
-                  u.status === 'Active' ? 'bg-emerald-500' : 'bg-slate-400'
+                  u.status === 'Aktif' || u.status === 'Active' ? 'bg-emerald-500' : 'bg-slate-400'
                 }`}
                 title={u.status}
               />

@@ -17,7 +17,7 @@ export const RealTimePowerDrawCard: React.FC<RealTimePowerDrawCardProps> = ({ bu
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm tracking-tight">
-          Real-time power draw
+          Konsumsi Daya Real-Time
         </h3>
         <div className="flex items-center space-x-2">
           <div className="relative">
@@ -26,9 +26,9 @@ export const RealTimePowerDrawCard: React.FC<RealTimePowerDrawCardProps> = ({ bu
               onChange={(e) => setFilter(e.target.value)}
               className="appearance-none bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 text-xs px-2.5 py-1 pr-6 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer focus:outline-none"
             >
-              <option value="Real time">Real time</option>
-              <option value="Today">Today</option>
-              <option value="7 Days">7 Days</option>
+              <option value="Real time">Real Time</option>
+              <option value="Today">Hari Ini</option>
+              <option value="7 Days">7 Hari Terakhir</option>
             </select>
             <ChevronDown className="w-3 h-3 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
@@ -44,21 +44,21 @@ export const RealTimePowerDrawCard: React.FC<RealTimePowerDrawCardProps> = ({ bu
           <div className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
             {building.peakConsumption} kW
           </div>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Peak today</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Beban Puncak</div>
         </div>
 
         <div>
           <div className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
             {building.currentConsumption} kW
           </div>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Load</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Beban Saat Ini</div>
         </div>
 
         <div>
           <div className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
             {building.alertsCount}
           </div>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Alerts</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Peringatan</div>
         </div>
       </div>
 

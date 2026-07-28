@@ -26,7 +26,7 @@
       "bgColor": "bg-blue-500",
       "role": "Kepala Dinas Kominfo Purwakarta",
       "email": "budi.santoso@purwakartakab.go.id",
-      "status": "Active"
+      "status": "Aktif"
     },
     {
       "id": "usr-2",
@@ -35,7 +35,7 @@
       "bgColor": "bg-emerald-500",
       "role": "Manajer Operasional Smart City",
       "email": "siti.nurhaliza@purwakartakab.go.id",
-      "status": "Active"
+      "status": "Aktif"
     },
     {
       "id": "usr-3",
@@ -44,7 +44,7 @@
       "bgColor": "bg-indigo-500",
       "role": "Spesialis Jaringan Listrik & Energi",
       "email": "rahmat.hidayat@purwakartakab.go.id",
-      "status": "Active"
+      "status": "Aktif"
     },
     {
       "id": "usr-4",
@@ -53,7 +53,7 @@
       "bgColor": "bg-amber-500",
       "role": "Koordinator Penanggulangan Bencana",
       "email": "dewi.lestari@purwakartakab.go.id",
-      "status": "Offline"
+      "status": "Non-aktif"
     },
     {
       "id": "usr-5",
@@ -62,7 +62,7 @@
       "bgColor": "bg-rose-500",
       "role": "Analis Infrastruktur & Air Bersih",
       "email": "agus.setiawan@purwakartakab.go.id",
-      "status": "Active"
+      "status": "Aktif"
     },
     {
       "id": "usr-6",
@@ -71,7 +71,7 @@
       "bgColor": "bg-cyan-500",
       "role": "Teknisi Sensor & IoT Perkotaan",
       "email": "eka.putri@purwakartakab.go.id",
-      "status": "Active"
+      "status": "Aktif"
     }
   ]
 }

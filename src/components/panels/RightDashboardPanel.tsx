@@ -3,6 +3,7 @@ import { useCityStore } from '../../store/useCityStore';
 import { BuildingOccupancyCard } from '../cards/BuildingOccupancyCard';
 import { RealTimePowerDrawCard } from '../cards/RealTimePowerDrawCard';
 import { InfrastructureHealthCard } from '../cards/InfrastructureHealthCard';
+import { EcoGreenCarbonCard } from '../cards/EcoGreenCarbonCard';
 import { LoadDistributionCard } from '../cards/LoadDistributionCard';
 import { ChevronDown, ChevronUp, BarChart3 } from 'lucide-react';
 
@@ -30,7 +31,7 @@ export const RightDashboardPanel: React.FC = () => {
           className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/60 dark:border-slate-800 text-slate-800 dark:text-white px-3 py-1.5 rounded-2xl shadow-lg text-xs font-semibold flex items-center space-x-1.5"
         >
           <BarChart3 className="w-3.5 h-3.5 text-blue-500" />
-          <span>{isMobileExpanded ? 'Hide Analytics' : 'Show Analytics'}</span>
+          <span>{isMobileExpanded ? 'Tutup Panel Analitis' : 'Buka Panel Analitis'}</span>
           {isMobileExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
         </button>
       </div>
@@ -43,6 +44,9 @@ export const RightDashboardPanel: React.FC = () => {
       >
         {/* Building Occupancy */}
         <BuildingOccupancyCard building={selectedBuilding} isNightMode={isNightMode} />
+
+        {/* Eco-Green & Carbon Index */}
+        <EcoGreenCarbonCard building={selectedBuilding} isNightMode={isNightMode} />
 
         {/* Real-time power draw */}
         <RealTimePowerDrawCard building={selectedBuilding} isNightMode={isNightMode} />

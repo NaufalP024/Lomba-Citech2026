@@ -20,10 +20,10 @@ export const IncidentsViewModal: React.FC = () => {
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-            Active Infrastructure Incidents ({incidentsData.length})
+            Insiden Infrastruktur Aktif ({incidentsData.length})
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Real-time system anomalies, pressure drops, and airflow deviations.
+            Deteksi anomali sistem, penurunan tekanan, dan sirkulasi udara.
           </p>
         </div>
       </div>
@@ -59,12 +59,12 @@ export const IncidentsViewModal: React.FC = () => {
                         : 'bg-blue-100 text-blue-600'
                     }`}
                   >
-                    {inc.severity}
+                    {inc.severity === 'critical' ? 'Kritis' : inc.severity === 'high' ? 'Tinggi' : 'Sedang'}
                   </span>
                 </div>
 
                 <div className="text-xs font-medium text-blue-600 dark:text-blue-400 mt-0.5">
-                  Building: {inc.buildingName} ({inc.buildingId.toUpperCase()})
+                  Gedung: {inc.buildingName} ({inc.buildingId.toUpperCase()})
                 </div>
 
                 <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
@@ -72,7 +72,7 @@ export const IncidentsViewModal: React.FC = () => {
                 </p>
 
                 <div className="text-[11px] text-slate-400 mt-2 font-mono flex items-center space-x-3">
-                  <span>Reported: {inc.time}</span>
+                  <span>Dilaporkan: {inc.time}</span>
                   <span>•</span>
                   <span>Status: <strong className="text-slate-700 dark:text-slate-200">{inc.status}</strong></span>
                 </div>
@@ -83,7 +83,7 @@ export const IncidentsViewModal: React.FC = () => {
               onClick={() => handleInspect(inc.buildingId)}
               className="w-full sm:w-auto px-3.5 py-1.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold shrink-0 shadow-sm text-center"
             >
-              Locate in 3D
+              Lacak di 3D
             </button>
           </div>
         ))}

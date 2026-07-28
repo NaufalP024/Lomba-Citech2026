@@ -37,7 +37,7 @@ export const SearchModal: React.FC = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search buildings by name, code (e.g. #B-42), or type..."
+            placeholder="Cari gedung berdasarkan nama, kode (contoh: #B-42), atau kategori..."
             className="w-full bg-transparent text-sm text-slate-900 dark:text-white focus:outline-none placeholder:text-slate-400"
             autoFocus
           />
@@ -53,7 +53,7 @@ export const SearchModal: React.FC = () => {
         <div className="max-h-80 overflow-y-auto p-2 divide-y divide-slate-100 dark:divide-slate-800/50">
           {filtered.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-400">
-              No buildings found matching "{query}"
+              Tidak ada gedung yang sesuai dengan "{query}"
             </div>
           ) : (
             filtered.map((b) => (

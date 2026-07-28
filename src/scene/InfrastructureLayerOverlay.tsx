@@ -203,6 +203,57 @@ export const InfrastructureLayerOverlay: React.FC = () => {
           })}
         </group>
       )}
+
+      {/* 8. ECO-GREEN & CARBON HEATMAP LAYER: Color-coded Eco Footprint & Rooftop Eco Beacons */}
+      {activeLayer === 'eco_green' && (
+        <group>
+          {buildings.map((b) => {
+            const roofY = getRoofHeight(b);
+            const w = b.dimensions[0] * 1.15;
+            const d = b.dimensions[2] * 1.15;
+            const ecoColor =
+              b.ecoStatus === 'Green' || (b.carbonEmission && b.carbonEmission < 250)
+                ? '#10B981'
+                : b.ecoStatus === 'Warning' || (b.carbonEmission && b.carbonEmission < 400)
+                ? '#F59E0B'
+                : '#EF4444';
+
+            return (
+              <group key={`eco-${b.id}`}>
+                {/* Ground Base Eco Footprint */}
+                <mesh
+                  position={[b.position[0], 0.02, b.position[2]]}
+                  rotation={[-Math.PI / 2, 0, 0]}
+                >
+                  <planeGeometry args={[w, d]} />
+                  <meshBasicMaterial color={ecoColor} transparent opacity={0.5} />
+                </mesh>
+
+                {/* Ground Pulse Ring */}
+                <mesh
+                  position={[b.position[0], 0.025, b.position[2]]}
+                  rotation={[-Math.PI / 2, 0, 0]}
+                >
+                  <ringGeometry args={[w * 0.55, w * 0.68, 32]} />
+                  <meshBasicMaterial color={ecoColor} transparent opacity={0.65} side={THREE.DoubleSide} />
+                </mesh>
+
+                {/* Rooftop Floating Eco Beacon */}
+                <group position={[b.position[0], roofY + 0.6, b.position[2]]}>
+                  <mesh>
+                    <octahedronGeometry args={[0.4]} />
+                    <meshBasicMaterial color={ecoColor} />
+                  </mesh>
+                  <mesh rotation={[Math.PI / 4, 0, 0]}>
+                    <torusGeometry args={[0.55, 0.04, 12, 24]} />
+                    <meshBasicMaterial color={ecoColor} transparent opacity={0.7} />
+                  </mesh>
+                </group>
+              </group>
+            );
+          })}
+        </group>
+      )}
     </group>
   );
 };

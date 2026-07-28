@@ -31,21 +31,21 @@ export function calculateBuildingStatus(data: Partial<BuildingData>): AutomatedS
     fireSafetyHealth < 50 ||
     waterSupplyHealth < 50
   ) {
-    let msg = 'System critical threshold exceeded.';
+    let msg = 'Batas ambang kritis sistem terlampaui.';
     if (waterPressure < 2.0) {
-      msg = `Water Pressure Anomaly: Pressure dropped dangerously to ${waterPressure.toFixed(1)} Bar.`;
+      msg = `Anomali Tekanan Air: Tekanan turun drastis ke ${waterPressure.toFixed(1)} Bar.`;
     } else if (waterPressure > 6.0) {
-      msg = `Water Pressure Anomaly: Pressure spiked excessively to ${waterPressure.toFixed(1)} Bar.`;
+      msg = `Anomali Tekanan Air: Tekanan melonjak ke ${waterPressure.toFixed(1)} Bar.`;
     } else if (powerLoadPercent >= 95) {
-      msg = `Critical Power Overload: Power draw reached ${powerLoadPercent.toFixed(0)}% of peak capacity.`;
+      msg = `Kelebihan Beban Listrik Kritis: Konsumsi daya mencapai ${powerLoadPercent.toFixed(0)}% dari kapasitas puncak.`;
     } else if (fireSafetyHealth < 50) {
-      msg = `Fire Safety Hazard: System health critical at ${fireSafetyHealth}%.`;
+      msg = `Bahaya Keselamatan Kebakaran: Kesehatan sistem kritis pada ${fireSafetyHealth}%.`;
     } else if (waterSupplyHealth < 50) {
-      msg = `Water Supply Crisis: Sub-grid supply health failed at ${waterSupplyHealth}%.`;
+      msg = `Krisis Pasokan Air: Kesehatan sub-grid gagal pada ${waterSupplyHealth}%.`;
     }
     return {
       status: 'Critical',
-      statusLabel: 'Critical Alert',
+      statusLabel: 'Peringatan Kritis',
       alertMessage: msg,
     };
   }
@@ -54,8 +54,8 @@ export function calculateBuildingStatus(data: Partial<BuildingData>): AutomatedS
   if (manualStatus === 'Maintenance' || (data.hvacEfficiency !== undefined && data.hvacEfficiency < 65)) {
     return {
       status: 'Maintenance',
-      statusLabel: 'Maintenance Required',
-      alertMessage: 'Scheduled system calibration & routine maintenance in progress.',
+      statusLabel: 'Perlu Pemeliharaan',
+      alertMessage: 'Kalibrasi sistem terjadwal & pemeliharaan rutin sedang berlangsung.',
     };
   }
 
@@ -67,17 +67,17 @@ export function calculateBuildingStatus(data: Partial<BuildingData>): AutomatedS
     waterPressure < 3.2 ||
     waterPressure > 5.5
   ) {
-    let msg = 'High operational demand logged in current cycle.';
+    let msg = 'Permintaan operasional tinggi tercatat dalam siklus ini.';
     if (powerLoadPercent >= 80) {
-      msg = `High Power Demand: Operating at ${powerLoadPercent.toFixed(0)}% of peak capacity.`;
+      msg = `Beban Listrik Tinggi: Beroperasi pada ${powerLoadPercent.toFixed(0)}% dari kapasitas puncak.`;
     } else if (waterPressure < 3.2 || waterPressure > 5.5) {
-      msg = `Water Pressure Warning: Flow pressure fluctuating at ${waterPressure.toFixed(1)} Bar.`;
+      msg = `Peringatan Tekanan Air: Tekanan aliran berfluktuasi pada ${waterPressure.toFixed(1)} Bar.`;
     } else if (occupancy >= 90) {
-      msg = `High Occupancy Load: Building visitor density reached ${occupancy}%.`;
+      msg = `Kepadatan Tinggi: Kepadatan pengunjung bangunan mencapai ${occupancy}%.`;
     }
     return {
       status: 'Warning',
-      statusLabel: 'High Load Warning',
+      statusLabel: 'Peringatan Beban Tinggi',
       alertMessage: msg,
     };
   }
@@ -85,7 +85,7 @@ export function calculateBuildingStatus(data: Partial<BuildingData>): AutomatedS
   // 4. SYSTEM NOMINAL (Green 🟢)
   return {
     status: 'Normal',
-    statusLabel: 'System Nominal',
-    alertMessage: 'All building utilities operating within optimal parameters.',
+    statusLabel: 'Sistem Normal',
+    alertMessage: 'Seluruh fasilitas gedung beroperasi dalam parameter optimal.',
   };
 }

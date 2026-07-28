@@ -59,7 +59,7 @@ export const BuildingContextMenu: React.FC<ContextMenuProps> = ({ x, y, building
           className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 flex items-center space-x-2 transition-colors"
         >
           <Info className="w-3.5 h-3.5" />
-          <span>Inspect Building Details</span>
+          <span>Inspeksi Detail Gedung</span>
         </button>
 
         <button
@@ -67,7 +67,7 @@ export const BuildingContextMenu: React.FC<ContextMenuProps> = ({ x, y, building
           className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 flex items-center space-x-2 transition-colors"
         >
           <BarChart2 className="w-3.5 h-3.5" />
-          <span>Show Detailed Analytics</span>
+          <span>Tampilkan Analitik Detail</span>
         </button>
 
         <button
@@ -75,7 +75,7 @@ export const BuildingContextMenu: React.FC<ContextMenuProps> = ({ x, y, building
           className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 flex items-center space-x-2 transition-colors"
         >
           <Zap className="w-3.5 h-3.5 text-amber-500" />
-          <span>Highlight Grid Infrastructure</span>
+          <span>Sorot Jaringan Infrastruktur</span>
         </button>
 
         <button
@@ -83,7 +83,7 @@ export const BuildingContextMenu: React.FC<ContextMenuProps> = ({ x, y, building
           className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 flex items-center space-x-2 transition-colors border-t border-slate-100 dark:border-slate-800 mt-1 pt-1.5"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Camera View</span>
+          <span>Reset Sudut Kamera</span>
         </button>
       </div>
     </div>

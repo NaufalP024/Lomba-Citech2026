@@ -1,6 +1,6 @@
 export type BuildingStatus = 'Normal' | 'Warning' | 'Critical' | 'Maintenance';
 
-export type InfraLayer = 'electricity' | 'water' | 'hvac' | 'occupancy' | 'fire' | 'solar' | 'internet';
+export type InfraLayer = 'electricity' | 'water' | 'hvac' | 'occupancy' | 'fire' | 'solar' | 'internet' | 'eco_green';
 
 export type NavTab = 'Dashboard' | 'Grid' | 'Analytics' | 'Incidents' | 'Users';
 
@@ -46,6 +46,11 @@ export interface BuildingData {
   modelUrl?: string; // Path to custom 3D GLTF/GLB model
   loadDistribution: LoadDistribution;
   powerHistory: number[];
+  // Eco-Green & Carbon Index
+  carbonEmission?: number; // kg CO2/day
+  ecoStatus?: 'Green' | 'Warning' | 'High Emission';
+  solarEnergyShare?: number; // %
+  aiEcoRecommendation?: string;
 }
 
 export interface IncidentItem {

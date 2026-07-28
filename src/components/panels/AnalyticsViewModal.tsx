@@ -11,20 +11,20 @@ export const AnalyticsViewModal: React.FC = () => {
   if (activeTab !== 'Analytics') return null;
 
   const chartOption = {
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['Total Power (MW)', 'Renewable Solar Feed (MW)'], textStyle: { color: isNightMode ? '#FFF' : '#333' } },
+    tooltip: { trigger: 'axis', confine: true },
+    legend: { data: ['Beban Jaringan Listrik (MW)', 'Pasokan Energi Surya (MW)'], textStyle: { color: isNightMode ? '#FFF' : '#333' } },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: analyticsData.hourlyGridPower.map((d) => d.time) },
     yAxis: { type: 'value' },
     series: [
       {
-        name: 'Total Power (MW)',
+        name: 'Beban Jaringan Listrik (MW)',
         type: 'bar',
         data: analyticsData.hourlyGridPower.map((d) => d.usage),
         itemStyle: { color: '#3B82F6', borderRadius: [4, 4, 0, 0] },
       },
       {
-        name: 'Renewable Solar Feed (MW)',
+        name: 'Pasokan Energi Surya (MW)',
         type: 'line',
         smooth: true,
         data: analyticsData.hourlyGridPower.map((d) => d.renewable),
@@ -39,10 +39,10 @@ export const AnalyticsViewModal: React.FC = () => {
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-            City-Wide Energy & Resource Analytics
+            Analisis Energi & Sumber Daya Kota
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Aggregated metric telemetry and environmental power distribution.
+            Statistik terpadu pasokan listrik, penggunaan air, dan efisiensi kota.
           </p>
         </div>
       </div>
@@ -52,7 +52,7 @@ export const AnalyticsViewModal: React.FC = () => {
         <div className="bg-blue-500/10 border border-blue-500/20 p-3.5 sm:p-4 rounded-2xl">
           <div className="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-1 flex items-center space-x-1.5">
             <Zap className="w-4 h-4 shrink-0" />
-            <span>Total Grid Consumption</span>
+            <span>Konsumsi Daya Total</span>
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white">
             {analyticsData.cityOverview.totalPowerConsumption}
@@ -62,7 +62,7 @@ export const AnalyticsViewModal: React.FC = () => {
         <div className="bg-emerald-500/10 border border-emerald-500/20 p-3.5 sm:p-4 rounded-2xl">
           <div className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mb-1 flex items-center space-x-1.5">
             <ShieldCheck className="w-4 h-4 shrink-0" />
-            <span>Grid Efficiency</span>
+            <span>Efisiensi Jaringan</span>
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white">
             {analyticsData.cityOverview.gridEfficiency}
@@ -72,7 +72,7 @@ export const AnalyticsViewModal: React.FC = () => {
         <div className="bg-cyan-500/10 border border-cyan-500/20 p-3.5 sm:p-4 rounded-2xl">
           <div className="text-xs text-cyan-600 dark:text-cyan-400 font-semibold mb-1 flex items-center space-x-1.5">
             <Droplet className="w-4 h-4 shrink-0" />
-            <span>Avg Water Pressure</span>
+            <span>Rata-rata Tekanan Air</span>
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white">
             {analyticsData.cityOverview.avgWaterPressure}
@@ -82,7 +82,7 @@ export const AnalyticsViewModal: React.FC = () => {
         <div className="bg-purple-500/10 border border-purple-500/20 p-3.5 sm:p-4 rounded-2xl">
           <div className="text-xs text-purple-600 dark:text-purple-400 font-semibold mb-1 flex items-center space-x-1.5">
             <Activity className="w-4 h-4 shrink-0" />
-            <span>Avg City Occupancy</span>
+            <span>Rata-rata Okupansi Kota</span>
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white">
             {analyticsData.cityOverview.totalOccupancy}
@@ -93,7 +93,7 @@ export const AnalyticsViewModal: React.FC = () => {
       {/* Hourly Grid Chart */}
       <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
         <h3 className="font-bold text-slate-800 dark:text-slate-100 text-xs sm:text-sm mb-3 sm:mb-4">
-          24-Hour Grid Power Draw vs Solar Generation
+          Grafik 24 Jam: Beban Listrik vs Daya Surya
         </h3>
         <ReactECharts option={chartOption} style={{ height: '260px', width: '100%' }} />
       </div>

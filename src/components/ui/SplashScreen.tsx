@@ -63,7 +63,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
             />
           </div>
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
-            <span>{displayProgress < 100 ? 'Rendering 3D Digital Twin...' : 'Siap! Membuka Dashboard...'}</span>
+            <span>{displayProgress < 100 ? 'Memuat Model 3D Digital Twin...' : 'Siap! Membuka Dashboard...'}</span>
             <span className="font-bold text-blue-500">{displayProgress}%</span>
           </div>
         </div>

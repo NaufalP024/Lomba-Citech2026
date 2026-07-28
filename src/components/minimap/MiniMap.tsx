@@ -27,13 +27,14 @@ export const MiniMap: React.FC = () => {
   };
 
   const layersList: { key: InfraLayer; label: string; icon: string }[] = [
-    { key: 'electricity', label: 'Electricity Grid', icon: '⚡' },
+    { key: 'electricity', label: 'Power Grid', icon: '⚡' },
     { key: 'water', label: 'Water Supply', icon: '💧' },
     { key: 'hvac', label: 'HVAC Airflow', icon: '❄️' },
     { key: 'occupancy', label: 'Occupancy Heatmap', icon: '👥' },
     { key: 'fire', label: 'Fire Safety', icon: '🔥' },
-    { key: 'solar', label: 'Solar Panels', icon: '☀️' },
-    { key: 'internet', label: 'Fiber Network', icon: '🌐' },
+    { key: 'solar', label: 'Solar PV Array', icon: '☀️' },
+    { key: 'internet', label: 'Fiber Optic Network', icon: '🌐' },
+    { key: 'eco_green', label: 'Eco-Green & Carbon', icon: '🍃' },
   ];
 
   return (
@@ -43,7 +44,7 @@ export const MiniMap: React.FC = () => {
         <button
           onClick={() => setZoomLevel((z) => Math.min(1.5, z + 0.15))}
           className="p-1.5 sm:p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-xl transition-colors"
-          title="Zoom In Minimap"
+          title="Perbesar Peta Mini"
         >
           <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
@@ -51,7 +52,7 @@ export const MiniMap: React.FC = () => {
         <button
           onClick={() => setZoomLevel((z) => Math.max(0.7, z - 0.15))}
           className="p-1.5 sm:p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-xl transition-colors"
-          title="Zoom Out Minimap"
+          title="Perkecil Peta Mini"
         >
           <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
@@ -64,7 +65,7 @@ export const MiniMap: React.FC = () => {
                 ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
                 : 'text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800'
             }`}
-            title="Infrastructure Layers"
+            title="Layer Infrastruktur"
           >
             <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
@@ -74,7 +75,7 @@ export const MiniMap: React.FC = () => {
             <div className="absolute bottom-12 left-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-white/80 dark:border-slate-800 rounded-2xl p-2 shadow-2xl w-48 sm:w-52 text-xs space-y-1 z-50 animate-in fade-in zoom-in-95 duration-150">
               <div className="flex items-center justify-between px-2 py-1 border-b border-slate-100 dark:border-slate-800 mb-1">
                 <span className="font-bold text-slate-800 dark:text-slate-100 text-xs">
-                  Infrastructure Layers
+                  Layer Infrastruktur
                 </span>
                 {activeLayer && (
                   <button
@@ -84,7 +85,7 @@ export const MiniMap: React.FC = () => {
                     }}
                     className="text-[10px] text-blue-500 hover:underline font-medium"
                   >
-                    Clear Layer
+                    Hapus Layer
                   </button>
                 )}
               </div>
@@ -163,7 +164,7 @@ export const MiniMap: React.FC = () => {
         <button
           onClick={toggleMinimap}
           className="absolute bottom-2.5 right-2.5 w-6 h-6 sm:w-7 sm:h-7 bg-white/90 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl shadow-md flex items-center justify-center hover:scale-105 transition-transform"
-          title="Toggle Map View"
+          title="Alihkan Tampilan Peta"
         >
           <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-500" />
         </button>

@@ -13,7 +13,7 @@ export const BuildingOccupancyCard: React.FC<BuildingOccupancyCardProps> = ({ bu
     <GlassCard isDark={isNightMode} className="w-full">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm tracking-tight">
-          Building occupancy
+          Profil & Kapasitas Gedung
         </h3>
         <button className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1">
           <MoreVertical className="w-4 h-4" />
@@ -22,22 +22,22 @@ export const BuildingOccupancyCard: React.FC<BuildingOccupancyCardProps> = ({ bu
 
       <div className="space-y-2 text-xs">
         <div className="flex justify-between items-center">
-          <span className="text-slate-500 dark:text-slate-400">Type</span>
+          <span className="text-slate-500 dark:text-slate-400">Kategori Gedung</span>
           <span className="font-semibold text-slate-800 dark:text-slate-100">{building.type}</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-slate-500 dark:text-slate-400">Total Area</span>
+          <span className="text-slate-500 dark:text-slate-400">Luas Bangunan</span>
           <span className="font-semibold text-slate-800 dark:text-slate-100">{building.totalArea}</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-slate-500 dark:text-slate-400">Tenants</span>
+          <span className="text-slate-500 dark:text-slate-400">Jumlah Unit / Tenant</span>
           <span className="font-semibold text-slate-800 dark:text-slate-100">{building.tenants}</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-slate-500 dark:text-slate-400">Operational Since</span>
+          <span className="text-slate-500 dark:text-slate-400">Tahun Beroperasi</span>
           <span className="font-semibold text-slate-800 dark:text-slate-100">{building.operationalSince}</span>
         </div>
       </div>

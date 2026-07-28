@@ -9,13 +9,13 @@ export const ShortcutHelpModal: React.FC = () => {
   if (!isShortcutHelpOpen) return null;
 
   const shortcuts = [
-    { key: 'F', desc: 'Enter / Exit Focus Mode on selected building' },
-    { key: 'ESC', desc: 'Exit focus mode & close modals' },
-    { key: 'R', desc: 'Reset 3D camera to default overview' },
-    { key: 'M', desc: 'Toggle bottom-left Minimap view' },
-    { key: 'N', desc: 'Toggle Smart Notifications drawer' },
-    { key: 'L', desc: 'Cycle through Infrastructure Layers' },
-    { key: '?', desc: 'Toggle this keyboard shortcut guide' },
+    { key: 'F', desc: 'Fokus / Lepas Fokus Gedung Terpilih' },
+    { key: 'ESC', desc: 'Tutup Jendela / Keluar Mode Fokus' },
+    { key: 'R', desc: 'Reset Kamera 3D ke Posisi Awal' },
+    { key: 'M', desc: 'Buka / Tutup Peta Mini' },
+    { key: 'N', desc: 'Buka / Tutup Panel Notifikasi' },
+    { key: 'L', desc: 'Ganti Layer Infrastruktur' },
+    { key: '?', desc: 'Tampilkan Panduan Tombol Pintas' },
   ];
 
   return (
@@ -28,9 +28,9 @@ export const ShortcutHelpModal: React.FC = () => {
             </div>
             <div>
               <h2 className="font-bold text-slate-900 dark:text-white text-base">
-                Keyboard Navigation
+                Pintas Tombol Keyboard
               </h2>
-              <p className="text-xs text-slate-400">Control CityOS with hotkeys</p>
+              <p className="text-xs text-slate-400">Navigasi aplikasi dengan tombol cepat</p>
             </div>
           </div>
           <button

@@ -20,6 +20,14 @@ export const Navbar: React.FC = () => {
   const incrementLogoClicks = useCityStore((state) => state.incrementLogoClicks);
 
   const tabs: NavTab[] = ['Dashboard', 'Grid', 'Analytics', 'Incidents', 'Users'];
+  const tabDisplayNames: Record<NavTab, string> = {
+    Dashboard: 'Beranda 3D',
+    Grid: 'Peta Jaringan',
+    Analytics: 'Analisis Kota',
+    Incidents: 'Laporan Insiden',
+    Users: 'Tim Pengelola',
+  };
+
   const activeIndex = Math.max(0, tabs.indexOf(activeTab));
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -56,7 +64,7 @@ export const Navbar: React.FC = () => {
       <div
         className="flex items-center space-x-2 cursor-pointer group select-none shrink-0"
         onClick={incrementLogoClicks}
-        title="Click 5 times for Developer Mode"
+        title="Klik 5 kali untuk Mode Developer"
       >
         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center shadow-md shadow-blue-500/30 group-hover:scale-105 transition-transform">
           <svg className="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
@@ -95,7 +103,7 @@ export const Navbar: React.FC = () => {
                   : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              {tab}
+              {tabDisplayNames[tab]}
             </button>
           );
         })}
@@ -107,7 +115,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={() => setTourOpen(true)}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors flex items-center space-x-1"
-          title="Panduan Interaktif Fitur (Tutorial Tour)"
+          title="Tur Panduan Interaktif"
         >
           <Compass className="w-4 h-4 text-blue-500 animate-pulse" />
         </button>
@@ -117,7 +125,7 @@ export const Navbar: React.FC = () => {
           id="tour-night-mode-toggle"
           onClick={toggleNightMode}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
-          title={isNightMode ? 'Switch to Day Mode' : 'Switch to Night Mode'}
+          title={isNightMode ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Malam'}
         >
           {isNightMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
         </button>
@@ -126,7 +134,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={toggleSound}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors hidden xs:block"
-          title={soundEnabled ? 'Mute UI Sounds' : 'Enable UI Sounds'}
+          title={soundEnabled ? 'Matikan Suara UI' : 'Aktifkan Suara UI'}
         >
           {soundEnabled ? <Volume2 className="w-4 h-4 text-blue-500" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
         </button>
@@ -135,7 +143,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={() => setShortcutHelpOpen(true)}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors hidden sm:block"
-          title="Keyboard Shortcuts (Press ?)"
+          title="Pintas Kunci Keyboard (Tekan ?)"
         >
           <HelpCircle className="w-4 h-4" />
         </button>
@@ -145,7 +153,7 @@ export const Navbar: React.FC = () => {
           id="tour-search-button"
           onClick={() => setSearchOpen(true)}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
-          title="Search Buildings"
+          title="Cari Bangunan"
         >
           <Search className="w-4 h-4" />
         </button>
@@ -154,7 +162,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={toggleNotifications}
           className="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors relative"
-          title="Notifications"
+          title="Notifikasi"
         >
           <Bell className="w-4 h-4" />
           {notifications.length > 0 && (

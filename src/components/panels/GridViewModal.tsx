@@ -20,10 +20,10 @@ export const GridViewModal: React.FC = () => {
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-            City Infrastructure Grid ({buildings.length} Assets)
+            Grid Infrastruktur Kota ({buildings.length} Aset)
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Real-time status grid overview across all metropolitan sectors.
+            Ringkasan status infrastruktur seluruh sektor kota.
           </p>
         </div>
       </div>
@@ -59,17 +59,17 @@ export const GridViewModal: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-2 text-xs border-t border-slate-200/50 dark:border-slate-700/50 pt-2 font-mono">
               <div>
-                <div className="text-[10px] text-slate-400 font-sans">Power Draw</div>
+                <div className="text-[10px] text-slate-400 font-sans">Konsumsi Daya</div>
                 <div className="font-semibold text-slate-800 dark:text-slate-200">{b.currentConsumption} kW</div>
               </div>
               <div>
-                <div className="text-[10px] text-slate-400 font-sans">Occupancy</div>
+                <div className="text-[10px] text-slate-400 font-sans">Kepadatan</div>
                 <div className="font-semibold text-slate-800 dark:text-slate-200">{b.occupancy}%</div>
               </div>
             </div>
 
             <div className="mt-3 flex items-center justify-end text-xs text-blue-500 font-medium group-hover:translate-x-1 transition-transform">
-              <span>View in 3D</span>
+              <span>Lihat 3D</span>
               <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </div>
           </div>

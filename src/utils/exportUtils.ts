@@ -20,7 +20,7 @@ export function exportCityDataJSON(buildings: BuildingData[]) {
 }
 
 export function exportCityDataCSV(buildings: BuildingData[]) {
-  const headers = ['ID', 'Code', 'Name', 'Type', 'Status', 'Occupancy (%)', 'Total Area', 'Current Consumption (kW)', 'Peak (kW)', 'Water Pressure (Bar)', 'HVAC Efficiency (%)'];
+  const headers = ['ID', 'Kode Aset', 'Nama Gedung', 'Kategori', 'Status', 'Okupansi (%)', 'Luas Area', 'Konsumsi Daya (kW)', 'Beban Puncak (kW)', 'Tekanan Air (Bar)', 'Efisiensi HVAC (%)'];
   const rows = buildings.map(b => [
     b.id,
     `"${b.code}"`,

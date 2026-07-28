@@ -2,51 +2,51 @@
   {
     "id": "inc-101",
     "buildingId": "b-42",
-    "buildingName": "Skyline plaza",
+    "buildingName": "Bale Panyawangan",
     "severity": "medium",
-    "title": "HVAC Airflow Deviation",
-    "description": "+12% deviation vs historical data due to overcast weather and sudden pressure shift.",
-    "time": "10 mins ago",
-    "status": "Open"
+    "title": "Deviasi Sirkulasi Udara HVAC",
+    "description": "Deviasi +12% dibanding data historis akibat cuaca mendung dan fluktuasi tekanan.",
+    "time": "10 menit lalu",
+    "status": "Baru"
   },
   {
     "id": "inc-102",
     "buildingId": "d-15",
-    "buildingName": "Cybernetics Bio-Labs",
+    "buildingName": "Puskesmas Purwakarta",
     "severity": "critical",
-    "title": "Sub-Pump Pressure Drop",
-    "description": "Main water valve sub-pump pressure dropped below 3.0 Bar threshold.",
-    "time": "25 mins ago",
-    "status": "Investigating"
+    "title": "Penurunan Tekanan Pompa Air",
+    "description": "Tekanan pompa katup air utama turun di bawah batas ambang 3.0 Bar.",
+    "time": "25 menit lalu",
+    "status": "Penanganan"
   },
   {
     "id": "inc-103",
     "buildingId": "a-12",
-    "buildingName": "Apex Innovation Tower",
+    "buildingName": "Kantor Bupati Purwakarta",
     "severity": "high",
-    "title": "Thermal Output Spike",
-    "description": "Elevated server room thermal output logged in East Wing Level 4.",
-    "time": "1 hour ago",
-    "status": "Investigating"
+    "title": "Lonjakan Suhu Ruang Server",
+    "description": "Peningkatan suhu ruang server terdeteksi pada Sayap Timur Lantai 4.",
+    "time": "1 jam lalu",
+    "status": "Penanganan"
   },
   {
     "id": "inc-104",
-    "buildingId": "h-18",
-    "buildingName": "Vanguard Trade Center",
+    "buildingId": "g-14",
+    "buildingName": "Sadang Terminal Square",
     "severity": "low",
-    "title": "Visitor Traffic Exchange Surge",
-    "description": "Zone 3 ventilation fans automatically stepped up to 85% capacity.",
-    "time": "2 hours ago",
-    "status": "Resolved"
+    "title": "Penyelarasan Kapasitas Ventilasi",
+    "description": "Kipas ventilasi Zona 3 menyesuaikan secara otomatis ke kapasitas 85%.",
+    "time": "2 jam lalu",
+    "status": "Selesai"
   },
   {
     "id": "inc-105",
     "buildingId": "e-22",
-    "buildingName": "Solaria Green Tower",
+    "buildingName": "Politeknik Enjinering Indorama",
     "severity": "low",
-    "title": "Solar Inverter Calibration",
-    "description": "Planned maintenance sync for rooftop photovolatic arrays.",
-    "time": "3 hours ago",
-    "status": "Resolved"
+    "title": "Kalibrasi Inverter Surya",
+    "description": "Sinkronisasi pemeliharaan rutin untuk panel surya atap gedung.",
+    "time": "3 jam lalu",
+    "status": "Selesai"
   }
 ]

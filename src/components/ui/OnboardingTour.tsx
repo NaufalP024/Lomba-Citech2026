@@ -44,9 +44,9 @@ export const OnboardingTour: React.FC = () => {
     {
       targetId: null,
       title: 'Selamat Datang di SmartCity Vision!',
-      subtitle: 'Purwakarta 3D Digital Twin Platform',
+      subtitle: 'Platform Digital Twin 3D Purwakarta',
       description:
-        'Selamat datang di platform Digital Twin SmartCity Purwakarta! Dashboard interaktif ini menyajikan monitoring 3D real-time untuk jaringan listrik, pasokan air, HVAC, keamanan, serta infrastruktur publik kota.',
+        'Selamat datang di platform Digital Twin SmartCity Purwakarta! Dashboard interaktif ini menyajikan monitoring 3D real-time untuk jaringan listrik, pasokan air, HVAC, keselamatan, serta infrastruktur publik kota.',
       icon: <Sparkles className="w-5 h-5 text-amber-500" />,
       badge: 'Selamat Datang',
       arrowPosition: 'center',
@@ -56,7 +56,7 @@ export const OnboardingTour: React.FC = () => {
       title: 'Navigasi Tab Perkotaan',
       subtitle: 'Beralih Tampilan Utama',
       description:
-        'Gunakan tab navbar ini untuk berpindah secara cepat antara Dashboard 3D, Grid Listrik, Analitik, Insiden, dan Manajemen Personel.',
+        'Gunakan tab navbar ini untuk berpindah secara cepat antara Dashboard 3D, Peta Grid, Analitik, Insiden, dan Manajemen Personel.',
       icon: <MapPin className="w-5 h-5 text-blue-500" />,
       badge: 'Navbar Utama',
       arrowPosition: 'top-center',
@@ -66,7 +66,7 @@ export const OnboardingTour: React.FC = () => {
       title: 'Interaksi Gedung & Kamera 3D',
       subtitle: 'Rotasi, Zoom & Detail Gedung',
       description:
-        'Klik pada gedung 3D mana pun di peta untuk membuka panel telemetri real-time. Tahan drag mouse untuk memutar sudut pandang dan scroll untuk zoom.',
+        'Klik pada gedung 3D mana pun di peta untuk membuka panel telemetri real-time. Tahan & geser mouse untuk memutar sudut pandang dan scroll untuk zoom.',
       icon: <MousePointerClick className="w-5 h-5 text-emerald-500" />,
       badge: 'Kontrol 3D',
       arrowPosition: 'center',

@@ -12,16 +12,16 @@ export const ExportDataModal: React.FC = () => {
   if (!isExportModalOpen) return null;
 
   const handleExportJSON = () => {
-    toast.info('Export started.', {
-      description: 'Generating CityOS Digital Twin JSON report...',
+    toast.info('Proses ekspor dimulai.', {
+      description: 'Membuat laporan data JSON...',
     });
     exportCityDataJSON(buildings);
     setExportModalOpen(false);
   };
 
   const handleExportCSV = () => {
-    toast.info('Export started.', {
-      description: 'Generating CityOS CSV spreadsheet...',
+    toast.info('Proses ekspor dimulai.', {
+      description: 'Membuat lembar kerja CSV...',
     });
     exportCityDataCSV(buildings);
     setExportModalOpen(false);
@@ -38,9 +38,9 @@ export const ExportDataModal: React.FC = () => {
             </div>
             <div>
               <h2 className="font-bold text-slate-900 dark:text-white text-base">
-                Export Digital Twin Data
+                Ekspor Data Perkotaan
               </h2>
-              <p className="text-xs text-slate-400">Select output format</p>
+              <p className="text-xs text-slate-400">Pilih format berkas</p>
             </div>
           </div>
           <button
@@ -62,10 +62,10 @@ export const ExportDataModal: React.FC = () => {
             </div>
             <div>
               <div className="font-semibold text-slate-900 dark:text-white text-sm">
-                JSON Data Format (.json)
+                Format JSON (.json)
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                Full 3D object telemetry, building load curves, and status attributes.
+                Berisi telemetri lengkap, profil beban listrik, dan status gedung.
               </p>
             </div>
           </button>
@@ -79,10 +79,10 @@ export const ExportDataModal: React.FC = () => {
             </div>
             <div>
               <div className="font-semibold text-slate-900 dark:text-white text-sm">
-                CSV Spreadsheet (.csv)
+                Format Tabel CSV (.csv)
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                Structured tabular format for Excel, Google Sheets, and BI tools.
+                Format tabel rapi untuk Excel, Google Sheets, dan pengolahan data.
               </p>
             </div>
           </button>

@@ -29,18 +29,20 @@ export const PowerDrawChart: React.FC<PowerDrawChartProps> = ({ data, isNightMod
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: isNightMode ? '#1E293B' : 'rgba(255, 255, 255, 0.95)',
+      confine: true,
+      extraCssText: 'z-index: 50; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);',
+      backgroundColor: isNightMode ? '#0F172A' : 'rgba(255, 255, 255, 0.98)',
       borderColor: '#3B82F6',
       borderWidth: 1,
       textStyle: {
         color: isNightMode ? '#F8FAFC' : '#0F172A',
         fontSize: 12,
-        fontFamily: 'Poppins',
+        fontFamily: 'Inter, sans-serif',
       },
       formatter: (params: any) => {
         const item = params[0];
         return `<div class="font-sans">
-          <div class="text-[11px] text-slate-400">Time: ${item.name}</div>
+          <div class="text-[11px] text-slate-400">Waktu: ${item.name}</div>
           <div class="font-semibold text-blue-500">${item.value} kW</div>
         </div>`;
       },
@@ -75,7 +77,7 @@ export const PowerDrawChart: React.FC<PowerDrawChartProps> = ({ data, isNightMod
         markPoint: {
           symbol: 'circle',
           symbolSize: 10,
-          data: [{ type: 'max', name: 'Peak' }],
+          data: [{ type: 'max', name: 'Beban Puncak' }],
           itemStyle: {
             color: '#00D8FF',
             borderColor: '#FFFFFF',
