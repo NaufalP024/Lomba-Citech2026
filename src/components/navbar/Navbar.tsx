@@ -64,11 +64,11 @@ export const Navbar: React.FC = () => {
       
       {/* Brand Logo */}
       <div
-        className="flex items-center space-x-2 cursor-pointer group select-none shrink-0"
+        className="flex items-center space-x-2 cursor-pointer group select-none shrink-0 mr-4 sm:mr-6"
         onClick={incrementLogoClicks}
         title="Klik 5 kali untuk Mode Developer"
       >
-        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/30 group-hover:scale-105 transition-transform">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/30 group-hover:scale-105 transition-transform shrink-0">
           <svg className="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
             <path d="M19 2H5a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2V4a2 2 0 00-2-2zm-7 3h3v3h-3V5zm-4 0h3v3H8V5zm0 5h3v3H8v-3zm0 5h3v3H8v-3zm9 3h-3v-3h3v3zm0-5h-3v-3h3v3zm0-5h-3V5h3v3z" />
           </svg>
@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
           <span className="text-lg sm:text-xl font-extrabold tracking-wider text-slate-900 dark:text-white leading-none">
             SIG<span className="text-blue-600">AP</span>
           </span>
-          <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 tracking-tight leading-snug hidden xl:block mt-1">
+          <span className="text-[8px] font-bold text-slate-500 dark:text-slate-400 tracking-tighter leading-none hidden 2xl:block mt-0.5 whitespace-nowrap">
             Sistem Informasi & Pengawasan Gedung Publik
           </span>
         </div>
@@ -104,7 +104,7 @@ export const Navbar: React.FC = () => {
               key={tab}
               ref={(el) => (tabRefs.current[idx] = el)}
               onClick={() => handleTabClick(tab)}
-              className={`relative z-10 px-3.5 sm:px-4 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 text-center select-none ${
+              className={`relative z-10 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-200 text-center select-none ${
                 isActive
                   ? 'text-white'
                   : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
