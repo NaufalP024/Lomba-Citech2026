@@ -29,7 +29,7 @@ export const TopHeaderOverlay: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-14 sm:top-20 left-3 sm:left-6 z-30 flex items-center space-x-2 sm:space-x-4 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-300 max-w-[calc(100vw-24px)]">
+    <div className="fixed top-14 sm:top-20 left-3 sm:left-6 z-30 flex items-center space-x-2 sm:space-x-4 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-300 max-w-[calc(100vw-24px)] overflow-x-auto no-scrollbar">
       {/* Top Left Bar Info */}
       <div className="bg-white/85 dark:bg-slate-900/90 backdrop-blur-2xl border border-white/60 dark:border-slate-800 rounded-3xl px-3 sm:px-4 py-1.5 sm:py-2 shadow-[0_15px_40px_rgba(15,23,42,0.12)] flex items-center space-x-2 sm:space-x-3.5">
         {/* Back button */}

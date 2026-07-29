@@ -195,24 +195,16 @@ const GLTFModelRenderer: React.FC<{
   );
 });
 
-// Preload models for instant rendering
-useGLTF.preload('/models/gedung.glb');
-useGLTF.preload('/models/panyawangan.glb');
+// Preload models that actually exist in public/models for instant rendering
 useGLTF.preload('/models/bupati.glb');
-useGLTF.preload('/models/rumah_sakit.glb');
-useGLTF.preload('/models/dprd.glb');
-useGLTF.preload('/models/gedung_dprd.glb');
-useGLTF.preload('/models/plta.glb');
-useGLTF.preload('/models/sadang.glb');
-useGLTF.preload('/models/sadang_terminal_square.glb');
-useGLTF.preload('/models/puskesmas.glb');
-useGLTF.preload('/models/stasiun.glb');
+useGLTF.preload('/models/gedung.glb');
 useGLTF.preload('/models/harper.glb');
-useGLTF.preload('/models/hotel_harper.glb');
-useGLTF.preload('/models/polres.glb');
+useGLTF.preload('/models/masjid_agung.glb');
+useGLTF.preload('/models/panyawangan.glb');
+useGLTF.preload('/models/puskesmas.glb');
+useGLTF.preload('/models/rumah_sakit.glb');
+useGLTF.preload('/models/sadang.glb');
 useGLTF.preload('/models/wikara.glb');
-useGLTF.preload('/models/keramik_anjun.glb');
-useGLTF.preload('/models/kerami_anjun.glb');
 
 export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.memo(({ building, onContextMenu }) => {
   const meshRef = useRef<THREE.Group>(null);

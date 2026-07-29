@@ -30,30 +30,31 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
   };
 
   return (
-    <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-950 flex flex-col lg:flex-row overflow-hidden select-none">
+    <div className="fixed inset-0 z-50 w-full h-full bg-slate-950 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden select-none">
       
-      {/* LEFT COLUMN: Clean White/Slate Full-Height Form Area */}
-      <div className="w-full lg:w-5/12 xl:w-4/12 h-full bg-white dark:bg-slate-900 p-6 sm:p-10 lg:p-12 flex flex-col justify-between z-10 shadow-2xl overflow-y-auto">
-        <div>
+      {/* LEFT COLUMN: Clean White/Slate Form Area (Full screen centered on Mobile HP, Split side on Desktop) */}
+      <div className="w-full lg:w-5/12 xl:w-4/12 h-full min-h-screen bg-white dark:bg-slate-900 p-6 sm:p-10 lg:p-12 flex flex-col justify-between z-10 shadow-2xl shrink-0 overflow-y-auto">
+        <div className="max-w-md mx-auto w-full my-auto py-4">
+          
           {/* Brand Header */}
-          <div className="flex items-center space-x-3 mb-10">
-            <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-xl shadow-blue-600/30 shrink-0">
-              <Building2 className="w-6 h-6" />
+          <div className="flex items-center space-x-3 mb-8 lg:mb-10">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-xl shadow-blue-600/30 shrink-0">
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <h1 className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white flex items-center space-x-1.5">
+              <h1 className="font-extrabold text-lg sm:text-xl lg:text-2xl tracking-tight text-slate-900 dark:text-white flex items-center space-x-1.5">
                 <span>City</span>
                 <span className="text-blue-600">OS</span>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 ml-1 uppercase tracking-wider">
+                <span className="text-[9px] sm:text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 ml-1 uppercase tracking-wider">
                   Purwakarta
                 </span>
               </h1>
-              <p className="text-[11px] font-medium text-slate-400">Pemerintah Kabupaten Purwakarta</p>
+              <p className="text-[10px] sm:text-[11px] font-medium text-slate-400">Pemerintah Kabupaten Purwakarta</p>
             </div>
           </div>
 
           {/* Form Title */}
-          <div className="mb-8">
+          <div className="mb-6 lg:mb-8">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
               Masuk Sistem
             </h2>
@@ -63,7 +64,7 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
           </div>
 
           {/* Form Container */}
-          <form onSubmit={handleLoginSubmit} className="space-y-5">
+          <form onSubmit={handleLoginSubmit} className="space-y-4 lg:space-y-5">
             
             {/* Account Selector Field */}
             <div>
@@ -75,15 +76,15 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-left flex items-center justify-between hover:border-blue-500 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                  className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-left flex items-center justify-between hover:border-blue-500 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 >
                   <div className="flex items-center space-x-3.5 min-w-0">
-                    <div className={`w-10 h-10 rounded-xl ${selectedUser.bgColor} text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm`}>
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${selectedUser.bgColor} text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm`}>
                       {selectedUser.initials}
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold text-slate-900 dark:text-white text-sm truncate">
+                        <span className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm truncate">
                           {selectedUser.name}
                         </span>
                         {selectedUser.isSuperAdmin && (
@@ -92,7 +93,7 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 font-medium truncate mt-0.5">
+                      <p className="text-[11px] sm:text-xs text-blue-600 dark:text-blue-400 font-medium truncate mt-0.5">
                         {selectedUser.role}
                       </p>
                     </div>
@@ -142,15 +143,15 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
             </div>
 
             {/* Authority Status Card */}
-            <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 flex items-center space-x-3.5 text-xs">
-              <div className="p-2.5 rounded-xl bg-blue-600 text-white shrink-0 shadow-sm">
-                <Lock className="w-4 h-4" />
+            <div className="p-3 sm:p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 flex items-center space-x-3.5 text-xs">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-blue-600 text-white shrink-0 shadow-sm">
+                <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <div>
-                <span className="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
+                <span className="text-[9px] sm:text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
                   Hak Otorisasi Sistem
                 </span>
-                <span className="font-bold text-slate-900 dark:text-slate-100 text-xs">
+                <span className="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-xs">
                   {selectedUser.isSuperAdmin
                     ? 'Superadmin (Akses Kelola Seluruh Gedung)'
                     : `Akses Khusus (${selectedUser.assignedBuildingName})`}
@@ -174,24 +175,25 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
             {/* Primary Action Button */}
             <button
               type="submit"
-              className="w-full py-4 px-6 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-sm shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center space-x-2 mt-4"
+              className="w-full py-3.5 sm:py-4 px-6 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-xs sm:text-sm shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center space-x-2 mt-4"
             >
               <span>Masuk ke Portal Smart City</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
-        </div>
 
-        {/* Footer Subtext */}
-        <div className="pt-8 border-t border-slate-100 dark:border-slate-800 text-left">
-          <p className="text-xs text-slate-400 dark:text-slate-500">
-            © 2026 Dinas Komunikasi dan Informatika • Kabupaten Purwakarta
-          </p>
+          {/* Footer Subtext */}
+          <div className="pt-6 border-t border-slate-100 dark:border-slate-800 text-center sm:text-left mt-8">
+            <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500">
+              © 2026 Dinas Komunikasi dan Informatika • Kabupaten Purwakarta
+            </p>
+          </div>
+
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Real Purwakarta Webp Image Banner */}
-      <div className="w-full lg:w-7/12 xl:w-8/12 h-64 lg:h-full relative overflow-hidden bg-slate-950 flex flex-col justify-between p-8 sm:p-12 lg:p-16">
+      {/* RIGHT COLUMN: Real Purwakarta Webp Image Banner (HIDDEN ON MOBILE HP, VISIBLE ON DESKTOP LG) */}
+      <div className="hidden lg:flex lg:w-7/12 xl:w-8/12 lg:h-full relative overflow-hidden bg-slate-950 flex-col justify-between p-8 sm:p-12 lg:p-16 shrink-0">
         
         {/* Background Image: Purwakarta.webp */}
         <img
