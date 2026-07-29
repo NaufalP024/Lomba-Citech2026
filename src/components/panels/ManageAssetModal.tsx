@@ -70,7 +70,21 @@ export const ManageAssetModal: React.FC = () => {
     e.preventDefault();
 
     const newCarbon = Number(carbonEmission);
+    const newSolar = Number(solarEnergyShare);
     const calculatedEcoStatus = newCarbon < 220 ? 'Green' : newCarbon < 400 ? 'Warning' : 'High Emission';
+
+    let calculatedAiRec = '';
+    if (newCarbon >= 400) {
+      calculatedAiRec = newSolar < 30
+        ? `Emisi sangat tinggi (${newCarbon} kg CO₂/hari) & porsi energi surya rendah (${newSolar}%). Segera aktifkan penghematan daya HVAC dan tingkatkan panel surya.`
+        : `Emisi tinggi terdeteksi (${newCarbon} kg CO₂/hari). Pasokan energi surya (${newSolar}%) perlu ditingkatkan untuk menekan beban jejak karbon harian.`;
+    } else if (newCarbon >= 220) {
+      calculatedAiRec = newSolar >= 50
+        ? `Kinerja stabil: Emisi sedang (${newCarbon} kg CO₂/hari) didukung ${newSolar}% energi surya. Jaga efisiensi pendingin udara & pencahayaan luar.`
+        : `Emisi dalam ambang sedang (${newCarbon} kg CO₂/hari). Disarankan mengoptimalkan pasokan energi surya dari ${newSolar}% menuju target 50%.`;
+    } else {
+      calculatedAiRec = `Kinerja ekologis sangat baik! Emisi rendah (${newCarbon} kg CO₂/hari) dengan ${newSolar}% kontribusi energi surya terbarukan.`;
+    }
 
     updateBuildingData(selectedBuilding.id, {
       name,
@@ -83,12 +97,13 @@ export const ManageAssetModal: React.FC = () => {
       exteriorLight,
       coordinator,
       carbonEmission: newCarbon,
-      solarEnergyShare: Number(solarEnergyShare),
+      solarEnergyShare: newSolar,
       ecoStatus: calculatedEcoStatus,
+      aiEcoRecommendation: calculatedAiRec,
     });
 
     toast.success(`Data "${name}" berhasil diperbarui oleh ${coordinator}!`, {
-      description: `Emisi Karbon: ${newCarbon} kg CO₂/hari (${calculatedEcoStatus}) | Status: ${preview.statusLabel}`,
+      description: `Emisi Karbon: ${newCarbon} kg CO₂/hari | Energi Surya: ${newSolar}% | Rekomendasi AI telah disesuaikan`,
     });
 
     setManageAssetOpen(false);

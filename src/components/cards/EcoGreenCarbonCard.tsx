@@ -14,17 +14,23 @@ export const EcoGreenCarbonCard: React.FC<EcoGreenCarbonCardProps> = ({ building
   const solarShare = building.solarEnergyShare ?? (building.roofType === 'solar' ? 60 : 30);
 
   // Dynamic AI Recommendation Engine matching real-time updated telemetry
-  const getDynamicAiRecommendation = () => {
-    if (carbon >= 400) {
-      return `Rekomendasi AI: Emisi tinggi terdeteksi (${carbon} kg CO₂/hari). Disarankan mengaktifkan mode penghematan daya HVAC dan meningkatkan pasokan energi surya dari ${solarShare}%.`;
-    } else if (carbon >= 220) {
-      return `Rekomendasi AI: Emisi dalam ambang sedang (${carbon} kg CO₂/hari). Energi surya (${solarShare}%) bekerja stabil, optimalkan efisiensi pencahayaan luar.`;
+  const getDynamicAiRecommendation = (carbonVal: number, solarVal: number) => {
+    if (carbonVal >= 400) {
+      if (solarVal < 30) {
+        return `Emisi sangat tinggi (${carbonVal} kg CO₂/hari) & porsi energi surya rendah (${solarVal}%). Segera aktifkan penghematan daya HVAC dan tingkatkan panel surya.`;
+      }
+      return `Emisi tinggi terdeteksi (${carbonVal} kg CO₂/hari). Pasokan energi surya (${solarVal}%) perlu ditingkatkan untuk menekan beban jejak karbon harian.`;
+    } else if (carbonVal >= 220) {
+      if (solarVal >= 50) {
+        return `Kinerja stabil: Emisi sedang (${carbonVal} kg CO₂/hari) didukung ${solarVal}% energi surya. Jaga efisiensi pendingin udara & pencahayaan luar.`;
+      }
+      return `Emisi dalam ambang sedang (${carbonVal} kg CO₂/hari). Disarankan mengoptimalkan pasokan energi surya dari ${solarVal}% menuju target 50%.`;
     } else {
-      return `Rekomendasi AI: Kinerja ekologis sangat baik! Emisi amat rendah (${carbon} kg CO₂/hari) dengan ${solarShare}% kontribusi energi surya terbarukan.`;
+      return `Kinerja ekologis sangat baik! Emisi rendah (${carbonVal} kg CO₂/hari) dengan ${solarVal}% kontribusi energi surya terbarukan.`;
     }
   };
 
-  const aiRecommendation = building.aiEcoRecommendation || getDynamicAiRecommendation();
+  const aiRecommendation = getDynamicAiRecommendation(carbon, solarShare);
 
   return (
     <GlassCard isDark={isNightMode} className="w-full">
