@@ -84,8 +84,8 @@ export const ManageAssetModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-12 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl w-full max-w-lg my-auto max-h-[88vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center space-x-2.5">
@@ -143,7 +143,7 @@ export const ManageAssetModal: React.FC = () => {
         )}
 
         {/* Form Body */}
-        <form onSubmit={handleSave} className="p-6 pt-3 space-y-3.5 text-xs">
+        <form onSubmit={handleSave} className="p-6 pt-3 space-y-3.5 text-xs overflow-y-auto max-h-[calc(88vh-80px)]">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
