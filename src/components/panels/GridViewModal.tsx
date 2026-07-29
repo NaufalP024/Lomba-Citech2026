@@ -16,7 +16,7 @@ export const GridViewModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-16 sm:top-20 left-3 sm:left-6 right-3 lg:right-[410px] bottom-3 sm:bottom-6 z-30 bg-white/85 dark:bg-slate-900/90 backdrop-blur-2xl border border-white/60 dark:border-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed top-16 sm:top-20 left-3 sm:left-6 right-3 lg:right-6 bottom-3 sm:bottom-6 z-30 bg-white/85 dark:bg-slate-900/90 backdrop-blur-2xl border border-white/60 dark:border-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
