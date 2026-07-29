@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import analyticsData from '../../data/analytics.json';
-import { Building2, ShieldCheck, ArrowRight, CheckCircle2, Lock, ChevronDown, UserCheck, BarChart3, PieChart } from 'lucide-react';
+import { Building2, ShieldCheck, ArrowRight, CheckCircle2, Lock, ChevronDown, UserCheck, Sparkles, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface LoginGatewayProps {
@@ -30,252 +30,217 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
-      {/* Outer Card Container matching Reference UI */}
-      <div className="relative bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-[2.5rem] shadow-2xl w-full max-w-5xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
-        
-        {/* LEFT PANEL: Clean White Form Area (Matching Reference Image Left Column) */}
-        <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col justify-between bg-white dark:bg-slate-900">
-          <div>
-            {/* Brand Logo */}
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <div>
-                <h1 className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white flex items-center space-x-1">
-                  <span>City</span>
-                  <span className="text-blue-600">OS</span>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 ml-1">
-                    Purwakarta
-                  </span>
-                </h1>
-              </div>
+    <div className="fixed inset-0 z-50 w-screen h-screen bg-slate-950 flex flex-col lg:flex-row overflow-hidden select-none">
+      
+      {/* LEFT COLUMN: Clean White/Slate Full-Height Form Area */}
+      <div className="w-full lg:w-5/12 xl:w-4/12 h-full bg-white dark:bg-slate-900 p-6 sm:p-10 lg:p-12 flex flex-col justify-between z-10 shadow-2xl overflow-y-auto">
+        <div>
+          {/* Brand Header */}
+          <div className="flex items-center space-x-3 mb-10">
+            <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-xl shadow-blue-600/30 shrink-0">
+              <Building2 className="w-6 h-6" />
             </div>
+            <div>
+              <h1 className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white flex items-center space-x-1.5">
+                <span>City</span>
+                <span className="text-blue-600">OS</span>
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 ml-1 uppercase tracking-wider">
+                  Purwakarta
+                </span>
+              </h1>
+              <p className="text-[11px] font-medium text-slate-400">Pemerintah Kabupaten Purwakarta</p>
+            </div>
+          </div>
 
-            {/* Form Title & Subtitle */}
-            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
+          {/* Form Title */}
+          <div className="mb-8">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
               Masuk Sistem
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
               Selamat datang kembali! Silakan pilih akun tim pengelola Anda.
             </p>
+          </div>
 
-            {/* Form Container */}
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              
-              {/* Account Dropdown Selector */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Pilih Akun Tim Pengelola (11 Personel Terdaftar)
-                </label>
+          {/* Form Container */}
+          <form onSubmit={handleLoginSubmit} className="space-y-5">
+            
+            {/* Account Selector Field */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
+                Pilih Akun Tim Pengelola (11 Personel Terdaftar)
+              </label>
 
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-left flex items-center justify-between hover:border-blue-500 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                  >
-                    <div className="flex items-center space-x-3 min-w-0">
-                      <div className={`w-9 h-9 rounded-xl ${selectedUser.bgColor} text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm`}>
-                        {selectedUser.initials}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center space-x-2">
-                          <span className="font-bold text-slate-900 dark:text-white text-xs truncate">
-                            {selectedUser.name}
-                          </span>
-                          {selectedUser.isSuperAdmin && (
-                            <span className="px-1.5 py-0.5 rounded-full text-[8px] font-black bg-amber-500 text-white uppercase tracking-wider">
-                              Superadmin
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium truncate">
-                          {selectedUser.role}
-                        </p>
-                      </div>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="w-full p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-left flex items-center justify-between hover:border-blue-500 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                >
+                  <div className="flex items-center space-x-3.5 min-w-0">
+                    <div className={`w-10 h-10 rounded-xl ${selectedUser.bgColor} text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm`}>
+                      {selectedUser.initials}
                     </div>
-                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
+                    <div className="min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-bold text-slate-900 dark:text-white text-sm truncate">
+                          {selectedUser.name}
+                        </span>
+                        {selectedUser.isSuperAdmin && (
+                          <span className="px-2 py-0.5 rounded-full text-[8px] font-black bg-amber-500 text-white uppercase tracking-wider">
+                            Superadmin
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 font-medium truncate mt-0.5">
+                        {selectedUser.role}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 ml-2 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
 
-                  {/* Dropdown Menu Overlay */}
-                  {isDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-30 max-h-56 overflow-y-auto p-1.5 space-y-1">
-                      {analyticsData.users.map((u) => (
-                        <button
-                          key={u.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedUserId(u.id);
-                            setIsDropdownOpen(false);
-                          }}
-                          className={`w-full p-2.5 rounded-xl text-left flex items-center justify-between transition-colors ${
-                            u.id === selectedUserId
-                              ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold'
-                              : 'hover:bg-slate-100 dark:hover:bg-slate-700/60 text-slate-800 dark:text-slate-200'
-                          }`}
-                        >
-                          <div className="flex items-center space-x-2.5 min-w-0">
-                            <div className={`w-7 h-7 rounded-lg ${u.bgColor} text-white font-bold text-[10px] flex items-center justify-center shrink-0`}>
-                              {u.initials}
+                {/* Dropdown Menu List */}
+                {isDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-40 max-h-60 overflow-y-auto p-2 space-y-1">
+                    {analyticsData.users.map((u) => (
+                      <button
+                        key={u.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedUserId(u.id);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full p-2.5 rounded-xl text-left flex items-center justify-between transition-colors ${
+                          u.id === selectedUserId
+                            ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold'
+                            : 'hover:bg-slate-100 dark:hover:bg-slate-700/60 text-slate-800 dark:text-slate-200'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3 min-w-0">
+                          <div className={`w-8 h-8 rounded-lg ${u.bgColor} text-white font-bold text-xs flex items-center justify-center shrink-0`}>
+                            {u.initials}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold truncate flex items-center space-x-1.5">
+                              <span>{u.name}</span>
+                              {u.isSuperAdmin && (
+                                <span className="text-[8px] bg-amber-500 text-white px-1.5 rounded font-extrabold">SA</span>
+                              )}
                             </div>
-                            <div className="min-w-0">
-                              <div className="text-xs font-bold truncate flex items-center space-x-1.5">
-                                <span>{u.name}</span>
-                                {u.isSuperAdmin && (
-                                  <span className="text-[8px] bg-amber-500 text-white px-1 rounded font-extrabold">SA</span>
-                                )}
-                              </div>
-                              <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                                {u.role}
-                              </div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                              {u.role}
                             </div>
                           </div>
-                          {u.id === selectedUserId && <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 ml-1" />}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                        </div>
+                        {u.id === selectedUserId && <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 ml-1" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
 
-              {/* Status Access Badge Info Card */}
-              <div className="p-3 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 flex items-center space-x-3 text-xs">
-                <div className="p-2 rounded-xl bg-blue-600 text-white shrink-0">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
-                    Hak Otorisasi Sistem
-                  </span>
-                  <span className="font-bold text-slate-800 dark:text-slate-100">
-                    {selectedUser.isSuperAdmin
-                      ? 'Penuh (Kelola Seluruh Gedung & Sistem)'
-                      : `Khusus (${selectedUser.assignedBuildingName})`}
-                  </span>
-                </div>
+            {/* Authority Status Card */}
+            <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 flex items-center space-x-3.5 text-xs">
+              <div className="p-2.5 rounded-xl bg-blue-600 text-white shrink-0 shadow-sm">
+                <Lock className="w-4 h-4" />
               </div>
-
-              {/* Remember for 30 Days Checkbox */}
-              <div className="flex items-center justify-between pt-1">
-                <label className="flex items-center space-x-2 cursor-pointer text-xs text-slate-600 dark:text-slate-400 select-none">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span>Ingat Sesi Saya (30 Hari)</span>
-                </label>
+              <div>
+                <span className="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
+                  Hak Otorisasi Sistem
+                </span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 text-xs">
+                  {selectedUser.isSuperAdmin
+                    ? 'Superadmin (Akses Kelola Seluruh Gedung)'
+                    : `Akses Khusus (${selectedUser.assignedBuildingName})`}
+                </span>
               </div>
+            </div>
 
-              {/* Primary Blue Action Button matching Reference UI */}
-              <button
-                type="submit"
-                className="w-full py-3.5 px-6 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-sm shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center space-x-2 mt-2"
-              >
-                <span>Masuk ke Portal Smart City</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
-          </div>
+            {/* Checkbox Remember Me */}
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center space-x-2.5 cursor-pointer text-xs text-slate-600 dark:text-slate-400 select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span>Ingat Sesi Saya (30 Hari)</span>
+              </label>
+            </div>
 
-          {/* Footer Subtext */}
-          <div className="pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
-            <p className="text-[11px] text-slate-400 dark:text-slate-500">
-              Dinas Komunikasi dan Informatika • Kabupaten Purwakarta
-            </p>
-          </div>
+            {/* Primary Action Button */}
+            <button
+              type="submit"
+              className="w-full py-4 px-6 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-sm shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center space-x-2 mt-4"
+            >
+              <span>Masuk ke Portal Smart City</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
         </div>
 
-        {/* RIGHT PANEL: Vibrant Royal Blue Banner with Mockup Graphic (Matching Reference Image Right Column) */}
-        <div className="lg:col-span-7 bg-blue-600 p-8 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden">
-          
-          {/* Subtle background glow graphics */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-700/50 rounded-full blur-3xl pointer-events-none" />
+        {/* Footer Subtext */}
+        <div className="pt-8 border-t border-slate-100 dark:border-slate-800 text-left">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
+            © 2026 Dinas Komunikasi dan Informatika • Kabupaten Purwakarta
+          </p>
+        </div>
+      </div>
 
-          {/* Header Text */}
-          <div className="relative z-10 max-w-xl">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-3">
-              Selamat Datang Kembali!
-            </h2>
-            <h3 className="text-xl sm:text-2xl font-bold text-blue-100 underline decoration-blue-300 underline-offset-8 mb-4">
-              Portal Otentikasi CityOS Digital Twin
-            </h3>
-            <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed font-normal">
-              Pusat komando dan kendali telemetri infrastruktur perkotaan terpadu Kabupaten Purwakarta berbasis kecerdasan digital twin 3D spatial.
-            </p>
+      {/* RIGHT COLUMN: Real Purwakarta Webp Image Banner */}
+      <div className="w-full lg:w-7/12 xl:w-8/12 h-64 lg:h-full relative overflow-hidden bg-slate-950 flex flex-col justify-between p-8 sm:p-12 lg:p-16">
+        
+        {/* Background Image: Purwakarta.webp */}
+        <img
+          src="/purwakarta.webp"
+          alt="Kota Purwakarta Smart City"
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105 filter brightness-90 transition-transform duration-10000 ease-out"
+        />
+
+        {/* Gradient Overlay for Text Legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-blue-950/40 pointer-events-none" />
+
+        {/* Top Header Badge inside Image */}
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="px-4 py-2 rounded-full bg-slate-900/80 border border-white/20 text-white text-xs font-bold backdrop-blur-md flex items-center space-x-2 shadow-lg">
+            <MapPin className="w-4 h-4 text-emerald-400" />
+            <span>Kabupaten Purwakarta, Jawa Barat</span>
           </div>
+          <span className="hidden sm:inline-flex px-3 py-1.5 rounded-full bg-blue-600/80 text-white text-[11px] font-extrabold uppercase tracking-wider backdrop-blur-md">
+            Digital Twin 3D
+          </span>
+        </div>
 
-          {/* Graphic Illustrated UI Dashboard Mockup Card (Floating inside Blue Banner matching reference image) */}
-          <div className="relative z-10 my-6 bg-white rounded-3xl p-5 sm:p-6 text-slate-900 shadow-2xl border border-white/20 max-w-lg mx-auto w-full">
-            <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-              <div>
-                <h4 className="font-extrabold text-sm text-slate-900">Laporan Konsumsi Energi & Telemetri</h4>
-                <p className="text-[10px] text-slate-400">Kabupaten Purwakarta • Real-time Sync</p>
-              </div>
-              <div className="flex items-center space-x-2 text-[10px]">
-                <span className="flex items-center space-x-1 font-semibold text-blue-600">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 inline-block" />
-                  <span>Daya (kW)</span>
-                </span>
-                <span className="flex items-center space-x-1 text-slate-400 font-semibold">
-                  <span className="w-2 h-2 rounded-full bg-slate-200 inline-block" />
-                  <span>Air (Bar)</span>
-                </span>
-              </div>
+        {/* Bottom Banner Content over Purwakarta Image */}
+        <div className="relative z-10 max-w-2xl mt-auto">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4 drop-shadow-md">
+            Selamat Datang Kembali!
+          </h2>
+          <h3 className="text-xl sm:text-2xl font-bold text-blue-300 underline decoration-blue-400 underline-offset-8 mb-4">
+            Portal Otentikasi CityOS Digital Twin
+          </h3>
+          <p className="text-xs sm:text-base text-slate-200 leading-relaxed font-normal mb-8 drop-shadow">
+            Pusat komando dan kendali telemetri infrastruktur perkotaan terpadu Kabupaten Purwakarta berbasis kecerdasan digital twin spatial 3D.
+          </p>
+
+          {/* Quick Stats Badges Over Image */}
+          <div className="grid grid-cols-3 gap-3 pt-6 border-t border-white/20">
+            <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3.5 backdrop-blur-md">
+              <span className="text-lg sm:text-2xl font-extrabold text-white block">10 Gedung</span>
+              <span className="text-[10px] sm:text-xs text-blue-300 font-medium">Fasilitas Utama</span>
             </div>
-
-            {/* Bar Chart & Category Graphic */}
-            <div className="grid grid-cols-12 gap-4 items-end min-h-[120px]">
-              
-              {/* Simulated Bar Chart Columns */}
-              <div className="col-span-8 flex items-end justify-between h-28 px-2 border-b border-slate-100 pb-1">
-                {[
-                  { month: 'Jan', height: '60%' },
-                  { month: 'Feb', height: '45%' },
-                  { month: 'Mar', height: '75%' },
-                  { month: 'Apr', height: '50%' },
-                  { month: 'May', height: '65%' },
-                  { month: 'Jun', height: '85%' },
-                  { month: 'Jul', height: '70%' },
-                ].map((item, i) => (
-                  <div key={i} className="flex flex-col items-center space-y-1 group">
-                    <div className="w-4 sm:w-5 bg-blue-100 rounded-t-sm relative flex items-end justify-center overflow-hidden" style={{ height: '90px' }}>
-                      <div className="w-full bg-blue-600 rounded-t-sm transition-all" style={{ height: item.height }} />
-                    </div>
-                    <span className="text-[9px] font-semibold text-slate-400">{item.month}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Floating Category Donut Breakdown Card */}
-              <div className="col-span-4 bg-slate-50 p-3 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col items-center justify-center text-center">
-                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                  Kategori Aset
-                </span>
-                <div className="relative w-14 h-14 rounded-full border-4 border-blue-600 border-t-amber-400 border-r-emerald-500 flex items-center justify-center my-1">
-                  <span className="text-[9px] font-extrabold text-slate-800">10 Gedung</span>
-                </div>
-                <div className="flex items-center space-x-1 text-[8px] text-slate-500 mt-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                  <span>Publik</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>Kesehatan</span>
-                </div>
-              </div>
+            <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3.5 backdrop-blur-md">
+              <span className="text-lg sm:text-2xl font-extrabold text-emerald-400 block">11 Personel</span>
+              <span className="text-[10px] sm:text-xs text-slate-300 font-medium">Tim Pengelola</span>
+            </div>
+            <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3.5 backdrop-blur-md">
+              <span className="text-lg sm:text-2xl font-extrabold text-blue-400 block">Real-time</span>
+              <span className="text-[10px] sm:text-xs text-slate-300 font-medium">Telemetri Kota</span>
             </div>
           </div>
-
-          {/* Slider Pagination Dots matching reference image */}
-          <div className="relative z-10 flex items-center justify-center space-x-2 pt-2">
-            <span className="w-6 h-1.5 rounded-full bg-white" />
-            <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-            <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-          </div>
-
         </div>
 
       </div>
