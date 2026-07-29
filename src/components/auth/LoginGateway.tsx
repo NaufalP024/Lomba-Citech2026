@@ -43,13 +43,12 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
             </div>
             <div>
               <h1 className="font-extrabold text-lg sm:text-xl lg:text-2xl tracking-tight text-slate-900 dark:text-white flex items-center space-x-1.5">
-                <span>City</span>
-                <span className="text-blue-600">OS</span>
+                <span>SIGAP</span>
                 <span className="text-[9px] sm:text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 ml-1 uppercase tracking-wider">
                   Purwakarta
                 </span>
               </h1>
-              <p className="text-[10px] sm:text-[11px] font-medium text-slate-400">Pemerintah Kabupaten Purwakarta</p>
+              <p className="text-[10px] sm:text-[11px] font-medium text-slate-400">SISTEM INFORMASI DAN PENGAWASAN GEDUNG PUBLIK</p>
             </div>
           </div>
 
@@ -177,7 +176,7 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
               type="submit"
               className="w-full py-3.5 sm:py-4 px-6 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-xs sm:text-sm shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center space-x-2 mt-4"
             >
-              <span>Masuk ke Portal Smart City</span>
+              <span>Masuk ke Portal SIGAP</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -222,10 +221,10 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
             Selamat Datang Kembali!
           </h2>
           <h3 className="text-xl sm:text-2xl font-bold text-blue-300 underline decoration-blue-400 underline-offset-8 mb-4">
-            Portal Otentikasi CityOS Digital Twin
+            Portal Otentikasi SIGAP Purwakarta
           </h3>
           <p className="text-xs sm:text-base text-slate-200 leading-relaxed font-normal mb-8 drop-shadow">
-            Pusat komando dan kendali telemetri infrastruktur perkotaan terpadu Kabupaten Purwakarta berbasis kecerdasan digital twin spatial 3D.
+            SISTEM INFORMASI DAN PENGAWASAN GEDUNG PUBLIK terpadu Kabupaten Purwakarta berbasis kecerdasan digital twin spatial 3D.
           </p>
 
           {/* Quick Stats Badges Over Image */}

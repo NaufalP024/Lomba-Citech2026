@@ -43,10 +43,10 @@ export const OnboardingTour: React.FC = () => {
   const steps: FeatureStep[] = [
     {
       targetId: null,
-      title: 'Selamat Datang di SmartCity Vision!',
-      subtitle: 'Platform Digital Twin 3D Purwakarta',
+      title: 'Selamat Datang di SIGAP!',
+      subtitle: 'SISTEM INFORMASI DAN PENGAWASAN GEDUNG PUBLIK',
       description:
-        'Selamat datang di platform Digital Twin SmartCity Purwakarta! Dashboard interaktif ini menyajikan monitoring 3D real-time untuk jaringan listrik, pasokan air, HVAC, keselamatan, serta infrastruktur publik kota.',
+        'Selamat datang di platform SIGAP (Sistem Informasi dan Pengawasan Gedung Publik) Kabupaten Purwakarta! Dashboard interaktif ini menyajikan monitoring 3D real-time untuk jaringan listrik, pasokan air, HVAC, keselamatan, serta infrastruktur gedung publik kota.',
       icon: <Sparkles className="w-5 h-5 text-amber-500" />,
       badge: 'Selamat Datang',
       arrowPosition: 'center',

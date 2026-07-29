@@ -46,11 +46,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
 
         {/* Title & Subtitle */}
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            SmartCity<span className="text-blue-500"> Vision</span>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-wider">
+            SIG<span className="text-blue-500">AP</span>
           </h1>
+          <p className="text-[10px] text-blue-600 dark:text-blue-400 font-extrabold uppercase tracking-wider mt-1">
+            SISTEM INFORMASI DAN PENGAWASAN GEDUNG PUBLIK
+          </p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
-            Memuat aset 3D & telemetri kota Purwakarta...
+            Memuat aset 3D & telemetri gedung publik Kabupaten Purwakarta...
           </p>
         </div>
 

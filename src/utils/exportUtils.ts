@@ -27,7 +27,7 @@ export function exportCityDataPDF(buildings: BuildingData[]) {
 
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text('CityOS Digital Twin - Laporan Resmi Telemetri & Infrastruktur Perkotaan', 14, 18);
+  doc.text('SIGAP - Sistem Informasi dan Pengawasan Gedung Publik Kabupaten Purwakarta', 14, 18);
 
   doc.setFontSize(9);
   doc.text(`Tanggal Cetak: ${currentDate}`, 220, 18);
@@ -122,7 +122,7 @@ export function exportCityDataPDF(buildings: BuildingData[]) {
   }
 
   // Save PDF file
-  doc.save(`Laporan_CityOS_Purwakarta_${new Date().toISOString().split('T')[0]}.pdf`);
+  doc.save(`Laporan_SIGAP_Purwakarta_${new Date().toISOString().split('T')[0]}.pdf`);
 
   // Trigger celebration confetti
   confetti({

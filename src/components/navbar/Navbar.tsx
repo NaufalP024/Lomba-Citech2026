@@ -77,9 +77,14 @@ export const Navbar: React.FC = () => {
             <path d="M19 2H5a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2V4a2 2 0 00-2-2zm-7 3h3v3h-3V5zm-4 0h3v3H8V5zm0 5h3v3H8v-3zm0 5h3v3H8v-3zm9 3h-3v-3h3v3zm0-5h-3v-3h3v3zm0-5h-3V5h3v3z" />
           </svg>
         </div>
-        <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-          City<span className="text-blue-600">OS</span>
-        </span>
+        <div className="flex flex-col justify-center">
+          <span className="text-lg sm:text-xl font-extrabold tracking-wider text-slate-900 dark:text-white leading-none">
+            SIG<span className="text-blue-600">AP</span>
+          </span>
+          <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 tracking-tight leading-none hidden xl:block mt-0.5">
+            Sistem Informasi & Pengawasan Gedung Publik
+          </span>
+        </div>
       </div>
 
       {/* DESKTOP: Dynamic-Width Sliding Pill Navigation Segment Control (Hidden on Mobile/Tablet) */}
