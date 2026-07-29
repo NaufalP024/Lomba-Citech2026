@@ -22,6 +22,8 @@ export const ManageAssetModal: React.FC = () => {
   const [occupancy, setOccupancy] = useState(selectedBuilding.occupancy);
   const [exteriorLight, setExteriorLight] = useState(selectedBuilding.exteriorLight);
 
+  const [coordinator, setCoordinator] = useState(selectedBuilding.coordinator || 'Drs. H. Ahmad Subagja (Koordinator Gedung)');
+
   useEffect(() => {
     setName(selectedBuilding.name);
     setType(selectedBuilding.type);
@@ -31,6 +33,7 @@ export const ManageAssetModal: React.FC = () => {
     setWaterPressure(selectedBuilding.waterPressure);
     setOccupancy(selectedBuilding.occupancy);
     setExteriorLight(selectedBuilding.exteriorLight);
+    setCoordinator(selectedBuilding.coordinator || 'Drs. H. Ahmad Subagja (Koordinator Gedung)');
   }, [selectedBuilding]);
 
   if (!isManageAssetOpen) return null;
@@ -56,9 +59,10 @@ export const ManageAssetModal: React.FC = () => {
       waterPressure: Number(waterPressure),
       occupancy: Number(occupancy),
       exteriorLight,
+      coordinator,
     });
 
-    toast.success(`Aset "${name}" berhasil diperbarui!`, {
+    toast.success(`Data "${name}" diperbarui oleh ${coordinator}!`, {
       description: `Status Otomatis: ${preview.statusLabel} (${preview.alertMessage})`,
     });
 
@@ -116,16 +120,30 @@ export const ManageAssetModal: React.FC = () => {
 
         {/* Form Body */}
         <form onSubmit={handleSave} className="p-6 pt-3 space-y-3.5 text-xs">
-          <div>
-            <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Nama Gedung
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Nama Gedung
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Koordinator Penanggung Jawab
+              </label>
+              <input
+                type="text"
+                value={coordinator}
+                onChange={(e) => setCoordinator(e.target.value)}
+                placeholder="Nama & Jabatan Koordinator"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

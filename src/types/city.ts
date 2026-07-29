@@ -51,6 +51,7 @@ export interface BuildingData {
   ecoStatus?: 'Green' | 'Warning' | 'High Emission';
   solarEnergyShare?: number; // %
   aiEcoRecommendation?: string;
+  coordinator?: string;
 }
 
 export interface IncidentItem {
@@ -62,6 +63,7 @@ export interface IncidentItem {
   description: string;
   time: string;
   status: 'Open' | 'Investigating' | 'Resolved';
+  reporter?: string;
 }
 
 export interface SmartNotification {

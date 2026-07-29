@@ -1,11 +1,13 @@
 import { create } from 'zustand';
-import { BuildingData, BuildingStatus, InfraLayer, NavTab, SmartNotification } from '../types/city';
+import { BuildingData, BuildingStatus, IncidentItem, InfraLayer, NavTab, SmartNotification } from '../types/city';
 import initialBuildingsData from '../data/buildings.json';
+import initialIncidentsData from '../data/incidents.json';
 import { calculateBuildingStatus } from '../utils/buildingStatusEngine';
 
 // City store Zustand state
 interface CityState {
   buildings: BuildingData[];
+  incidents: IncidentItem[];
   selectedBuildingId: string | null;
   hoveredBuildingId: string | null;
   focusedBuildingId: string | null;
@@ -60,6 +62,8 @@ interface CityState {
   toggleSound: () => void;
   incrementLogoClicks: () => void;
   updateBuildingData: (id: string, updates: Partial<BuildingData>) => void;
+  addIncident: (inc: Omit<IncidentItem, 'id' | 'time' | 'status'>) => void;
+  resolveIncident: (id: string) => void;
   updateDeveloperStats: (stats: Partial<CityState['developerStats']>) => void;
   simulateLiveUpdate: () => void;
   addNotification: (notif: Omit<SmartNotification, 'id' | 'timestamp'>) => void;
@@ -70,6 +74,7 @@ interface CityState {
 
 export const useCityStore = create<CityState>((set, get) => ({
   buildings: initialBuildingsData as BuildingData[],
+  incidents: initialIncidentsData as IncidentItem[],
   selectedBuildingId: 'b-42', // Default select Skyline Plaza as in reference image
   hoveredBuildingId: null,
   focusedBuildingId: null,
@@ -184,6 +189,31 @@ export const useCityStore = create<CityState>((set, get) => ({
           alertMessage: derived.alertMessage,
         };
       }),
+    }));
+  },
+
+  addIncident: (inc) => {
+    const newInc: IncidentItem = {
+      ...inc,
+      id: `inc-${Date.now()}`,
+      time: 'Baru saja',
+      status: 'Open',
+    };
+    set((state) => ({
+      incidents: [newInc, ...state.incidents],
+    }));
+    get().addNotification({
+      type: 'warning',
+      title: '🚨 Laporan Insiden Baru',
+      message: `${inc.title} dilaporkan di ${inc.buildingName} oleh ${inc.reporter || 'Koordinator Gedung'}.`,
+    });
+  },
+
+  resolveIncident: (id) => {
+    set((state) => ({
+      incidents: state.incidents.map((inc) =>
+        inc.id === id ? { ...inc, status: 'Resolved' } : inc
+      ),
     }));
   },
 
