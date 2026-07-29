@@ -19,12 +19,14 @@ import { BuildingContextMenu } from './components/building/BuildingContextMenu';
 import { SplashScreen } from './components/ui/SplashScreen';
 import { LiveNotificationStack } from './components/ui/LiveNotificationStack';
 import { OnboardingTour } from './components/ui/OnboardingTour';
+import { LoginGateway } from './components/auth/LoginGateway';
 import { useCityStore } from './store/useCityStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { BuildingData } from './types/city';
 
 export function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const isAuthenticated = useCityStore((state) => state.isAuthenticated);
   const isNightMode = useCityStore((state) => state.isNightMode);
   const simulateLiveUpdate = useCityStore((state) => state.simulateLiveUpdate);
   const setTourOpen = useCityStore((state) => state.setTourOpen);
@@ -34,14 +36,14 @@ export function App() {
 
   // Live simulation timer (PRD: every 5-10s random updates)
   useEffect(() => {
-    if (isLoading) return;
+    if (!isAuthenticated || isLoading) return;
     const interval = setInterval(() => {
       simulateLiveUpdate();
     }, 6000);
     return () => clearInterval(interval);
-  }, [isLoading, simulateLiveUpdate]);
+  }, [isAuthenticated, isLoading, simulateLiveUpdate]);
 
-  // Handle splash screen completion & auto-trigger onboarding tour every time web app loads
+  // Handle splash screen completion & auto-trigger onboarding tour every time user enters web app
   const handleSplashComplete = () => {
     setIsLoading(false);
     setTimeout(() => {
@@ -59,14 +61,19 @@ export function App() {
 
   return (
     <div className={`relative w-screen h-screen overflow-hidden select-none ${isNightMode ? 'dark' : ''}`}>
-      {/* 3D Scene rendered in background so models pre-load during Splash Loading Screen */}
+      {/* 3D Scene rendered in background so models pre-load */}
       <CityScene onContextMenu={handleContextMenu} />
 
-      {/* Loading Splash Screen Overlay */}
-      {isLoading && <SplashScreen onComplete={handleSplashComplete} />}
+      {/* 1. Login Phase Gateway */}
+      {!isAuthenticated && (
+        <LoginGateway onLoginSuccess={() => setIsLoading(true)} />
+      )}
 
-      {/* Main UI Overlay Controls & Modals */}
-      {!isLoading && (
+      {/* 2. Loading Splash Screen Overlay (Triggers after successful login) */}
+      {isAuthenticated && isLoading && <SplashScreen onComplete={handleSplashComplete} />}
+
+      {/* 3. Main UI Overlay Controls & Modals */}
+      {isAuthenticated && !isLoading && (
         <>
           {/* Top Navbar */}
           <Navbar />
@@ -114,6 +121,6 @@ export function App() {
       )}
     </div>
   );
-};
+}
 
 export default App;

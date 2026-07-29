@@ -1,7 +1,7 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import { NavTab } from '../../types/city';
-import { Search, Bell, Moon, Sun, Volume2, VolumeX, HelpCircle, Compass } from 'lucide-react';
+import { Search, Bell, Moon, Sun, Volume2, VolumeX, HelpCircle, Compass, LogOut, User } from 'lucide-react';
 import { playClickSound } from '../../utils/sound';
 
 export const Navbar: React.FC = () => {
@@ -18,6 +18,9 @@ export const Navbar: React.FC = () => {
   const setShortcutHelpOpen = useCityStore((state) => state.setShortcutHelpOpen);
   const setTourOpen = useCityStore((state) => state.setTourOpen);
   const incrementLogoClicks = useCityStore((state) => state.incrementLogoClicks);
+
+  const currentUser = useCityStore((state) => state.currentUser);
+  const logoutUser = useCityStore((state) => state.logoutUser);
 
   const tabs: NavTab[] = ['Dashboard', 'Grid', 'Analytics', 'Incidents', 'Users'];
   const tabDisplayNames: Record<NavTab, string> = {
@@ -170,16 +173,38 @@ export const Navbar: React.FC = () => {
           )}
         </button>
 
-        {/* User Initials Avatar Badge (Budi Santoso) */}
-        <div className="relative pl-0.5 sm:pl-1">
-          <div
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500 text-white font-bold text-xs flex items-center justify-center ring-2 ring-blue-500/40 shadow-sm select-none"
-            title="Budi Santoso (Admin)"
-          >
-            BS
+        {/* Logged-in User Profile Badge & Logout Button */}
+        {currentUser && (
+          <div className="flex items-center space-x-2 pl-1 sm:pl-2 border-l border-slate-200 dark:border-slate-800">
+            <div className="flex items-center space-x-2">
+              <div className="relative">
+                <div
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currentUser.bgColor || 'bg-blue-600'} text-white font-bold text-xs flex items-center justify-center ring-2 ring-blue-500/30 shadow-sm select-none`}
+                  title={`${currentUser.name} (${currentUser.role})`}
+                >
+                  {currentUser.initials}
+                </div>
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" />
+              </div>
+              <div className="hidden lg:block text-left">
+                <div className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-tight">
+                  {currentUser.name}
+                </div>
+                <div className="text-[10px] font-medium text-blue-600 dark:text-blue-400 leading-tight">
+                  {currentUser.isSuperAdmin ? 'Superadmin' : currentUser.assignedBuildingName}
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={logoutUser}
+              className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+              title="Keluar / Logout Akun"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
-          <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full" />
-        </div>
+        )}
       </div>
     </header>
   );

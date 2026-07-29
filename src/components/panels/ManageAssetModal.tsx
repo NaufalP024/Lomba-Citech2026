@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
-import { Settings, X, Save, Building2, Zap, Shield, Droplet, Users, Activity } from 'lucide-react';
+import { Settings, X, Save, Building2, Zap, Shield, Droplet, Users, Activity, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { calculateBuildingStatus } from '../../utils/buildingStatusEngine';
 
@@ -10,8 +10,14 @@ export const ManageAssetModal: React.FC = () => {
   const selectedBuildingId = useCityStore((state) => state.selectedBuildingId);
   const buildings = useCityStore((state) => state.buildings);
   const updateBuildingData = useCityStore((state) => state.updateBuildingData);
+  const currentUser = useCityStore((state) => state.currentUser);
 
   const selectedBuilding = buildings.find((b) => b.id === selectedBuildingId) || buildings[0];
+
+  const canEditBuilding =
+    currentUser?.isSuperAdmin ||
+    currentUser?.assignedBuildingId === selectedBuilding.id ||
+    currentUser?.assignedBuildingId === 'all';
 
   const [name, setName] = useState(selectedBuilding.name);
   const [type, setType] = useState(selectedBuilding.type);
@@ -118,6 +124,21 @@ export const ManageAssetModal: React.FC = () => {
           </span>
         </div>
 
+        {/* Permission Restriction Lock Notice */}
+        {!canEditBuilding && (
+          <div className="mx-6 mt-3 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start space-x-3">
+            <Lock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <div className="text-xs">
+              <h4 className="font-bold text-amber-600 dark:text-amber-400">
+                Akses Terbatas: Hanya Buka (Read-Only)
+              </h4>
+              <p className="text-slate-600 dark:text-slate-300 text-[11px] mt-0.5 leading-relaxed">
+                Anda saat ini berada pada akun <strong>{currentUser?.name}</strong> ({currentUser?.role}). Anda hanya dapat mengedit gedung <strong>{currentUser?.assignedBuildingName}</strong>. Pengeditan gedung <strong>{selectedBuilding.name}</strong> hanya dapat dilakukan oleh Pak Budi Santoso (Superadmin).
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Form Body */}
         <form onSubmit={handleSave} className="p-6 pt-3 space-y-3.5 text-xs">
           <div className="grid grid-cols-2 gap-3">
@@ -127,9 +148,10 @@ export const ManageAssetModal: React.FC = () => {
               </label>
               <input
                 type="text"
+                disabled={!canEditBuilding}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-medium"
               />
             </div>
             <div>
@@ -138,10 +160,11 @@ export const ManageAssetModal: React.FC = () => {
               </label>
               <input
                 type="text"
+                disabled={!canEditBuilding}
                 value={coordinator}
                 onChange={(e) => setCoordinator(e.target.value)}
                 placeholder="Nama & Jabatan Koordinator"
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-medium"
               />
             </div>
           </div>
@@ -153,9 +176,10 @@ export const ManageAssetModal: React.FC = () => {
               </label>
               <input
                 type="text"
+                disabled={!canEditBuilding}
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -164,9 +188,10 @@ export const ManageAssetModal: React.FC = () => {
                 Status Manual
               </label>
               <select
+                disabled={!canEditBuilding}
                 value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <option value="Normal">Normal (Operasional Optimal)</option>
                 <option value="Warning">Peringatan (Beban Tinggi)</option>
@@ -184,9 +209,10 @@ export const ManageAssetModal: React.FC = () => {
               </label>
               <input
                 type="number"
+                disabled={!canEditBuilding}
                 value={currentConsumption}
                 onChange={(e) => setCurrentConsumption(Number(e.target.value))}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-mono"
               />
             </div>
 
@@ -198,9 +224,10 @@ export const ManageAssetModal: React.FC = () => {
               <input
                 type="number"
                 step="0.1"
+                disabled={!canEditBuilding}
                 value={waterPressure}
                 onChange={(e) => setWaterPressure(Number(e.target.value))}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-mono"
               />
             </div>
           </div>
@@ -215,9 +242,10 @@ export const ManageAssetModal: React.FC = () => {
                 type="number"
                 min="0"
                 max="100"
+                disabled={!canEditBuilding}
                 value={occupancy}
                 onChange={(e) => setOccupancy(Number(e.target.value))}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-mono"
               />
             </div>
 
@@ -226,9 +254,10 @@ export const ManageAssetModal: React.FC = () => {
                 Pencahayaan Luar Gedung
               </label>
               <select
+                disabled={!canEditBuilding}
                 value={exteriorLight}
                 onChange={(e) => setExteriorLight(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <option value="ON (100%)">ON (100%)</option>
                 <option value="ON (75%)">ON (75%)</option>
@@ -251,15 +280,22 @@ export const ManageAssetModal: React.FC = () => {
               onClick={() => setManageAssetOpen(false)}
               className="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
             >
-              Batal
+              Tutup
             </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold flex items-center space-x-2 shadow-lg shadow-blue-500/30"
-            >
-              <Save className="w-4 h-4" />
-              <span>Simpan & Sinkronkan Data</span>
-            </button>
+            {canEditBuilding ? (
+              <button
+                type="submit"
+                className="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold flex items-center space-x-2 shadow-lg shadow-blue-500/30"
+              >
+                <Save className="w-4 h-4" />
+                <span>Simpan & Sinkronkan Data</span>
+              </button>
+            ) : (
+              <span className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 font-semibold cursor-not-allowed flex items-center space-x-1.5">
+                <Lock className="w-3.5 h-3.5" />
+                <span>Hanya Baca (Superadmin Only)</span>
+              </span>
+            )}
           </div>
         </form>
       </div>

@@ -15,6 +15,7 @@ export const IncidentsViewModal: React.FC = () => {
   const updateIncident = useCityStore((state) => state.updateIncident);
   const deleteIncident = useCityStore((state) => state.deleteIncident);
   const resolveIncident = useCityStore((state) => state.resolveIncident);
+  const currentUser = useCityStore((state) => state.currentUser);
 
   const teamCoordinators = analyticsData.users;
 
@@ -31,8 +32,8 @@ export const IncidentsViewModal: React.FC = () => {
 
   const handleOpenCreateForm = () => {
     setEditingIncidentId(null);
-    setSelectedBuildingId(buildings[0]?.id || 'b-42');
-    setReporter(`${teamCoordinators[0].name} (${teamCoordinators[0].role})`);
+    setSelectedBuildingId(currentUser?.assignedBuildingId !== 'all' ? (currentUser?.assignedBuildingId || buildings[0]?.id) : (buildings[0]?.id || 'b-42'));
+    setReporter(currentUser ? `${currentUser.name} (${currentUser.role})` : `${teamCoordinators[0].name} (${teamCoordinators[0].role})`);
     setTitle('');
     setSeverity('high');
     setDescription('');

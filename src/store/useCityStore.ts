@@ -2,7 +2,21 @@ import { create } from 'zustand';
 import { BuildingData, BuildingStatus, IncidentItem, InfraLayer, NavTab, SmartNotification } from '../types/city';
 import initialBuildingsData from '../data/buildings.json';
 import initialIncidentsData from '../data/incidents.json';
+import analyticsData from '../data/analytics.json';
 import { calculateBuildingStatus } from '../utils/buildingStatusEngine';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  initials: string;
+  bgColor: string;
+  role: string;
+  isSuperAdmin: boolean;
+  assignedBuildingId: string;
+  assignedBuildingName: string;
+  email: string;
+  status: string;
+}
 
 // City store Zustand state
 interface CityState {
@@ -11,6 +25,12 @@ interface CityState {
   selectedBuildingId: string | null;
   hoveredBuildingId: string | null;
   focusedBuildingId: string | null;
+
+  // Auth & User Management
+  currentUser: UserProfile | null;
+  isAuthenticated: boolean;
+  loginUser: (userId: string) => boolean;
+  logoutUser: () => void;
 
   // Navigation & View
   activeTab: NavTab;
@@ -80,6 +100,23 @@ export const useCityStore = create<CityState>((set, get) => ({
   selectedBuildingId: 'b-42', // Default select Skyline Plaza as in reference image
   hoveredBuildingId: null,
   focusedBuildingId: null,
+
+  // Auth Defaults
+  currentUser: null,
+  isAuthenticated: false,
+
+  loginUser: (userId) => {
+    const user = analyticsData.users.find((u) => u.id === userId || u.email.toLowerCase() === userId.toLowerCase());
+    if (user) {
+      set({ currentUser: user as UserProfile, isAuthenticated: true });
+      return true;
+    }
+    return false;
+  },
+
+  logoutUser: () => {
+    set({ currentUser: null, isAuthenticated: false });
+  },
 
   activeTab: 'Dashboard',
   activeLayer: null,
