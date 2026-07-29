@@ -126,16 +126,11 @@ export const ManageAssetModal: React.FC = () => {
 
         {/* Permission Restriction Lock Notice */}
         {!canEditBuilding && (
-          <div className="mx-6 mt-3 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start space-x-3">
-            <Lock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-            <div className="text-xs">
-              <h4 className="font-bold text-amber-600 dark:text-amber-400">
-                Akses Terbatas: Hanya Buka (Read-Only)
-              </h4>
-              <p className="text-slate-600 dark:text-slate-300 text-[11px] mt-0.5 leading-relaxed">
-                Anda saat ini berada pada akun <strong>{currentUser?.name}</strong> ({currentUser?.role}). Anda hanya dapat mengedit gedung <strong>{currentUser?.assignedBuildingName}</strong>. Pengeditan gedung <strong>{selectedBuilding.name}</strong> hanya dapat dilakukan oleh Pak Budi Santoso (Superadmin).
-              </p>
-            </div>
+          <div className="mx-6 mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center space-x-2 text-xs">
+            <Lock className="w-4 h-4 text-amber-500 shrink-0" />
+            <span className="font-bold text-amber-600 dark:text-amber-400">
+              Akses Terbatas: Hanya Buka (Read-Only)
+            </span>
           </div>
         )}
 
