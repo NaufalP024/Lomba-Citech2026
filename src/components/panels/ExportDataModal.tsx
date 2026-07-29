@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCityStore } from '../../store/useCityStore';
-import { Download, X, FileCode, FileSpreadsheet, FileText } from 'lucide-react';
-import { exportCityDataPDF, exportCityDataCSV, exportCityDataJSON } from '../../utils/exportUtils';
+import { Download, X, FileText } from 'lucide-react';
+import { exportCityDataPDF } from '../../utils/exportUtils';
 import { toast } from 'sonner';
 
 export const ExportDataModal: React.FC = () => {
@@ -19,22 +19,6 @@ export const ExportDataModal: React.FC = () => {
     setExportModalOpen(false);
   };
 
-  const handleExportCSV = () => {
-    toast.info('Proses ekspor dimulai.', {
-      description: 'Membuat lembar kerja CSV...',
-    });
-    exportCityDataCSV(buildings);
-    setExportModalOpen(false);
-  };
-
-  const handleExportJSON = () => {
-    toast.info('Proses ekspor dimulai.', {
-      description: 'Membuat laporan data JSON...',
-    });
-    exportCityDataJSON(buildings);
-    setExportModalOpen(false);
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
@@ -48,7 +32,7 @@ export const ExportDataModal: React.FC = () => {
               <h2 className="font-bold text-slate-900 dark:text-white text-base">
                 Ekspor Laporan Perkotaan
               </h2>
-              <p className="text-xs text-slate-400">Pilih format berkas yang diinginkan</p>
+              <p className="text-xs text-slate-400">Unduh dokumen resmi digital twin</p>
             </div>
           </div>
           <button
@@ -59,9 +43,8 @@ export const ExportDataModal: React.FC = () => {
           </button>
         </div>
 
-        {/* Format Options */}
-        <div className="p-5 space-y-3">
-          {/* Primary Recommended Option: PDF Document */}
+        {/* Format Option (PDF Exclusive) */}
+        <div className="p-6">
           <button
             onClick={handleExportPDF}
             className="w-full p-4 rounded-2xl border-2 border-blue-500/40 hover:border-blue-500 bg-blue-50/70 dark:bg-blue-950/40 hover:bg-blue-100/70 dark:hover:bg-blue-900/60 flex items-center space-x-4 transition-all text-left group shadow-sm"
@@ -75,47 +58,11 @@ export const ExportDataModal: React.FC = () => {
                   Laporan Resmi PDF (.pdf)
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500 text-white uppercase">
-                  Rekomendasi
+                  PDF Resmi
                 </span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 leading-snug">
-                Dokumen resmi cetak berisi tabel ringkasan telemetri, daya, dan status aset kota.
-              </p>
-            </div>
-          </button>
-
-          {/* Secondary Option: CSV Spreadsheet */}
-          <button
-            onClick={handleExportCSV}
-            className="w-full p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-slate-800 flex items-center space-x-3.5 transition-all text-left group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-              <FileSpreadsheet className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="font-semibold text-slate-900 dark:text-white text-xs sm:text-sm">
-                Format Lembar Kerja CSV (.csv)
-              </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                Tabel data dengan pemisah titik koma (;) untuk Microsoft Excel.
-              </p>
-            </div>
-          </button>
-
-          {/* Tertiary Option: JSON Data */}
-          <button
-            onClick={handleExportJSON}
-            className="w-full p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-indigo-50/50 dark:hover:bg-slate-800 flex items-center space-x-3.5 transition-all text-left group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-              <FileCode className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="font-semibold text-slate-900 dark:text-white text-xs sm:text-sm">
-                Format Data JSON (.json)
-              </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                Struktur data mentah lengkap untuk integrasi pengembang.
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-snug">
+                Dokumen cetak cetakan resmi berisi tabel ringkasan telemetri, konsumsi daya, dan status aset kota.
               </p>
             </div>
           </button>
