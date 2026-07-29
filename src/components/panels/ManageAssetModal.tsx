@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
+import analyticsData from '../../data/analytics.json';
 import { Settings, X, Save, Building2, Zap, Shield, Droplet, Users, Activity, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { calculateBuildingStatus } from '../../utils/buildingStatusEngine';
@@ -28,7 +29,14 @@ export const ManageAssetModal: React.FC = () => {
   const [occupancy, setOccupancy] = useState(selectedBuilding.occupancy);
   const [exteriorLight, setExteriorLight] = useState(selectedBuilding.exteriorLight);
 
-  const [coordinator, setCoordinator] = useState(selectedBuilding.coordinator || 'Drs. H. Ahmad Subagja (Koordinator Gedung)');
+  const getAssignedCoordinator = (buildingId: string) => {
+    const user = analyticsData.users.find((u: { assignedBuildingId: string }) => u.assignedBuildingId === buildingId);
+    return user ? `${user.name} (${user.role})` : 'Pak Budi Santoso (Kepala Dinas Kominfo)';
+  };
+
+  const [coordinator, setCoordinator] = useState(
+    selectedBuilding.coordinator || getAssignedCoordinator(selectedBuilding.id)
+  );
 
   useEffect(() => {
     setName(selectedBuilding.name);
@@ -39,7 +47,7 @@ export const ManageAssetModal: React.FC = () => {
     setWaterPressure(selectedBuilding.waterPressure);
     setOccupancy(selectedBuilding.occupancy);
     setExteriorLight(selectedBuilding.exteriorLight);
-    setCoordinator(selectedBuilding.coordinator || 'Drs. H. Ahmad Subagja (Koordinator Gedung)');
+    setCoordinator(selectedBuilding.coordinator || getAssignedCoordinator(selectedBuilding.id));
   }, [selectedBuilding]);
 
   if (!isManageAssetOpen) return null;
@@ -277,7 +285,7 @@ export const ManageAssetModal: React.FC = () => {
             >
               Tutup
             </button>
-            {canEditBuilding ? (
+            {canEditBuilding && (
               <button
                 type="submit"
                 className="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold flex items-center space-x-2 shadow-lg shadow-blue-500/30"
@@ -285,11 +293,6 @@ export const ManageAssetModal: React.FC = () => {
                 <Save className="w-4 h-4" />
                 <span>Simpan & Sinkronkan Data</span>
               </button>
-            ) : (
-              <span className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 font-semibold cursor-not-allowed flex items-center space-x-1.5">
-                <Lock className="w-3.5 h-3.5" />
-                <span>Hanya Baca (Superadmin Only)</span>
-              </span>
             )}
           </div>
         </form>
