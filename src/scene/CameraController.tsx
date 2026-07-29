@@ -86,8 +86,6 @@ export const CameraController: React.FC = () => {
       ref={controlsRef}
       enableDamping
       dampingFactor={0.05}
-      autoRotate={!isAuthenticated}
-      autoRotateSpeed={0.8}
       maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going below ground
       minDistance={6}
       maxDistance={70}
