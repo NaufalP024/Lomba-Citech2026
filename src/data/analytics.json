@@ -13,7 +13,7 @@
     { "time": "03:00", "usage": 1.8, "renewable": 0.3 },
     { "time": "06:00", "usage": 2.6, "renewable": 0.8 },
     { "time": "09:00", "usage": 3.9, "renewable": 1.6 },
-    { "time": "12:00", "usage": 4.5, "renewable": 2.2 },
+    { "time": "12:00", "usage": 4.5, "renewable": 2.0 },
     { "time": "15:00", "usage": 4.8, "renewable": 2.0 },
     { "time": "18:00", "usage": 4.1, "renewable": 1.1 },
     { "time": "21:00", "usage": 3.2, "renewable": 0.6 }
@@ -33,7 +33,7 @@
       "name": "Siti Nurhaliza",
       "initials": "SN",
       "bgColor": "bg-emerald-500",
-      "role": "Manajer Operasional Smart City",
+      "role": "Koordinator Kantor Bupati Purwakarta",
       "email": "siti.nurhaliza@purwakartakab.go.id",
       "status": "Aktif"
     },
@@ -42,8 +42,8 @@
       "name": "Rahmat Hidayat",
       "initials": "RH",
       "bgColor": "bg-indigo-500",
-      "role": "Spesialis Jaringan Listrik & Energi",
-      "email": "rahmat.hidayat@purwakartakab.go.id",
+      "role": "Koordinator Hotel Harper Purwakarta",
+      "email": "rahmat.hidayat@harper.co.id",
       "status": "Aktif"
     },
     {
@@ -51,17 +51,17 @@
       "name": "Dewi Lestari",
       "initials": "DL",
       "bgColor": "bg-amber-500",
-      "role": "Koordinator Penanggulangan Bencana",
-      "email": "dewi.lestari@purwakartakab.go.id",
-      "status": "Non-aktif"
+      "role": "Koordinator RSUD Bayu Asih",
+      "email": "dewi.lestari@rsudbayuasih.go.id",
+      "status": "Aktif"
     },
     {
       "id": "usr-5",
       "name": "Agus Setiawan",
       "initials": "AS",
       "bgColor": "bg-rose-500",
-      "role": "Analis Infrastruktur & Air Bersih",
-      "email": "agus.setiawan@purwakartakab.go.id",
+      "role": "Koordinator Masjid Agung Purwakarta",
+      "email": "agus.setiawan@masjidagung.id",
       "status": "Aktif"
     },
     {
@@ -69,8 +69,17 @@
       "name": "Eka Putri",
       "initials": "EP",
       "bgColor": "bg-cyan-500",
-      "role": "Teknisi Sensor & IoT Perkotaan",
+      "role": "Koordinator Terminal Sadang Square",
       "email": "eka.putri@purwakartakab.go.id",
+      "status": "Aktif"
+    },
+    {
+      "id": "usr-7",
+      "name": "Hendra Wijaya",
+      "initials": "HW",
+      "bgColor": "bg-purple-500",
+      "role": "Koordinator Disnakertrans Purwakarta",
+      "email": "hendra.wijaya@purwakartakab.go.id",
       "status": "Aktif"
     }
   ]

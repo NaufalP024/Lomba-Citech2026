@@ -63,6 +63,8 @@ interface CityState {
   incrementLogoClicks: () => void;
   updateBuildingData: (id: string, updates: Partial<BuildingData>) => void;
   addIncident: (inc: Omit<IncidentItem, 'id' | 'time' | 'status'>) => void;
+  updateIncident: (id: string, updates: Partial<IncidentItem>) => void;
+  deleteIncident: (id: string) => void;
   resolveIncident: (id: string) => void;
   updateDeveloperStats: (stats: Partial<CityState['developerStats']>) => void;
   simulateLiveUpdate: () => void;
@@ -207,6 +209,20 @@ export const useCityStore = create<CityState>((set, get) => ({
       title: '🚨 Laporan Insiden Baru',
       message: `${inc.title} dilaporkan di ${inc.buildingName} oleh ${inc.reporter || 'Koordinator Gedung'}.`,
     });
+  },
+
+  updateIncident: (id, updates) => {
+    set((state) => ({
+      incidents: state.incidents.map((inc) =>
+        inc.id === id ? { ...inc, ...updates } : inc
+      ),
+    }));
+  },
+
+  deleteIncident: (id) => {
+    set((state) => ({
+      incidents: state.incidents.filter((inc) => inc.id !== id),
+    }));
   },
 
   resolveIncident: (id) => {
