@@ -1,16 +1,13 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import { NavTab } from '../../types/city';
-import { Search, Bell, Moon, Sun, Volume2, VolumeX, HelpCircle, Compass, LogOut, Menu, X, ChevronRight } from 'lucide-react';
-import { playClickSound } from '../../utils/sound';
+import { Search, Bell, Moon, Sun, HelpCircle, Compass, LogOut, Menu, X, ChevronRight } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const activeTab = useCityStore((state) => state.activeTab);
   const setActiveTab = useCityStore((state) => state.setActiveTab);
   const isNightMode = useCityStore((state) => state.isNightMode);
   const toggleNightMode = useCityStore((state) => state.toggleNightMode);
-  const soundEnabled = useCityStore((state) => state.soundEnabled);
-  const toggleSound = useCityStore((state) => state.toggleSound);
   
   const setSearchOpen = useCityStore((state) => state.setSearchOpen);
   const toggleNotifications = useCityStore((state) => state.toggleNotifications);
@@ -59,7 +56,6 @@ export const Navbar: React.FC = () => {
 
   const handleTabClick = (tab: NavTab) => {
     setActiveTab(tab);
-    playClickSound(soundEnabled);
     setIsMobileMenuOpen(false);
   };
 
@@ -139,15 +135,6 @@ export const Navbar: React.FC = () => {
           title={isNightMode ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Malam'}
         >
           {isNightMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
-        </button>
-
-        {/* Mute/Unmute Sound */}
-        <button
-          onClick={toggleSound}
-          className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
-          title={soundEnabled ? 'Matikan Suara UI' : 'Aktifkan Suara UI'}
-        >
-          {soundEnabled ? <Volume2 className="w-4 h-4 text-blue-500" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
         </button>
 
         {/* Keyboard Shortcuts Help */}
@@ -334,18 +321,6 @@ export const Navbar: React.FC = () => {
               >
                 <Bell className="w-4 h-4 text-rose-500" />
                 <span className="text-[9px] font-semibold">Notif</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  toggleSound();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/80 flex flex-col items-center justify-center space-y-1 text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                title="Efek Suara"
-              >
-                {soundEnabled ? <Volume2 className="w-4 h-4 text-blue-500" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
-                <span className="text-[9px] font-semibold">Suara</span>
               </button>
             </div>
           </div>
