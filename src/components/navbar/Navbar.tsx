@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
           <span className="text-lg sm:text-xl font-extrabold tracking-wider text-slate-900 dark:text-white leading-none">
             SIG<span className="text-blue-600">AP</span>
           </span>
-          <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 tracking-tight leading-none hidden xl:block mt-0.5">
+          <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 tracking-tight leading-snug hidden xl:block mt-1">
             Sistem Informasi & Pengawasan Gedung Publik
           </span>
         </div>

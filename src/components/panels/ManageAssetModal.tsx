@@ -284,7 +284,7 @@ export const ManageAssetModal: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center justify-between">
-                <span>Indeks Emisi Karbon (kg CO₂/hari)</span>
+                <span>Emisi Karbon (kg CO₂/hari)</span>
                 <Leaf className="w-3.5 h-3.5 text-emerald-500" />
               </label>
               <input
