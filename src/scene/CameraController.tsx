@@ -14,6 +14,7 @@ export const CameraController: React.FC = () => {
   const resetCameraTrigger = useCityStore((state) => state.resetCameraTrigger);
   const buildings = useCityStore((state) => state.buildings);
   const updateDeveloperStats = useCityStore((state) => state.updateDeveloperStats);
+  const isAuthenticated = useCityStore((state) => state.isAuthenticated);
 
   // Target camera position and controls target
   const targetCamPos = useRef(new THREE.Vector3(16, 18, 22));
@@ -85,6 +86,8 @@ export const CameraController: React.FC = () => {
       ref={controlsRef}
       enableDamping
       dampingFactor={0.05}
+      autoRotate={!isAuthenticated}
+      autoRotateSpeed={0.8}
       maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going below ground
       minDistance={6}
       maxDistance={70}
