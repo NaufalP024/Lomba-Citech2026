@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import analyticsData from '../../data/analytics.json';
-import { Settings, X, Save, Building2, Zap, Shield, Droplet, Users, Activity, Lock } from 'lucide-react';
+import { Settings, X, Save, Building2, Zap, Shield, Droplet, Users, Activity, Lock, Leaf, Sun } from 'lucide-react';
 import { toast } from 'sonner';
 import { calculateBuildingStatus } from '../../utils/buildingStatusEngine';
 
@@ -29,6 +29,9 @@ export const ManageAssetModal: React.FC = () => {
   const [occupancy, setOccupancy] = useState(selectedBuilding.occupancy);
   const [exteriorLight, setExteriorLight] = useState(selectedBuilding.exteriorLight);
 
+  const [carbonEmission, setCarbonEmission] = useState(selectedBuilding.carbonEmission ?? Math.round(selectedBuilding.currentConsumption * 0.45));
+  const [solarEnergyShare, setSolarEnergyShare] = useState(selectedBuilding.solarEnergyShare ?? 35);
+
   const getAssignedCoordinator = (buildingId: string) => {
     const user = analyticsData.users.find((u: { assignedBuildingId: string }) => u.assignedBuildingId === buildingId);
     return user ? `${user.name} (${user.role})` : 'Pak Budi Santoso (Kepala Dinas Kominfo)';
@@ -47,6 +50,8 @@ export const ManageAssetModal: React.FC = () => {
     setWaterPressure(selectedBuilding.waterPressure);
     setOccupancy(selectedBuilding.occupancy);
     setExteriorLight(selectedBuilding.exteriorLight);
+    setCarbonEmission(selectedBuilding.carbonEmission ?? Math.round(selectedBuilding.currentConsumption * 0.45));
+    setSolarEnergyShare(selectedBuilding.solarEnergyShare ?? 35);
     setCoordinator(selectedBuilding.coordinator || getAssignedCoordinator(selectedBuilding.id));
   }, [selectedBuilding]);
 
@@ -64,6 +69,9 @@ export const ManageAssetModal: React.FC = () => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const newCarbon = Number(carbonEmission);
+    const calculatedEcoStatus = newCarbon < 220 ? 'Green' : newCarbon < 400 ? 'Warning' : 'High Emission';
+
     updateBuildingData(selectedBuilding.id, {
       name,
       type,
@@ -74,10 +82,13 @@ export const ManageAssetModal: React.FC = () => {
       occupancy: Number(occupancy),
       exteriorLight,
       coordinator,
+      carbonEmission: newCarbon,
+      solarEnergyShare: Number(solarEnergyShare),
+      ecoStatus: calculatedEcoStatus,
     });
 
-    toast.success(`Data "${name}" diperbarui oleh ${coordinator}!`, {
-      description: `Status Otomatis: ${preview.statusLabel} (${preview.alertMessage})`,
+    toast.success(`Data "${name}" berhasil diperbarui oleh ${coordinator}!`, {
+      description: `Emisi Karbon: ${newCarbon} kg CO₂/hari (${calculatedEcoStatus}) | Status: ${preview.statusLabel}`,
     });
 
     setManageAssetOpen(false);
@@ -267,6 +278,39 @@ export const ManageAssetModal: React.FC = () => {
                 <option value="ON (50%)">ON (50%)</option>
                 <option value="OFF">OFF</option>
               </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center justify-between">
+                <span>Indeks Emisi Karbon (kg CO₂/hari)</span>
+                <Leaf className="w-3.5 h-3.5 text-emerald-500" />
+              </label>
+              <input
+                type="number"
+                min="0"
+                disabled={!canEditBuilding}
+                value={carbonEmission}
+                onChange={(e) => setCarbonEmission(Number(e.target.value))}
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-mono"
+              />
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center justify-between">
+                <span>Porsi Energi Surya (%)</span>
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="100"
+                disabled={!canEditBuilding}
+                value={solarEnergyShare}
+                onChange={(e) => setSolarEnergyShare(Number(e.target.value))}
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed font-mono"
+              />
             </div>
           </div>
 
