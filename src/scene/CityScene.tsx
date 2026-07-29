@@ -33,10 +33,17 @@ export const CityScene: React.FC<CitySceneProps> = ({ onContextMenu }) => {
   return (
     <div className="w-full h-full absolute inset-0 z-0 bg-[#EEF3F8]">
       <Canvas
-        dpr={[1, 1.25]}
+        dpr={[1, Math.min(1.25, window.devicePixelRatio)]}
+        performance={{ min: 0.5 }}
         shadows={{ type: THREE.PCFShadowMap }}
         camera={{ position: [16, 18, 22], fov: 40, near: 0.1, far: 180 }}
-        gl={{ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: false }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: 'high-performance',
+          preserveDrawingBuffer: false,
+          stencil: false,
+        }}
       >
         <EnvironmentSky />
         <Lights />

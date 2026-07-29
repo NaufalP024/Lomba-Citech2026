@@ -10,9 +10,21 @@ interface EcoGreenCarbonCardProps {
 
 export const EcoGreenCarbonCard: React.FC<EcoGreenCarbonCardProps> = ({ building, isNightMode = false }) => {
   const carbon = building.carbonEmission ?? Math.round(building.currentConsumption * 0.45);
-  const ecoStatus = building.ecoStatus || (carbon < 220 ? 'Green' : carbon < 400 ? 'Warning' : 'High Emission');
+  const ecoStatus = carbon < 220 ? 'Green' : carbon < 400 ? 'Warning' : 'High Emission';
   const solarShare = building.solarEnergyShare ?? (building.roofType === 'solar' ? 60 : 30);
-  const aiRecommendation = building.aiEcoRecommendation || "Rekomendasi AI: Optimalkan mode hemat HVAC malam hari untuk mengurangi emisi 45 kg CO₂/hari.";
+
+  // Dynamic AI Recommendation Engine matching real-time updated telemetry
+  const getDynamicAiRecommendation = () => {
+    if (carbon >= 400) {
+      return `Rekomendasi AI: Emisi tinggi terdeteksi (${carbon} kg CO₂/hari). Disarankan mengaktifkan mode penghematan daya HVAC dan meningkatkan pasokan energi surya dari ${solarShare}%.`;
+    } else if (carbon >= 220) {
+      return `Rekomendasi AI: Emisi dalam ambang sedang (${carbon} kg CO₂/hari). Energi surya (${solarShare}%) bekerja stabil, optimalkan efisiensi pencahayaan luar.`;
+    } else {
+      return `Rekomendasi AI: Kinerja ekologis sangat baik! Emisi amat rendah (${carbon} kg CO₂/hari) dengan ${solarShare}% kontribusi energi surya terbarukan.`;
+    }
+  };
+
+  const aiRecommendation = building.aiEcoRecommendation || getDynamicAiRecommendation();
 
   return (
     <GlassCard isDark={isNightMode} className="w-full">

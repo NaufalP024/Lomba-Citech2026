@@ -26,8 +26,8 @@ export const Lights: React.FC = () => {
         intensity={isNightMode ? 0.35 : 1.4}
         color={isNightMode ? '#60A5FA' : '#FFFDF5'}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-near={0.5}
         shadow-camera-far={120}
         shadow-camera-left={-40}
