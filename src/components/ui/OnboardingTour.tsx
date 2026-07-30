@@ -73,10 +73,10 @@ export const OnboardingTour: React.FC = () => {
     },
     {
       targetId: 'tour-search-button',
-      title: 'Pencarian Gedung',
-      subtitle: 'Cari Gedung Publik',
+      title: 'Pencarian Gedung Publik',
+      subtitle: 'Cari cepat gedung di Purwakarta',
       description:
-        'Klik ikon ini untuk membuka pencarian gedung. Fitur ini hanya mendukung pencarian bangunan publik, bukan insiden atau data lain.',
+        'Fitur search ini digunakan untuk mencari cepat gedung publik yang ada di Purwakarta. Klik ikon ini untuk membuka pencarian dan temukan bangunan publik secara langsung.',
       icon: <Search className="w-5 h-5 text-indigo-500" />,
       badge: 'Pencarian',
       arrowPosition: 'top-right',
