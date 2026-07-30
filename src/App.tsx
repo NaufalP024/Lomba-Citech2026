@@ -34,14 +34,7 @@ export function App() {
   // Activate hotkeys
   useKeyboardShortcuts();
 
-  // Live simulation timer (PRD: every 5-10s random updates)
-  useEffect(() => {
-    if (!isAuthenticated || isLoading) return;
-    const interval = setInterval(() => {
-      simulateLiveUpdate();
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [isAuthenticated, isLoading, simulateLiveUpdate]);
+  // Live simulation timer disabled: Telemetry numbers update ONLY when edited by Superadmin or Building Coordinator
 
   // Handle splash screen completion & auto-trigger onboarding tour every time user enters web app
   const handleSplashComplete = () => {

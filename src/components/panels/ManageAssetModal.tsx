@@ -69,6 +69,16 @@ export const ManageAssetModal: React.FC = () => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const newConsumption = Number(currentConsumption);
+    const prevConsumption = selectedBuilding.currentConsumption;
+
+    let calculatedTrend: 'Rising' | 'Falling' | 'Stable' = selectedBuilding.loadTrend || 'Stable';
+    if (newConsumption > prevConsumption) {
+      calculatedTrend = 'Rising';
+    } else if (newConsumption < prevConsumption) {
+      calculatedTrend = 'Falling';
+    }
+
     const newCarbon = Number(carbonEmission);
     const newSolar = Number(solarEnergyShare);
     const calculatedEcoStatus = newCarbon < 220 ? 'Green' : newCarbon < 400 ? 'Warning' : 'High Emission';
@@ -90,7 +100,8 @@ export const ManageAssetModal: React.FC = () => {
       name,
       type,
       status,
-      currentConsumption: Number(currentConsumption),
+      currentConsumption: newConsumption,
+      loadTrend: calculatedTrend,
       peakConsumption: Number(peakConsumption),
       waterPressure: Number(waterPressure),
       occupancy: Number(occupancy),
