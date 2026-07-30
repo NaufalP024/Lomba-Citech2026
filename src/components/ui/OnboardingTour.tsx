@@ -72,13 +72,13 @@ export const OnboardingTour: React.FC = () => {
       arrowPosition: 'center',
     },
     {
-      targetId: 'tour-night-mode-toggle',
-      title: 'Mode Malam & Window Light',
-      subtitle: 'Pencahayaan Gedung Realistis',
+      targetId: 'tour-search-button',
+      title: 'Pencarian Cepat Gedung',
+      subtitle: 'Cari Aset dan Insiden',
       description:
-        'Klik ikon ini untuk mengaktifkan Mode Malam dengan pendar titik cahaya jendela gedung dan efek lingkungan malam yang realistis.',
-      icon: <Moon className="w-5 h-5 text-purple-500" />,
-      badge: 'Visual 3D',
+        'Klik ikon ini untuk membuka pencarian cepat dan temukan bangunan, laporan insiden, atau data aset dengan segera.',
+      icon: <Search className="w-5 h-5 text-indigo-500" />,
+      badge: 'Pencarian',
       arrowPosition: 'top-right',
     },
     {
@@ -182,12 +182,10 @@ export const OnboardingTour: React.FC = () => {
   let tooltipStyleClass = 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2';
   if (currentStep.targetId === 'tour-navbar-tabs') {
     tooltipStyleClass = 'top-20 left-1/2 -translate-x-1/2';
-  } else if (currentStep.targetId === 'tour-night-mode-toggle') {
-    tooltipStyleClass = 'top-20 right-4 sm:right-28';
-  } else if (currentStep.targetId === 'tour-analytics-panel') {
-    tooltipStyleClass = 'top-24 right-3 sm:right-[410px]';
   } else if (currentStep.targetId === 'tour-search-button') {
     tooltipStyleClass = 'top-20 right-4 sm:right-16';
+  } else if (currentStep.targetId === 'tour-analytics-panel') {
+    tooltipStyleClass = 'top-24 right-3 sm:right-[410px]';
   }
 
   return (
