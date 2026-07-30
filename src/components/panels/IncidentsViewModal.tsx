@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCityStore } from '../../store/useCityStore';
-import { AlertTriangle, ShieldAlert, Clock, Plus, CheckCircle, X, Send, Edit3, Trash2 } from 'lucide-react';
+import { AlertTriangle, ShieldAlert, Clock, Plus, CheckCircle, X, Send, Edit3, Trash2, Check, Lock } from 'lucide-react';
 import analyticsData from '../../data/analytics.json';
 import { toast } from 'sonner';
 import { IncidentItem } from '../../types/city';
@@ -19,6 +19,14 @@ export const IncidentsViewModal: React.FC = () => {
 
   const teamCoordinators = analyticsData.users;
 
+  const isSuperAdmin = currentUser?.isSuperAdmin || false;
+
+  const canManageIncident = (incBuildingId: string) => {
+    if (isSuperAdmin) return true;
+    if (!currentUser?.assignedBuildingId || currentUser.assignedBuildingId === 'all') return true;
+    return currentUser.assignedBuildingId === incBuildingId;
+  };
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingIncidentId, setEditingIncidentId] = useState<string | null>(null);
 
@@ -32,7 +40,11 @@ export const IncidentsViewModal: React.FC = () => {
 
   const handleOpenCreateForm = () => {
     setEditingIncidentId(null);
-    setSelectedBuildingId(currentUser?.assignedBuildingId !== 'all' ? (currentUser?.assignedBuildingId || buildings[0]?.id) : (buildings[0]?.id || 'b-42'));
+    const targetBuildingId = (!isSuperAdmin && currentUser?.assignedBuildingId && currentUser.assignedBuildingId !== 'all')
+      ? currentUser.assignedBuildingId
+      : (buildings[0]?.id || 'b-42');
+
+    setSelectedBuildingId(targetBuildingId);
     setReporter(currentUser ? `${currentUser.name} (${currentUser.role})` : `${teamCoordinators[0].name} (${teamCoordinators[0].role})`);
     setTitle('');
     setSeverity('high');
@@ -41,6 +53,12 @@ export const IncidentsViewModal: React.FC = () => {
   };
 
   const handleOpenEditForm = (inc: IncidentItem) => {
+    if (!canManageIncident(inc.buildingId)) {
+      toast.error('Akses Terbatas!', {
+        description: 'Anda hanya berhak mengedit laporan insiden pada gedung Anda sendiri.',
+      });
+      return;
+    }
     setEditingIncidentId(inc.id);
     setSelectedBuildingId(inc.buildingId);
     setReporter(inc.reporter || `${teamCoordinators[0].name} (${teamCoordinators[0].role})`);
@@ -56,6 +74,7 @@ export const IncidentsViewModal: React.FC = () => {
   };
 
   const handleBuildingChange = (bId: string) => {
+    if (!isSuperAdmin) return;
     setSelectedBuildingId(bId);
     const bld = buildings.find((b) => b.id === bId);
     if (!bld) return;
@@ -81,7 +100,12 @@ export const IncidentsViewModal: React.FC = () => {
       return;
     }
 
-    const bld = buildings.find((b) => b.id === selectedBuildingId) || buildings[0];
+    const targetBId = isSuperAdmin
+      ? selectedBuildingId
+      : (currentUser?.assignedBuildingId && currentUser.assignedBuildingId !== 'all' ? currentUser.assignedBuildingId : selectedBuildingId);
+
+    const bld = buildings.find((b) => b.id === targetBId) || buildings[0];
+    const finalReporter = isSuperAdmin ? reporter : (currentUser ? `${currentUser.name} (${currentUser.role})` : reporter);
 
     if (editingIncidentId) {
       // Edit Mode
@@ -91,10 +115,10 @@ export const IncidentsViewModal: React.FC = () => {
         severity,
         title,
         description,
-        reporter,
+        reporter: finalReporter,
       });
       toast.success('Pembaruan data insiden berhasil disimpan!', {
-        description: `Insiden "${title}" diperbarui oleh ${reporter}.`,
+        description: `Insiden "${title}" diperbarui oleh ${finalReporter}.`,
       });
     } else {
       // Create Mode
@@ -104,26 +128,38 @@ export const IncidentsViewModal: React.FC = () => {
         severity,
         title,
         description,
-        reporter,
+        reporter: finalReporter,
       });
       toast.success('Laporan insiden baru berhasil dikirim!', {
-        description: `Insiden "${title}" dilaporkan untuk ${bld.name} oleh ${reporter}.`,
+        description: `Insiden "${title}" dilaporkan untuk ${bld.name} oleh ${finalReporter}.`,
       });
     }
 
     setIsFormOpen(false);
   };
 
-  const handleDelete = (id: string, incTitle: string) => {
-    if (window.confirm(`Apakah Anda yakin ingin menghapus laporan insiden "${incTitle}"?`)) {
-      deleteIncident(id);
-      toast.success(`Insiden "${incTitle}" berhasil dihapus.`);
+  const handleDelete = (inc: IncidentItem) => {
+    if (!canManageIncident(inc.buildingId)) {
+      toast.error('Akses Terbatas!', {
+        description: 'Anda hanya berhak menghapus laporan insiden pada gedung Anda sendiri.',
+      });
+      return;
+    }
+    if (window.confirm(`Apakah Anda yakin ingin menghapus laporan insiden "${inc.title}"?`)) {
+      deleteIncident(inc.id);
+      toast.success(`Insiden "${inc.title}" berhasil dihapus.`);
     }
   };
 
-  const handleResolve = (id: string, incTitle: string) => {
-    resolveIncident(id);
-    toast.success(`Insiden "${incTitle}" telah ditandai Selesai.`);
+  const handleResolve = (inc: IncidentItem) => {
+    if (!canManageIncident(inc.buildingId)) {
+      toast.error('Akses Terbatas!', {
+        description: 'Hanya koordinator gedung ini atau Superadmin yang berhak merubah status insiden menjadi Selesai.',
+      });
+      return;
+    }
+    resolveIncident(inc.id);
+    toast.success(`Insiden "${inc.title}" telah ditandai Selesai.`);
   };
 
   const activeIncidentsCount = incidents.filter((i) => i.status !== 'Resolved').length;
@@ -157,103 +193,114 @@ export const IncidentsViewModal: React.FC = () => {
 
         {/* Incidents List */}
         <div className="space-y-3">
-          {incidents.map((inc) => (
-            <div
-              key={inc.id}
-              className={`p-3.5 sm:p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors ${
-                inc.status === 'Resolved'
-                  ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-500/30'
-                  : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60 hover:border-blue-500'
-              }`}
-            >
-              <div className="flex items-start space-x-3">
-                <div className="mt-0.5 shrink-0">
-                  {inc.status === 'Resolved' ? (
-                    <CheckCircle className="w-5 h-5 text-emerald-500" />
-                  ) : inc.severity === 'critical' ? (
-                    <ShieldAlert className="w-5 h-5 text-rose-500" />
-                  ) : inc.severity === 'high' ? (
-                    <AlertTriangle className="w-5 h-5 text-amber-500" />
-                  ) : (
-                    <Clock className="w-5 h-5 text-blue-500" />
-                  )}
-                </div>
+          {incidents.map((inc) => {
+            const isAllowed = canManageIncident(inc.buildingId);
 
-                <div>
-                  <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                    <h3 className={`font-bold text-xs sm:text-sm ${inc.status === 'Resolved' ? 'line-through text-slate-400' : 'text-slate-800 dark:text-slate-100'}`}>
-                      {inc.title}
-                    </h3>
-                    <span
-                      className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                        inc.status === 'Resolved'
-                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300'
-                          : inc.severity === 'critical'
-                          ? 'bg-rose-100 text-rose-600'
-                          : inc.severity === 'high'
-                          ? 'bg-amber-100 text-amber-600'
-                          : 'bg-blue-100 text-blue-600'
-                      }`}
-                    >
-                      {inc.status === 'Resolved' ? 'Selesai Ditangani' : inc.severity === 'critical' ? 'Kritis' : inc.severity === 'high' ? 'Tinggi' : 'Sedang'}
-                    </span>
-                  </div>
-
-                  <div className="text-xs font-medium text-blue-600 dark:text-blue-400 mt-0.5">
-                    Gedung: {inc.buildingName} ({inc.buildingId.toUpperCase()})
-                  </div>
-
-                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                    {inc.description}
-                  </p>
-
-                  <div className="text-[11px] text-slate-400 mt-2 font-mono flex items-center space-x-3 flex-wrap gap-y-1">
-                    <span>Dilaporkan: {inc.time}</span>
-                    {inc.reporter && (
-                      <>
-                        <span>•</span>
-                        <span>Koordinator: <strong className="text-slate-700 dark:text-slate-200 font-sans">{inc.reporter}</strong></span>
-                      </>
+            return (
+              <div
+                key={inc.id}
+                className={`p-3.5 sm:p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors ${
+                  inc.status === 'Resolved'
+                    ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60 hover:border-blue-500'
+                }`}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="mt-0.5 shrink-0">
+                    {inc.status === 'Resolved' ? (
+                      <CheckCircle className="w-5 h-5 text-emerald-500" />
+                    ) : inc.severity === 'critical' ? (
+                      <ShieldAlert className="w-5 h-5 text-rose-500" />
+                    ) : inc.severity === 'high' ? (
+                      <AlertTriangle className="w-5 h-5 text-amber-500" />
+                    ) : (
+                      <Clock className="w-5 h-5 text-blue-500" />
                     )}
-                    <span>•</span>
-                    <span>Status: <strong className="text-slate-700 dark:text-slate-200">{inc.status === 'Resolved' ? 'Telah Diperbaiki' : 'Aktif'}</strong></span>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+                      <h3 className={`font-bold text-xs sm:text-sm ${inc.status === 'Resolved' ? 'line-through text-slate-400' : 'text-slate-800 dark:text-slate-100'}`}>
+                        {inc.title}
+                      </h3>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                          inc.status === 'Resolved'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300'
+                            : inc.severity === 'critical'
+                            ? 'bg-rose-100 text-rose-600'
+                            : inc.severity === 'high'
+                            ? 'bg-amber-100 text-amber-600'
+                            : 'bg-blue-100 text-blue-600'
+                        }`}
+                      >
+                        {inc.status === 'Resolved' ? 'Selesai Ditangani' : inc.severity === 'critical' ? 'Kritis' : inc.severity === 'high' ? 'Tinggi' : 'Sedang'}
+                      </span>
+                    </div>
+
+                    <div className="text-xs font-medium text-blue-600 dark:text-blue-400 mt-0.5">
+                      Gedung: {inc.buildingName} ({inc.buildingId.toUpperCase()})
+                    </div>
+
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                      {inc.description}
+                    </p>
+
+                    <div className="text-[11px] text-slate-400 mt-2 font-mono flex items-center space-x-3 flex-wrap gap-y-1">
+                      <span>Dilaporkan: {inc.time}</span>
+                      {inc.reporter && (
+                        <>
+                          <span>•</span>
+                          <span>Koordinator: <strong className="text-slate-700 dark:text-slate-200 font-sans">{inc.reporter}</strong></span>
+                        </>
+                      )}
+                      <span>•</span>
+                      <span>Status: <strong className="text-slate-700 dark:text-slate-200">{inc.status === 'Resolved' ? 'Telah Diperbaiki' : 'Aktif'}</strong></span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Action Buttons: Edit, Delete, Resolve, Inspect 3D */}
-              <div className="flex items-center space-x-2 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-0 border-slate-200/50 dark:border-slate-800">
-                <button
-                  onClick={() => handleOpenEditForm(inc)}
-                  title="Edit Laporan Insiden"
-                  className="p-2 rounded-xl bg-slate-200/70 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors"
-                >
-                  <Edit3 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleDelete(inc.id, inc.title)}
-                  title="Hapus Laporan Insiden"
-                  className="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-500/30 text-xs font-semibold transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                {inc.status !== 'Resolved' && (
+                {/* Action Buttons: Edit, Delete, Resolve (Checkmark Icon), Inspect 3D */}
+                <div className="flex items-center space-x-2 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-0 border-slate-200/50 dark:border-slate-800">
                   <button
-                    onClick={() => handleResolve(inc.id, inc.title)}
-                    className="flex-1 sm:flex-none px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500 text-emerald-600 hover:text-white border border-emerald-500/30 text-xs font-semibold transition-colors"
+                    onClick={() => handleOpenEditForm(inc)}
+                    disabled={!isAllowed}
+                    title={isAllowed ? 'Edit Laporan Insiden' : 'Akses Terbatas: Hanya Koordinator Gedung ini atau Superadmin'}
+                    className="p-2 rounded-xl bg-slate-200/70 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    Selesai
+                    <Edit3 className="w-4 h-4" />
                   </button>
-                )}
-                <button
-                  onClick={() => handleInspect(inc.buildingId)}
-                  className="flex-1 sm:flex-none px-3.5 py-1.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold shadow-sm text-center"
-                >
-                  Lacak 3D
-                </button>
+
+                  <button
+                    onClick={() => handleDelete(inc)}
+                    disabled={!isAllowed}
+                    title={isAllowed ? 'Hapus Laporan Insiden' : 'Akses Terbatas: Hanya Koordinator Gedung ini atau Superadmin'}
+                    className="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-500/30 text-xs font-semibold transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+
+                  {inc.status !== 'Resolved' && (
+                    <button
+                      onClick={() => handleResolve(inc)}
+                      disabled={!isAllowed}
+                      title={isAllowed ? 'Tandai Insiden Selesai' : 'Akses Terbatas: Hanya Koordinator Gedung ini atau Superadmin yang berhak merubah status Selesai'}
+                      className="p-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500 text-emerald-600 hover:text-white border border-emerald-500/30 text-xs font-semibold transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      <Check className="w-4 h-4" />
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => handleInspect(inc.buildingId)}
+                    className="flex-1 sm:flex-none px-3.5 py-1.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold shadow-sm text-center"
+                  >
+                    Lacak 3D
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -284,6 +331,13 @@ export const IncidentsViewModal: React.FC = () => {
 
             {/* Form Body */}
             <form onSubmit={handleSubmitForm} className="p-6 space-y-3.5 text-xs">
+              {!isSuperAdmin && (
+                <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 flex items-center space-x-2 text-blue-600 dark:text-blue-400 font-medium">
+                  <Lock className="w-3.5 h-3.5 shrink-0" />
+                  <span>Otorisasi Terkunci: Anda melaporkan insiden untuk gedung wewenang Anda.</span>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
@@ -291,8 +345,9 @@ export const IncidentsViewModal: React.FC = () => {
                   </label>
                   <select
                     value={selectedBuildingId}
+                    disabled={!isSuperAdmin}
                     onChange={(e) => handleBuildingChange(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-slate-100 dark:disabled:bg-slate-800/60"
                   >
                     {buildings.map((b) => (
                       <option key={b.id} value={b.id}>
@@ -324,8 +379,9 @@ export const IncidentsViewModal: React.FC = () => {
                 </label>
                 <select
                   value={reporter}
+                  disabled={!isSuperAdmin}
                   onChange={(e) => setReporter(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-slate-100 dark:disabled:bg-slate-800/60"
                 >
                   {teamCoordinators.map((user) => (
                     <option key={user.id} value={`${user.name} (${user.role})`}>

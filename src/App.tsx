@@ -55,8 +55,12 @@ export function App() {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; building: BuildingData | null } | null>(null);
 
   const handleContextMenu = (e: React.MouseEvent, building: BuildingData) => {
-    e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY, building });
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
+    const clientX = e?.clientX ?? (e as any)?.nativeEvent?.clientX ?? (window.innerWidth / 2);
+    const clientY = e?.clientY ?? (e as any)?.nativeEvent?.clientY ?? (window.innerHeight / 2);
+    setContextMenu({ x: clientX, y: clientY, building });
   };
 
   return (

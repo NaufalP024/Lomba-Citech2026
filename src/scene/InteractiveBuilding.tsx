@@ -396,7 +396,12 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
       onDoubleClick={handleDoubleClick}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
-      onContextMenu={(e) => onContextMenu && onContextMenu(e as unknown as React.MouseEvent, building)}
+      onContextMenu={(e) => {
+        if (onContextMenu) {
+          const domEvent = (e && (e as any).nativeEvent) ? (e as any).nativeEvent : e;
+          onContextMenu(domEvent as unknown as React.MouseEvent, building);
+        }
+      }}
     >
       {/* Custom 3D Model GLTF / GLB renderer with ErrorBoundary safety */}
       {archType === 'gltf' && building.modelUrl ? (
