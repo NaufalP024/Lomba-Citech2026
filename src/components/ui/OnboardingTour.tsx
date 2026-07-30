@@ -73,10 +73,10 @@ export const OnboardingTour: React.FC = () => {
     },
     {
       targetId: 'tour-search-button',
-      title: 'Pencarian Cepat Gedung',
-      subtitle: 'Cari Aset dan Insiden',
+      title: 'Pencarian Gedung',
+      subtitle: 'Cari Gedung Publik',
       description:
-        'Klik ikon ini untuk membuka pencarian cepat dan temukan bangunan, laporan insiden, atau data aset dengan segera.',
+        'Klik ikon ini untuk membuka pencarian gedung. Fitur ini hanya mendukung pencarian bangunan publik, bukan insiden atau data lain.',
       icon: <Search className="w-5 h-5 text-indigo-500" />,
       badge: 'Pencarian',
       arrowPosition: 'top-right',
