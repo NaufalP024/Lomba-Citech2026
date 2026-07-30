@@ -10,7 +10,6 @@ import { ChevronDown, ChevronUp, BarChart3 } from 'lucide-react';
 export const RightDashboardPanel: React.FC = () => {
   const selectedBuildingId = useCityStore((state) => state.selectedBuildingId);
   const buildings = useCityStore((state) => state.buildings);
-  const isNightMode = useCityStore((state) => state.isNightMode);
   const activeTab = useCityStore((state) => state.activeTab);
 
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
@@ -43,19 +42,19 @@ export const RightDashboardPanel: React.FC = () => {
         }`}
       >
         {/* Building Occupancy */}
-        <BuildingOccupancyCard building={selectedBuilding} isNightMode={isNightMode} />
+        <BuildingOccupancyCard building={selectedBuilding} />
 
         {/* Eco-Green & Carbon Index */}
-        <EcoGreenCarbonCard building={selectedBuilding} isNightMode={isNightMode} />
+        <EcoGreenCarbonCard building={selectedBuilding} />
 
         {/* Real-time power draw */}
-        <RealTimePowerDrawCard building={selectedBuilding} isNightMode={isNightMode} />
+        <RealTimePowerDrawCard building={selectedBuilding} />
 
         {/* Infrastructure health */}
-        <InfrastructureHealthCard building={selectedBuilding} isNightMode={isNightMode} />
+        <InfrastructureHealthCard building={selectedBuilding} />
 
         {/* Load distribution */}
-        <LoadDistributionCard building={selectedBuilding} isNightMode={isNightMode} />
+        <LoadDistributionCard building={selectedBuilding} />
       </div>
     </aside>
   );

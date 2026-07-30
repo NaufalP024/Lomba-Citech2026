@@ -31,11 +31,11 @@ export const PowerDrawChart: React.FC<PowerDrawChartProps> = ({ data, isNightMod
       trigger: 'axis',
       confine: true,
       extraCssText: 'z-index: 50; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);',
-      backgroundColor: isNightMode ? '#0F172A' : 'rgba(255, 255, 255, 0.98)',
+      backgroundColor: 'rgba(255, 255, 255, 0.98)',
       borderColor: '#3B82F6',
       borderWidth: 1,
       textStyle: {
-        color: isNightMode ? '#F8FAFC' : '#0F172A',
+        color: '#0F172A',
         fontSize: 12,
         fontFamily: 'Inter, sans-serif',
       },

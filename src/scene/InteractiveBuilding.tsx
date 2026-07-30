@@ -34,15 +34,13 @@ class GLTFErrorBoundary extends React.Component<{ fallback: React.ReactNode; chi
   }
 }
 
-// Custom Sub-Component to render GLTF/GLB 3D Building Models with Auto-Scale, Unchanged Building Colors & Night Mode Yellow Window Lights
+// Custom Sub-Component to render GLTF/GLB 3D Building Models with Auto-Scale & Unchanged Building Colors
 const GLTFModelRenderer: React.FC<{
   url: string;
-  isNightMode: boolean;
   isSelected: boolean;
   isHovered: boolean;
   targetDimensions: [number, number, number];
-  nightWindowTexture: THREE.CanvasTexture;
-}> = React.memo(({ url, isNightMode, isSelected, isHovered, targetDimensions, nightWindowTexture }) => {
+}> = React.memo(({ url, isSelected, isHovered, targetDimensions }) => {
   const { scene } = useGLTF(url);
   const [targetW, targetH, targetD] = targetDimensions;
 
@@ -63,10 +61,10 @@ const GLTFModelRenderer: React.FC<{
     bbox.getCenter(center);
 
     let scaleFactor: number;
-    if (url.includes('rumah_sakit') || url.includes('hospital')) {
-      const scaleX = (targetW * 1.25) / (size.x || 1);
-      const scaleZ = (targetD * 1.3) / (size.z || 1);
-      const scaleY = (targetH * 1.3) / (size.y || 1);
+    if (url.includes('rumah_sakit') || url.includes('hospital') || url.includes('rsud') || url.includes('RSUD') || url.includes('bayu_asih')) {
+      const scaleX = targetW / (size.x || 1);
+      const scaleZ = targetD / (size.z || 1);
+      const scaleY = targetH / (size.y || 1);
       scaleFactor = Math.min(scaleX, scaleZ, scaleY);
     } else if (url.includes('harper')) {
       const scaleY = (targetH * 1.45) / (size.y || 1);
@@ -83,6 +81,24 @@ const GLTFModelRenderer: React.FC<{
       const scaleX = (targetW * 1.3) / (size.x || 1);
       const scaleZ = (targetD * 1.3) / (size.z || 1);
       const scaleY = (targetH * 1.2) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('panyawangan')) {
+      // Maximum filling scale for Bale Panyawangan inside fence boundary
+      const scaleX = (targetW * 1.06) / (size.x || 1);
+      const scaleZ = (targetD * 1.06) / (size.z || 1);
+      const scaleY = (targetH * 1.06) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('disnaker')) {
+      // Balanced scaling for Disnakertrans building
+      const scaleX = (targetW * 1.05) / (size.x || 1);
+      const scaleZ = (targetD * 1.05) / (size.z || 1);
+      const scaleY = (targetH * 1.05) / (size.y || 1);
+      scaleFactor = Math.min(scaleX, scaleZ, scaleY);
+    } else if (url.includes('sadang')) {
+      // Balanced scaling for Sadang Terminal Square
+      const scaleX = (targetW * 1.05) / (size.x || 1);
+      const scaleZ = (targetD * 1.05) / (size.z || 1);
+      const scaleY = (targetH * 1.05) / (size.y || 1);
       scaleFactor = Math.min(scaleX, scaleZ, scaleY);
     } else if (url.includes('masjid')) {
       // Grand scaling for Masjid Agung Purwakarta landmark
@@ -142,47 +158,30 @@ const GLTFModelRenderer: React.FC<{
     return { clonedScene: cloned, scaleFactor, offsetX, offsetY, offsetZ };
   }, [scene, targetW, targetH, targetD]);
 
-  // Animate material color dynamically on frame update when clicked (isSelected) or hovered or night mode
+  // Animate material color dynamically on frame update when clicked (isSelected) or hovered
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    meshMaterialsRef.current.forEach(({ mesh, origColor, isWindowMesh }) => {
+    meshMaterialsRef.current.forEach(({ mesh, origColor }) => {
       const mat = mesh.material as THREE.MeshStandardMaterial;
       if (!mat) return;
 
       if (isSelected) {
-        // Bright cyan/blue selection tint on click
         mat.color.set('#7DD3FC');
         const glow = 0.6 + Math.sin(t * 5) * 0.3;
         mat.emissive.set('#00D8FF');
-        mat.emissiveMap = null;
+        if (mat.emissiveMap) { mat.emissiveMap = null; mat.needsUpdate = true; }
         mat.emissiveIntensity = glow;
       } else if (isHovered) {
-        // Soft blue hover tint
         mat.color.set('#93C5FD');
         mat.emissive.set('#3B82F6');
-        mat.emissiveMap = null;
+        if (mat.emissiveMap) { mat.emissiveMap = null; mat.needsUpdate = true; }
         mat.emissiveIntensity = 0.4;
-      } else if (isNightMode) {
-        // Keep original building color completely unchanged (warna gedung ga berubah)
-        mat.color.copy(origColor);
-        if (isWindowMesh) {
-          // Add warm glowing yellow window lights on top
-          mat.emissive.set('#FFB703');
-          mat.emissiveMap = nightWindowTexture;
-          mat.emissiveIntensity = 1.5;
-        } else {
-          mat.emissive.set('#000000');
-          mat.emissiveMap = null;
-          mat.emissiveIntensity = 0;
-        }
       } else {
-        // Day mode - original architectural colors
         mat.color.copy(origColor);
         mat.emissive.set('#000000');
-        mat.emissiveMap = null;
+        if (mat.emissiveMap) { mat.emissiveMap = null; mat.needsUpdate = true; }
         mat.emissiveIntensity = 0;
       }
-      mat.needsUpdate = true;
     });
   });
 
@@ -196,15 +195,15 @@ const GLTFModelRenderer: React.FC<{
 });
 
 // Preload models that actually exist in public/models for instant rendering
-useGLTF.preload('/models/bupati.glb');
-useGLTF.preload('/models/gedung.glb');
-useGLTF.preload('/models/harper.glb');
-useGLTF.preload('/models/masjid_agung.glb');
-useGLTF.preload('/models/panyawangan.glb');
-useGLTF.preload('/models/puskesmas.glb');
-useGLTF.preload('/models/rumah_sakit.glb');
-useGLTF.preload('/models/sadang.glb');
-useGLTF.preload('/models/wikara.glb');
+useGLTF.preload('/models/kantor_bupati.optimized.glb');
+useGLTF.preload('/models/disnakertrans.optimized.glb');
+useGLTF.preload('/models/harper.optimized.glb');
+useGLTF.preload('/models/masjid_agungg.optimized.glb');
+useGLTF.preload('/models/panyawangan.optimized.glb');
+useGLTF.preload('/models/puskesmas.optimized.glb');
+useGLTF.preload('/models/rsud.optimized.glb');
+useGLTF.preload('/models/sadang.optimized.glb');
+useGLTF.preload('/models/wikara.optimized.glb');
 
 export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.memo(({ building, onContextMenu }) => {
   const meshRef = useRef<THREE.Group>(null);
@@ -213,7 +212,6 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
   const selectedBuildingId = useCityStore((state) => state.selectedBuildingId);
   const hoveredBuildingId = useCityStore((state) => state.hoveredBuildingId);
   const focusedBuildingId = useCityStore((state) => state.focusedBuildingId);
-  const isNightMode = useCityStore((state) => state.isNightMode);
   const soundEnabled = useCityStore((state) => state.soundEnabled);
 
   const selectBuilding = useCityStore((state) => state.selectBuilding);
@@ -228,7 +226,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
   const halfH = h / 2;
   const archType = building.architectureType || 'box';
 
-  // Generate procedural window texture for DAY mode
+  // Generate procedural window texture for buildings
   const dayWindowTexture = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 256;
@@ -256,54 +254,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
     return tex;
   }, []);
 
-  // Generate procedural scattered window LIGHT DOTS (warm yellow & gold) for NIGHT mode
-  const nightWindowTexture = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(0, 0, 256, 256);
-
-      const cols = 10;
-      const rows = 16;
-      const cellW = 256 / cols;
-      const cellH = 256 / rows;
-
-      // Realistic warm yellow and amber window light colors
-      const litYellowColors = ['#FFE066', '#FFB703', '#FEF08A', '#FFD166', '#F59E0B'];
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          if (r >= rows - 2) {
-            // Warm entrance lobby glow
-            ctx.fillStyle = (c % 2 === 0) ? '#FCD34D' : '#F59E0B';
-            ctx.fillRect(c * cellW + 4, r * cellH + 4, cellW - 8, cellH - 8);
-          } else {
-            // Scattered warm yellow lit window dots (~20% lit windows)
-            const seed = (r * 19 + c * 11 + Math.floor(h * 23)) % 100;
-            if (seed < 20) {
-              const colorIdx = (r * 3 + c * 5 + Math.floor(h)) % litYellowColors.length;
-              ctx.fillStyle = litYellowColors[colorIdx];
-              ctx.fillRect(c * cellW + 5, r * cellH + 4, cellW - 10, cellH - 8);
-            } else {
-              // Unlit dark window pane
-              ctx.fillStyle = '#000000';
-              ctx.fillRect(c * cellW + 5, r * cellH + 4, cellW - 10, cellH - 8);
-            }
-          }
-        }
-      }
-    }
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(1, Math.max(1, Math.round(h * 1.5)));
-    return tex;
-  }, [h]);
-
-  // Helper to generate building material scaled specifically to any sub-mesh height for uniform window distribution
+  // Helper to generate building material
   const createSubMeshMaterial = (subMeshHeight: number) => {
     const repeatY = Math.max(1, Math.round(subMeshHeight * 1.8));
 
@@ -311,16 +262,11 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
     dayTex.repeat.set(1, repeatY);
     dayTex.needsUpdate = true;
 
-    const nightTex = nightWindowTexture.clone();
-    nightTex.repeat.set(1, repeatY);
-    nightTex.needsUpdate = true;
-
     return (
       <meshStandardMaterial
         ref={materialRef}
-        color={isNightMode ? '#0F172A' : (isSelected ? '#7DD3FC' : building.color || '#D1DBE5')}
-        map={isNightMode ? nightTex : dayTex}
-        emissiveMap={isNightMode ? nightTex : undefined}
+        color={isSelected ? '#7DD3FC' : building.color || '#D1DBE5'}
+        map={dayTex}
         roughness={0.35}
         metalness={0.15}
         transparent={focusedBuildingId !== null && !isFocused}
@@ -334,30 +280,16 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
     if (!materialRef.current) return;
     const t = state.clock.getElapsedTime();
 
-    if (isNightMode) {
-      if (isSelected) {
-        const glowIntensity = 0.6 + Math.sin(t * 4) * 0.25;
-        materialRef.current.emissive.set('#00D8FF');
-        materialRef.current.emissiveIntensity = glowIntensity + 0.4;
-      } else if (isHovered) {
-        materialRef.current.emissive.set('#3B82F6');
-        materialRef.current.emissiveIntensity = 0.5;
-      } else {
-        materialRef.current.emissive.set('#FFFFFF');
-        materialRef.current.emissiveIntensity = 1.35;
-      }
+    if (isSelected) {
+      const glowIntensity = 0.5 + Math.sin(t * 4) * 0.25;
+      materialRef.current.emissive.set('#00D8FF');
+      materialRef.current.emissiveIntensity = glowIntensity;
+    } else if (isHovered) {
+      materialRef.current.emissive.set('#3B82F6');
+      materialRef.current.emissiveIntensity = 0.3;
     } else {
-      if (isSelected) {
-        const glowIntensity = 0.5 + Math.sin(t * 4) * 0.25;
-        materialRef.current.emissive.set('#00D8FF');
-        materialRef.current.emissiveIntensity = glowIntensity;
-      } else if (isHovered) {
-        materialRef.current.emissive.set('#3B82F6');
-        materialRef.current.emissiveIntensity = 0.3;
-      } else {
-        materialRef.current.emissive.set('#000000');
-        materialRef.current.emissiveIntensity = 0;
-      }
+      materialRef.current.emissive.set('#000000');
+      materialRef.current.emissiveIntensity = 0;
     }
 
     if (meshRef.current) {
@@ -423,11 +355,9 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
           >
             <GLTFModelRenderer
               url={building.modelUrl}
-              isNightMode={isNightMode}
               isSelected={isSelected}
               isHovered={isHovered}
               targetDimensions={[w, h, d]}
-              nightWindowTexture={nightWindowTexture}
             />
           </Suspense>
         </GLTFErrorBoundary>
@@ -443,12 +373,12 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
               {/* Grand Central Dome */}
               <mesh castShadow receiveShadow position={[0, h * 0.35, 0]}>
                 <sphereGeometry args={[w * 0.35, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.65]} />
-                <meshStandardMaterial color={isNightMode ? '#38BDF8' : '#0D9488'} roughness={0.2} metalness={0.8} />
+                <meshStandardMaterial color="#0D9488" roughness={0.2} metalness={0.8} />
               </mesh>
               {/* Minaret */}
               <mesh castShadow receiveShadow position={[w * 0.4, h * 0.2, d * 0.4]}>
                 <cylinderGeometry args={[w * 0.06, w * 0.08, h * 1.2, 16]} />
-                <meshStandardMaterial color={isNightMode ? '#334155' : '#CBD5E1'} roughness={0.3} />
+                <meshStandardMaterial color="#CBD5E1" roughness={0.3} />
               </mesh>
             </group>
           )}
@@ -487,7 +417,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
               {[-0.25 * h, 0, 0.25 * h].map((yOffset, idx) => (
                 <mesh key={`ring-${idx}`} position={[0, yOffset, 0]}>
                   <torusGeometry args={[w * 0.49, 0.04, 12, 32]} />
-                  <meshStandardMaterial color={isNightMode ? '#38BDF8' : '#64748B'} metalness={0.8} />
+                  <meshStandardMaterial color="#64748B" metalness={0.8} />
                 </mesh>
               ))}
             </group>
@@ -501,7 +431,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
               </mesh>
               <mesh castShadow receiveShadow position={[0, h * 0.35, 0]} rotation={[0, Math.PI / 4, 0]}>
                 <coneGeometry args={[w * 0.75, h * 0.3, 4]} />
-                <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.3} metalness={0.6} />
+                <meshStandardMaterial color="#475569" roughness={0.3} metalness={0.6} />
               </mesh>
             </group>
           )}
@@ -544,7 +474,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
           {/* Parapet border */}
           <mesh position={[0, 0.1, 0]}>
             <boxGeometry args={[w * 0.9, 0.2, d * 0.9]} />
-            <meshStandardMaterial color={isNightMode ? '#1E293B' : '#94A3B8'} roughness={0.4} />
+            <meshStandardMaterial color="#94A3B8" roughness={0.4} />
           </mesh>
 
           {/* Helipad */}

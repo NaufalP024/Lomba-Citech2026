@@ -1,13 +1,11 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import { useCityStore } from '../../store/useCityStore';
 import { NavTab } from '../../types/city';
-import { Search, Bell, Moon, Sun, HelpCircle, Compass, LogOut, Menu, X, ChevronRight } from 'lucide-react';
+import { Search, Bell, HelpCircle, Compass, LogOut, Menu, X, ChevronRight } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const activeTab = useCityStore((state) => state.activeTab);
   const setActiveTab = useCityStore((state) => state.setActiveTab);
-  const isNightMode = useCityStore((state) => state.isNightMode);
-  const toggleNightMode = useCityStore((state) => state.toggleNightMode);
   
   const setSearchOpen = useCityStore((state) => state.setSearchOpen);
   const toggleNotifications = useCityStore((state) => state.toggleNotifications);
@@ -127,15 +125,6 @@ export const Navbar: React.FC = () => {
           <Compass className="w-4 h-4 text-blue-500 animate-pulse" />
         </button>
 
-        {/* Day/Night Toggle */}
-        <button
-          id="tour-night-mode-toggle"
-          onClick={toggleNightMode}
-          className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
-          title={isNightMode ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Malam'}
-        >
-          {isNightMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
-        </button>
 
         {/* Keyboard Shortcuts Help */}
         <button
@@ -287,17 +276,6 @@ export const Navbar: React.FC = () => {
               Pengaturan & Alat
             </span>
             <div className="grid grid-cols-4 gap-2">
-              <button
-                onClick={() => {
-                  toggleNightMode();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/80 flex flex-col items-center justify-center space-y-1 text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                title="Beralih Tema"
-              >
-                {isNightMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
-                <span className="text-[9px] font-semibold">{isNightMode ? 'Siang' : 'Malam'}</span>
-              </button>
 
               <button
                 onClick={() => {

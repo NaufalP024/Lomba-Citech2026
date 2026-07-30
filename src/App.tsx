@@ -27,7 +27,6 @@ import { BuildingData } from './types/city';
 export function App() {
   const [isLoading, setIsLoading] = useState(true);
   const isAuthenticated = useCityStore((state) => state.isAuthenticated);
-  const isNightMode = useCityStore((state) => state.isNightMode);
   const simulateLiveUpdate = useCityStore((state) => state.simulateLiveUpdate);
   const setTourOpen = useCityStore((state) => state.setTourOpen);
 
@@ -57,7 +56,7 @@ export function App() {
   };
 
   return (
-    <div className={`relative w-screen h-screen overflow-hidden select-none ${isNightMode ? 'dark' : ''}`}>
+    <div className={`relative w-screen h-screen overflow-hidden select-none ${''}`}>
       {/* 3D Scene rendered in background so models pre-load */}
       <CityScene onContextMenu={handleContextMenu} />
 

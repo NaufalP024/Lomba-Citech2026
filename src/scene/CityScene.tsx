@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Lights } from './Lights';
@@ -45,36 +45,38 @@ export const CityScene: React.FC<CitySceneProps> = ({ onContextMenu }) => {
           stencil: false,
         }}
       >
-        <EnvironmentSky />
-        <Lights />
-        <CityGrid />
-        <CampusFence />
-        <HarperFence />
-        <PuskesmasFence />
-        <PrimePlazaFence />
-        <PanyawanganFence />
-        <BupatiFence />
-        <BayuAsihFence />
-        <SadangFence />
-        <DisnakerFence />
-        <MasjidAgungEntrance />
-        <CampusParkingLot />
+        <Suspense fallback={null}>
+          <EnvironmentSky />
+          <Lights />
+          <CityGrid />
+          <CampusFence />
+          <HarperFence />
+          <PuskesmasFence />
+          <PrimePlazaFence />
+          <PanyawanganFence />
+          <BupatiFence />
+          <BayuAsihFence />
+          <SadangFence />
+          <DisnakerFence />
+          <MasjidAgungEntrance />
+          <CampusParkingLot />
 
-        {/* Render interactive city buildings */}
-        <group>
-          {buildings.map((building) => (
-            <InteractiveBuilding
-              key={building.id}
-              building={building}
-              onContextMenu={onContextMenu}
-            />
-          ))}
-        </group>
+          {/* Render interactive city buildings */}
+          <group>
+            {buildings.map((building) => (
+              <InteractiveBuilding
+                key={building.id}
+                building={building}
+                onContextMenu={onContextMenu}
+              />
+            ))}
+          </group>
 
-        <InfrastructureLayerOverlay />
-        <MovingVehicles />
-        <CameraController />
-        <Effects />
+          <InfrastructureLayerOverlay />
+          <MovingVehicles />
+          <CameraController />
+          <Effects />
+        </Suspense>
       </Canvas>
     </div>
   );

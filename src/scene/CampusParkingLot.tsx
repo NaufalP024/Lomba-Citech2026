@@ -1,5 +1,4 @@
 import React from 'react';
-import { useCityStore } from '../store/useCityStore';
 
 /**
  * CampusParkingLot.tsx
@@ -8,7 +7,6 @@ import { useCityStore } from '../store/useCityStore';
  * with exactly 1 parked car (scaled identically to MovingVehicles).
  */
 export const CampusParkingLot: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   // 11 Parking bays spanning end-to-end along the front fence (Z = 18.5)
   const carSlots = [
@@ -30,7 +28,7 @@ export const CampusParkingLot: React.FC = () => {
       {/* End-to-end asphalt parking pad overlay along the front fence */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-14.6, 0.015, 18.5]}>
         <planeGeometry args={[9.0, 1.4]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#CBD5E1'} roughness={0.8} />
+        <meshStandardMaterial color={'#CBD5E1'} roughness={0.8} />
       </mesh>
 
       {/* Car Parking Slots White Line Markings (End-to-End along front fence) */}
@@ -39,17 +37,17 @@ export const CampusParkingLot: React.FC = () => {
           {/* Left Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.32, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Right Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.32, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Back Stop Line (Touching front fence border at Z = +0.55) */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.55]}>
             <planeGeometry args={[0.67, 0.03]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
 
           {/* Exactly 1 Parked Car Mesh inside Slot 6 (Matching MovingVehicles scale) */}
@@ -68,7 +66,7 @@ export const CampusParkingLot: React.FC = () => {
               {/* Headlights (Facing inward toward campus) */}
               <mesh position={[0, 0.12, -0.38]}>
                 <boxGeometry args={[0.28, 0.06, 0.02]} />
-                <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+                <meshBasicMaterial color={'#FEF08A'} />
               </mesh>
               {/* Taillights (Facing front fence/street) */}
               <mesh position={[0, 0.12, 0.38]}>

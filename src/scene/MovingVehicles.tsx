@@ -1,7 +1,6 @@
 import React, { useRef, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useCityStore } from '../store/useCityStore';
 import { TrafficLights } from './TrafficLights';
 
 interface VehicleData {
@@ -14,7 +13,6 @@ interface VehicleData {
 }
 
 export const MovingVehicles: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
   const vehiclesRef = useRef<THREE.Group>(null);
 
   // Traffic Light Cycle State ('GREEN' | 'YELLOW' | 'RED')
@@ -192,7 +190,6 @@ export const MovingVehicles: React.FC = () => {
       <TrafficLights
         nsLightState={nsLightState}
         ewLightState={ewLightState}
-        isNightMode={isNightMode}
       />
 
       {/* Optimized 3D Vehicles */}
@@ -232,7 +229,7 @@ export const MovingVehicles: React.FC = () => {
           {/* Headlights */}
           <mesh position={[0.38, 0.12, 0]}>
             <boxGeometry args={[0.02, 0.06, 0.28]} />
-            <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+            <meshBasicMaterial color={'#FEF08A'} />
           </mesh>
 
           {/* Taillights */}

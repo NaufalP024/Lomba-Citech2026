@@ -6,13 +6,12 @@ import { Zap, Activity, ShieldCheck, Droplet } from 'lucide-react';
 
 export const AnalyticsViewModal: React.FC = () => {
   const activeTab = useCityStore((state) => state.activeTab);
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   if (activeTab !== 'Analytics') return null;
 
   const chartOption = {
     tooltip: { trigger: 'axis', confine: true },
-    legend: { data: ['Beban Jaringan Listrik (MW)', 'Pasokan Energi Surya (MW)'], textStyle: { color: isNightMode ? '#FFF' : '#333' } },
+    legend: { data: ['Beban Jaringan Listrik (MW)', 'Pasokan Energi Surya (MW)'], textStyle: { color: '#333' } },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: analyticsData.hourlyGridPower.map((d) => d.time) },
     yAxis: { type: 'value' },

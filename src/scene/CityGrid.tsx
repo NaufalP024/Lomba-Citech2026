@@ -1,9 +1,7 @@
 import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import * as THREE from 'three';
-import { useCityStore } from '../store/useCityStore';
 
 export const CityGrid: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   // InstancedMesh references for maximum rendering performance (60 FPS)
   const blackCurbsRef = useRef<THREE.InstancedMesh>(null);
@@ -37,7 +35,7 @@ export const CityGrid: React.FC = () => {
         for (let k = 0; k < stripeCount; k++) {
           const dx = (k - (stripeCount - 1) / 2) * gap;
           stripes.push({
-            pos: [ix + dx, 0.026, iz + dz],
+            pos: [ix + dx, 0.036, iz + dz],
             size: [stripeWidth, stripeLength],
           });
         }
@@ -48,7 +46,7 @@ export const CityGrid: React.FC = () => {
         for (let k = 0; k < stripeCount; k++) {
           const dz = (k - (stripeCount - 1) / 2) * gap;
           stripes.push({
-            pos: [ix + dx, 0.026, iz + dz],
+            pos: [ix + dx, 0.036, iz + dz],
             size: [stripeLength, stripeWidth],
           });
         }
@@ -68,7 +66,7 @@ export const CityGrid: React.FC = () => {
       for (let z = -42; z <= 42; z += step) {
         if (Math.abs(z - (-6.5)) < 3.2 || Math.abs(z - 6.5) < 3.2) continue;
         lines.push({
-          pos: [rx, 0.025, z],
+          pos: [rx, 0.028, z],
           size: [0.12, 1.2],
         });
       }
@@ -79,7 +77,7 @@ export const CityGrid: React.FC = () => {
       for (let x = -42; x <= 42; x += step) {
         if (Math.abs(x - (-6.5)) < 3.2 || Math.abs(x - 6.5) < 3.2) continue;
         lines.push({
-          pos: [x, 0.025, rz],
+          pos: [x, 0.028, rz],
           size: [1.2, 0.12],
         });
       }
@@ -106,7 +104,7 @@ export const CityGrid: React.FC = () => {
           if (Math.abs((rx + dx) - (-8.45)) < 0.2 && z >= 1.0 && z <= 3.4) continue;
           // Skip road curb across Puskesmas entrance gap (Z: -3.2 to -1.2)
           if (Math.abs((rx + dx) - (-8.45)) < 0.2 && z >= -3.2 && z <= -1.2) continue;
-          const item = { pos: [rx + dx, 0.025, z] as [number, number, number], size: [curbWidth, segLength * 0.98] as [number, number] };
+          const item = { pos: [rx + dx, 0.032, z] as [number, number, number], size: [curbWidth, segLength * 0.98] as [number, number] };
           if (Math.abs(Math.floor(z)) % 2 === 0) black.push(item);
           else white.push(item);
         }
@@ -118,7 +116,7 @@ export const CityGrid: React.FC = () => {
       [-1.95, 1.95].forEach((dz) => {
         for (let x = -45; x <= 45; x += segLength) {
           if (Math.abs(x - (-6.5)) < 1.9 || Math.abs(x - 6.5) < 1.9) continue;
-          const item = { pos: [x, 0.025, rz + dz] as [number, number, number], size: [segLength * 0.98, curbWidth] as [number, number] };
+          const item = { pos: [x, 0.032, rz + dz] as [number, number, number], size: [segLength * 0.98, curbWidth] as [number, number] };
           if (Math.abs(Math.floor(x)) % 2 === 0) black.push(item);
           else white.push(item);
         }
@@ -131,7 +129,7 @@ export const CityGrid: React.FC = () => {
       intersectionPoints.forEach((iz) => {
         [-1.95, 1.95].forEach((dx) => {
           [-1.95, 1.95].forEach((dz) => {
-            const item = { pos: [ix + dx, 0.025, iz + dz] as [number, number, number], size: [curbWidth * 1.2, curbWidth * 1.2] as [number, number] };
+            const item = { pos: [ix + dx, 0.032, iz + dz] as [number, number, number], size: [curbWidth * 1.2, curbWidth * 1.2] as [number, number] };
             if (Math.abs(Math.floor(ix + dx + iz + dz)) % 2 === 0) black.push(item);
             else white.push(item);
           });
@@ -282,7 +280,7 @@ export const CityGrid: React.FC = () => {
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[90, 90]} />
         <meshStandardMaterial
-          color={isNightMode ? '#0D2216' : '#3B6E38'}
+          color={'#3B6E38'}
           roughness={0.95}
           metalness={0.02}
         />
@@ -307,7 +305,7 @@ export const CityGrid: React.FC = () => {
               >
                 <planeGeometry args={[10.6, 10.6]} />
                 <meshStandardMaterial
-                  color={isNightMode ? '#132E1E' : '#478044'}
+                  color={'#478044'}
                   roughness={0.9}
                 />
               </mesh>
@@ -319,7 +317,7 @@ export const CityGrid: React.FC = () => {
               >
                 <planeGeometry args={[9.8, 9.8]} />
                 <meshStandardMaterial
-                  color={isNightMode ? '#1E293B' : '#64748B'}
+                  color={'#64748B'}
                   roughness={0.7}
                 />
               </mesh>
@@ -331,7 +329,7 @@ export const CityGrid: React.FC = () => {
               >
                 <planeGeometry args={[9.4, 9.4]} />
                 <meshStandardMaterial
-                  color={isNightMode ? '#0F172A' : '#94A3B8'}
+                  color={'#94A3B8'}
                   roughness={0.65}
                 />
               </mesh>
@@ -346,11 +344,7 @@ export const CityGrid: React.FC = () => {
                 >
                   <planeGeometry args={tile.size} />
                   <meshStandardMaterial
-                    color={
-                      isNightMode
-                        ? tile.isAccent ? '#1E293B' : '#334155'
-                        : tile.isAccent ? '#F8FAFC' : '#E2E8F0'
-                    }
+                    color={tile.isAccent ? '#F8FAFC' : '#E2E8F0'}
                     roughness={0.55}
                   />
                 </mesh>
@@ -360,15 +354,15 @@ export const CityGrid: React.FC = () => {
               <group position={[px, 0.018, pz]}>
                 <mesh rotation={[-Math.PI / 2, 0, Math.PI / 4]}>
                   <planeGeometry args={[3.2, 3.2]} />
-                  <meshStandardMaterial color={isNightMode ? '#1E293B' : '#CBD5E1'} roughness={0.5} />
+                  <meshStandardMaterial color={'#CBD5E1'} roughness={0.5} />
                 </mesh>
                 <mesh rotation={[-Math.PI / 2, 0, Math.PI / 4]}>
                   <planeGeometry args={[2.6, 2.6]} />
-                  <meshStandardMaterial color={isNightMode ? '#0F172A' : '#94A3B8'} roughness={0.5} />
+                  <meshStandardMaterial color={'#94A3B8'} roughness={0.5} />
                 </mesh>
                 <mesh rotation={[-Math.PI / 2, 0, 0]}>
                   <planeGeometry args={[1.8, 1.8]} />
-                  <meshStandardMaterial color={isNightMode ? '#1E293B' : '#E2E8F0'} roughness={0.5} />
+                  <meshStandardMaterial color={'#E2E8F0'} roughness={0.5} />
                 </mesh>
               </group>
             </React.Fragment>
@@ -385,7 +379,7 @@ export const CityGrid: React.FC = () => {
             >
               <planeGeometry args={[10.6, 10.6]} />
               <meshStandardMaterial
-                color={isNightMode ? '#132E1E' : '#478044'}
+                color={'#478044'}
                 roughness={0.9}
               />
             </mesh>
@@ -397,7 +391,7 @@ export const CityGrid: React.FC = () => {
             >
               <planeGeometry args={[9.8, 9.8]} />
               <meshStandardMaterial
-                color={isNightMode ? '#1A2638' : '#DDE4ED'}
+                color={'#DDE4ED'}
                 roughness={0.8}
               />
             </mesh>
@@ -409,22 +403,22 @@ export const CityGrid: React.FC = () => {
       {/* North-South Road 1 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-6.5, 0.02, 0]}>
         <planeGeometry args={[3.6, 90]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} metalness={0.1} />
       </mesh>
       {/* North-South Road 2 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[6.5, 0.02, 0]}>
         <planeGeometry args={[3.6, 90]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} metalness={0.1} />
       </mesh>
       {/* East-West Road 1 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -6.5]}>
         <planeGeometry args={[90, 3.6]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} metalness={0.1} />
       </mesh>
       {/* East-West Road 2 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 6.5]}>
         <planeGeometry args={[90, 3.6]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} metalness={0.1} />
       </mesh>
 
       {/* High-Performance Instanced Black Curbs (Only 1 Draw Call!) */}
@@ -433,7 +427,7 @@ export const CityGrid: React.FC = () => {
         args={[undefined, undefined, blackCurbsData.length]}
       >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial color={isNightMode ? '#0F172A' : '#1E293B'} />
+        <meshBasicMaterial color={'#1E293B'} />
       </instancedMesh>
 
       {/* High-Performance Instanced White Curbs (Only 1 Draw Call!) */}
@@ -453,7 +447,7 @@ export const CityGrid: React.FC = () => {
           position={line.pos}
         >
           <planeGeometry args={line.size} />
-          <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.85 : 0.95} />
+          <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
         </mesh>
       ))}
 
@@ -465,7 +459,7 @@ export const CityGrid: React.FC = () => {
           position={stripe.pos}
         >
           <planeGeometry args={stripe.size} />
-          <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.9 : 0.98} />
+          <meshBasicMaterial color="#FFFFFF" transparent opacity={0.98} />
         </mesh>
       ))}
 
@@ -478,17 +472,17 @@ export const CityGrid: React.FC = () => {
       {/* Lower Foliage */}
       <instancedMesh ref={treeFoliageLowRef} args={[undefined, undefined, trees.length]} castShadow>
         <coneGeometry args={[0.55, 0.7, 8]} />
-        <meshStandardMaterial color={isNightMode ? '#0F3818' : '#2D6E37'} roughness={0.8} />
+        <meshStandardMaterial color={'#2D6E37'} roughness={0.8} />
       </instancedMesh>
       {/* Middle Foliage */}
       <instancedMesh ref={treeFoliageMidRef} args={[undefined, undefined, trees.length]} castShadow>
         <coneGeometry args={[0.42, 0.6, 8]} />
-        <meshStandardMaterial color={isNightMode ? '#13471E' : '#3A8A48'} roughness={0.8} />
+        <meshStandardMaterial color={'#3A8A48'} roughness={0.8} />
       </instancedMesh>
       {/* Top Foliage */}
       <instancedMesh ref={treeFoliageTopRef} args={[undefined, undefined, trees.length]} castShadow>
         <coneGeometry args={[0.28, 0.5, 8]} />
-        <meshStandardMaterial color={isNightMode ? '#195425' : '#45A354'} roughness={0.7} />
+        <meshStandardMaterial color={'#45A354'} roughness={0.7} />
       </instancedMesh>
 
     </group>

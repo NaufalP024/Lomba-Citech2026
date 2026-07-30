@@ -41,7 +41,7 @@ Melalui pendekatan **3D Digital Twin Spatial Visualization**, SIGAP menyatukan p
 ### 📊 5. Analisis Kota & Peta Jaringan Mikro-Grid
 - Visualisasi grafik interaktif menggunakan **Apache ECharts** & **Recharts** untuk analisis tren historis.
 - Pemantauan efisiensi HVAC, tingkat okupansi, dan distribusi daya penerangan luar.
-- Fitur ekspor laporan resmi berskala profesional dalam format **PDF** (`jsPDF`) dan **CSV**.
+- Fitur ekspor laporan resmi berskala profesional dalam format **PDF** (`jsPDF`).
 
 ---
 

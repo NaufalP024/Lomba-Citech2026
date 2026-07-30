@@ -1,14 +1,11 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useCityStore } from '../store/useCityStore';
 
 export const EnvironmentSky: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
   const cloudGroupRef = useRef<THREE.Group>(null);
   const particleGroupRef = useRef<THREE.Points>(null);
 
-  // Generate random clouds positions
   const cloudPositions = useMemo(() => {
     const arr: [number, number, number][] = [];
     for (let i = 0; i < 8; i++) {
@@ -21,7 +18,6 @@ export const EnvironmentSky: React.FC = () => {
     return arr;
   }, []);
 
-  // Generate floating dust / ambient light particles
   const particles = useMemo(() => {
     const count = 60;
     const pos = new Float32Array(count * 3);
@@ -44,11 +40,8 @@ export const EnvironmentSky: React.FC = () => {
 
   return (
     <>
-      {/* Background color matching PRD spec #EEF3F8 for day, #080E1E for night */}
-      <color attach="background" args={[isNightMode ? '#080E1E' : '#EEF3F8']} />
-
-      {/* Atmospheric Fog */}
-      <fog attach="fog" args={[isNightMode ? '#080E1E' : '#EEF3F8', 45, 110]} />
+      <color attach="background" args={['#EEF3F8']} />
+      <fog attach="fog" args={['#EEF3F8', 45, 110]} />
 
       {/* Moving Clouds */}
       <group ref={cloudGroupRef}>
@@ -56,9 +49,9 @@ export const EnvironmentSky: React.FC = () => {
           <mesh key={idx} position={pos}>
             <sphereGeometry args={[4 + (idx % 3), 12, 12]} />
             <meshStandardMaterial
-              color={isNightMode ? '#1E293B' : '#FFFFFF'}
+              color="#FFFFFF"
               transparent
-              opacity={isNightMode ? 0.25 : 0.45}
+              opacity={0.45}
               roughness={1}
             />
           </mesh>
@@ -75,7 +68,7 @@ export const EnvironmentSky: React.FC = () => {
         </bufferGeometry>
         <pointsMaterial
           size={0.25}
-          color={isNightMode ? '#00D8FF' : '#3B82F6'}
+          color="#3B82F6"
           transparent
           opacity={0.6}
           sizeAttenuation

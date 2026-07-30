@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useCityStore } from '../store/useCityStore';
 
 /**
  * CampusFence.tsx
@@ -7,7 +6,6 @@ import { useCityStore } from '../store/useCityStore';
  * featuring student seating gazebos (saung tempat duduk) and outdoor park benches.
  */
 export const CampusFence: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   // Generate low compact vertical fence bars
   const fenceBars = useMemo(() => {
@@ -99,7 +97,7 @@ export const CampusFence: React.FC = () => {
           {/* Interior Hanging Warm Lantern Lamp */}
           <mesh position={[0, 0.82, 0]}>
             <sphereGeometry args={[0.05, 12, 12]} />
-            <meshBasicMaterial color={isNightMode ? '#FDE047' : '#FEF08A'} />
+            <meshBasicMaterial color={'#FEF08A'} />
           </mesh>
         </group>
       ))}
@@ -138,7 +136,7 @@ export const CampusFence: React.FC = () => {
       {/* Seamless Asphalt Driveway Connector extending from main road into campus plaza */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-8.8, 0.026, 13.5]}>
         <planeGeometry args={[3.2, 3.2]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} />
       </mesh>
 
       {/* Speed Bump at Campus Gate Entrance (Polisi Tidur Aspal dengan Garis Kuning Miring) */}
@@ -146,7 +144,7 @@ export const CampusFence: React.FC = () => {
         {/* Dark Asphalt Speed Bump Base Strip */}
         <mesh castShadow receiveShadow position={[0, 0.02, 0]}>
           <boxGeometry args={[0.42, 0.04, 3.1]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#1E293B'} roughness={0.9} />
+          <meshStandardMaterial color={'#1E293B'} roughness={0.9} />
         </mesh>
 
         {/* Diagonal Slanted Yellow Safety Stripes (Garis Kuning Miring) */}
@@ -166,46 +164,46 @@ export const CampusFence: React.FC = () => {
       <group position={[-9.7, 0, 11.8]}>
         <mesh castShadow position={[0, 0.35, 0]}>
           <boxGeometry args={[0.25, 0.7, 0.25]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+          <meshStandardMaterial color={'#334155'} roughness={0.4} />
         </mesh>
         <mesh position={[0, 0.72, 0]}>
           <sphereGeometry args={[0.06, 12, 12]} />
-          <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+          <meshBasicMaterial color={'#FEF08A'} />
         </mesh>
       </group>
 
       <group position={[-9.7, 0, 15.2]}>
         <mesh castShadow position={[0, 0.35, 0]}>
           <boxGeometry args={[0.25, 0.7, 0.25]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+          <meshStandardMaterial color={'#334155'} roughness={0.4} />
         </mesh>
         <mesh position={[0, 0.72, 0]}>
           <sphereGeometry args={[0.06, 12, 12]} />
-          <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+          <meshBasicMaterial color={'#FEF08A'} />
         </mesh>
       </group>
 
       {/* ================= COMPACT LOW PERIMETER BASE CURBS ================= */}
       <mesh receiveShadow castShadow position={[-14.5, 0.05, 9.7]}>
         <boxGeometry args={[9.6, 0.1, 0.12]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-19.3, 0.05, 14.5]}>
         <boxGeometry args={[0.12, 0.1, 9.6]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-14.5, 0.05, 19.3]}>
         <boxGeometry args={[9.6, 0.1, 0.12]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
 
       <mesh receiveShadow castShadow position={[-9.7, 0.05, 10.75]}>
         <boxGeometry args={[0.12, 0.1, 2.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-9.7, 0.05, 17.25]}>
         <boxGeometry args={[0.12, 0.1, 4.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
 
       {/* ================= COMPACT LOW TOP FENCE RAILS ================= */}

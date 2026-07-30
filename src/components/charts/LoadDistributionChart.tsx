@@ -13,12 +13,12 @@ export const LoadDistributionChart: React.FC<LoadDistributionChartProps> = ({ di
       trigger: 'item',
       confine: true,
       extraCssText: 'z-index: 50; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);',
-      backgroundColor: isNightMode ? '#0F172A' : 'rgba(255, 255, 255, 0.98)',
-      borderColor: isNightMode ? '#334155' : '#E2E8F0',
+      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+      borderColor: '#E2E8F0',
       borderWidth: 1,
       padding: [6, 10],
       textStyle: {
-        color: isNightMode ? '#F8FAFC' : '#0F172A',
+        color: '#0F172A',
         fontFamily: 'Inter, sans-serif',
         fontSize: 11,
         fontWeight: 500,
@@ -34,7 +34,7 @@ export const LoadDistributionChart: React.FC<LoadDistributionChartProps> = ({ di
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 6,
-          borderColor: isNightMode ? '#1E293B' : '#FFFFFF',
+          borderColor: '#FFFFFF',
           borderWidth: 3,
         },
         label: {

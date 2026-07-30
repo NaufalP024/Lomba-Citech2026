@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useCityStore } from '../store/useCityStore';
 
 /**
  * PanyawanganFence.tsx
@@ -11,7 +10,6 @@ import { useCityStore } from '../store/useCityStore';
  * - Front parking lot row along inner fence (matching red line annotation) with 2 parked cars
  */
 export const PanyawanganFence: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   // Perimeter steel fence bars (retracted inside pad: X: -4.4 to 4.4, Z: -4.4 to 4.4)
   const fenceBars = useMemo(() => {
@@ -69,7 +67,7 @@ export const PanyawanganFence: React.FC = () => {
       {/* Asphalt parking pad overlay along front fence */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[1.4, 0.015, 3.5]}>
         <planeGeometry args={[4.4, 1.3]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#CBD5E1'} roughness={0.8} />
+        <meshStandardMaterial color={'#CBD5E1'} roughness={0.8} />
       </mesh>
 
       {/* Parking Slots White Line Markings & Parked Cars */}
@@ -78,17 +76,17 @@ export const PanyawanganFence: React.FC = () => {
           {/* Left Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.35, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Right Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.35, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Back Stop Line (Outer front fence border at Z = +0.55) */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.55]}>
             <planeGeometry args={[0.73, 0.03]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
 
           {/* Parked Cars */}
@@ -104,7 +102,7 @@ export const PanyawanganFence: React.FC = () => {
               </mesh>
               <mesh position={[0, 0.12, -0.38]}>
                 <boxGeometry args={[0.28, 0.06, 0.02]} />
-                <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+                <meshBasicMaterial color={'#FEF08A'} />
               </mesh>
               <mesh position={[0, 0.12, 0.38]}>
                 <boxGeometry args={[0.28, 0.06, 0.02]} />
@@ -131,14 +129,14 @@ export const PanyawanganFence: React.FC = () => {
       {/* Seamless Asphalt Ramp Connector extending from front street into courtyard */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-2.0, 0.026, 5.2]}>
         <planeGeometry args={[2.8, 2.0]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} />
       </mesh>
 
       {/* Speed Bump at Gate Entrance (Polisi Tidur Aspal dengan Garis Kuning Miring) */}
       <group position={[-2.0, 0.03, 4.8]}>
         <mesh castShadow receiveShadow position={[0, 0.02, 0]}>
           <boxGeometry args={[2.7, 0.04, 0.38]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#1E293B'} roughness={0.9} />
+          <meshStandardMaterial color={'#1E293B'} roughness={0.9} />
         </mesh>
 
         {/* Diagonal Slanted Yellow Stripes */}
@@ -158,48 +156,48 @@ export const PanyawanganFence: React.FC = () => {
       <group position={[-3.4, 0, 4.4]}>
         <mesh castShadow position={[0, 0.35, 0]}>
           <boxGeometry args={[0.22, 0.7, 0.22]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+          <meshStandardMaterial color={'#334155'} roughness={0.4} />
         </mesh>
         <mesh position={[0, 0.72, 0]}>
           <sphereGeometry args={[0.05, 12, 12]} />
-          <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+          <meshBasicMaterial color={'#FEF08A'} />
         </mesh>
       </group>
 
       <group position={[-0.6, 0, 4.4]}>
         <mesh castShadow position={[0, 0.35, 0]}>
           <boxGeometry args={[0.22, 0.7, 0.22]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+          <meshStandardMaterial color={'#334155'} roughness={0.4} />
         </mesh>
         <mesh position={[0, 0.72, 0]}>
           <sphereGeometry args={[0.05, 12, 12]} />
-          <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+          <meshBasicMaterial color={'#FEF08A'} />
         </mesh>
       </group>
 
       {/* ================= COMPACT LOW PERIMETER BASE CURBS ================= */}
       <mesh receiveShadow castShadow position={[0, 0.05, -4.4]}>
         <boxGeometry args={[8.8, 0.1, 0.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-4.4, 0.05, 0.0]}>
         <boxGeometry args={[0.1, 0.1, 8.8]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[4.4, 0.05, 0.0]}>
         <boxGeometry args={[0.1, 0.1, 8.8]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
 
       {/* Front Base Curb Segment 1 */}
       <mesh receiveShadow castShadow position={[-3.8, 0.05, 4.4]}>
         <boxGeometry args={[1.2, 0.1, 0.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       {/* Front Base Curb Segment 2 */}
       <mesh receiveShadow castShadow position={[1.8, 0.05, 4.4]}>
         <boxGeometry args={[4.8, 0.1, 0.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
 
       {/* ================= TOP FENCE RAILS ================= */}
@@ -240,11 +238,11 @@ export const PanyawanganFence: React.FC = () => {
         <group key={`panyawangan-corner-${idx}`} position={[cx, 0, cz]}>
           <mesh castShadow position={[0, 0.32, 0]}>
             <boxGeometry args={[0.22, 0.64, 0.22]} />
-            <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+            <meshStandardMaterial color={'#334155'} roughness={0.4} />
           </mesh>
           <mesh position={[0, 0.66, 0]}>
             <sphereGeometry args={[0.05, 12, 12]} />
-            <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+            <meshBasicMaterial color={'#FEF08A'} />
           </mesh>
         </group>
       ))}

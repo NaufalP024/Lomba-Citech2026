@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import * as THREE from 'three';
-import { useCityStore } from '../store/useCityStore';
 
 // Generate a procedural high-resolution soft radial gradient texture for street light halos
 function createRadialLightTexture(): THREE.CanvasTexture {
@@ -31,7 +30,6 @@ interface StreetLightProps {
 }
 
 const SingleStreetLight: React.FC<StreetLightProps> = ({ position, rotationY = 0, lightTexture }) => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   return (
     <group position={position} rotation={[0, rotationY, 0]}>
@@ -57,37 +55,12 @@ const SingleStreetLight: React.FC<StreetLightProps> = ({ position, rotationY = 0
       <mesh position={[0.52, 2.36, 0]}>
         <boxGeometry args={[0.26, 0.02, 0.1]} />
         <meshStandardMaterial
-          color={isNightMode ? '#FEF08A' : '#94A3B8'}
-          emissive={isNightMode ? '#FDE047' : '#000000'}
-          emissiveIntensity={isNightMode ? 3.5 : 0}
+          color={'#94A3B8'}
+          emissive={'#000000'}
+          emissiveIntensity={0}
         />
       </mesh>
 
-      {/* Soft Additive Light Spot on Asphalt Ground Surface */}
-      {isNightMode && (
-        <>
-          {/* Real Three.js Soft SpotLight */}
-          <pointLight
-            position={[0.52, 2.3, 0]}
-            color="#FEF08A"
-            intensity={2.2}
-            distance={7}
-            decay={2}
-          />
-
-          {/* Smooth Radial Additive Halo Disc on Road (Zero geometry edges!) */}
-          <mesh position={[0.52, 0.035, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <planeGeometry args={[3.8, 3.8]} />
-            <meshBasicMaterial
-              map={lightTexture}
-              transparent
-              opacity={0.85}
-              blending={THREE.AdditiveBlending}
-              depthWrite={false}
-            />
-          </mesh>
-        </>
-      )}
     </group>
   );
 };

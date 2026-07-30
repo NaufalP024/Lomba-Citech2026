@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useCityStore } from '../store/useCityStore';
 
 /**
  * HarperFence.tsx
@@ -10,7 +9,6 @@ import { useCityStore } from '../store/useCityStore';
  * with exactly 2 parked cars (scaled identically to MovingVehicles).
  */
 export const HarperFence: React.FC = () => {
-  const isNightMode = useCityStore((state) => state.isNightMode);
 
   // Vertical steel fence bars for Hotel Harper (retracted inside pad: X: -19.1 to -9.9, Z: 0.0 to 4.5)
   const fenceBars = useMemo(() => {
@@ -75,7 +73,7 @@ export const HarperFence: React.FC = () => {
       {/* Asphalt parking pad overlay */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-12.4, 0.015, 3.6]}>
         <planeGeometry args={[3.2, 1.3]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#CBD5E1'} roughness={0.8} />
+        <meshStandardMaterial color={'#CBD5E1'} roughness={0.8} />
       </mesh>
 
       {/* Front Parking Slots White Line Markings & Parked Car 1 */}
@@ -84,17 +82,17 @@ export const HarperFence: React.FC = () => {
           {/* Left Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.32, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Right Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.32, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Back Stop Line (Outer front fence border at Z = +0.55) */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.55]}>
             <planeGeometry args={[0.67, 0.03]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
 
           {/* Parked Car 1 (Royal Blue) */}
@@ -113,7 +111,7 @@ export const HarperFence: React.FC = () => {
               {/* Headlights (Facing inward) */}
               <mesh position={[0, 0.12, -0.38]}>
                 <boxGeometry args={[0.28, 0.06, 0.02]} />
-                <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+                <meshBasicMaterial color={'#FEF08A'} />
               </mesh>
               {/* Taillights (Facing front fence) */}
               <mesh position={[0, 0.12, 0.38]}>
@@ -129,7 +127,7 @@ export const HarperFence: React.FC = () => {
       {/* Asphalt parking pad overlay */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-12.4, 0.015, 0.9]}>
         <planeGeometry args={[3.2, 1.3]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#CBD5E1'} roughness={0.8} />
+        <meshStandardMaterial color={'#CBD5E1'} roughness={0.8} />
       </mesh>
 
       {/* Rear Parking Slots White Line Markings & Parked Car 2 */}
@@ -138,17 +136,17 @@ export const HarperFence: React.FC = () => {
           {/* Left Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.32, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Right Border Line */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.32, 0, 0]}>
             <planeGeometry args={[0.03, 1.1]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
           {/* Back Stop Line (Outer rear fence border at Z = -0.55) */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -0.55]}>
             <planeGeometry args={[0.67, 0.03]} />
-            <meshBasicMaterial color="#FFFFFF" transparent opacity={isNightMode ? 0.8 : 0.95} />
+            <meshBasicMaterial color="#FFFFFF" transparent opacity={0.95} />
           </mesh>
 
           {/* Parked Car 2 (Crimson Red) */}
@@ -167,7 +165,7 @@ export const HarperFence: React.FC = () => {
               {/* Headlights (Facing inward) */}
               <mesh position={[0, 0.12, 0.38]}>
                 <boxGeometry args={[0.28, 0.06, 0.02]} />
-                <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+                <meshBasicMaterial color={'#FEF08A'} />
               </mesh>
               {/* Taillights (Facing rear fence) */}
               <mesh position={[0, 0.12, -0.38]}>
@@ -195,14 +193,14 @@ export const HarperFence: React.FC = () => {
       {/* Seamless Asphalt Connector Ramp extending from main street into hotel lot */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-9.0, 0.026, 2.1]}>
         <planeGeometry args={[2.0, 2.4]} />
-        <meshStandardMaterial color={isNightMode ? '#151A24' : '#2A2E37'} roughness={0.9} />
+        <meshStandardMaterial color={'#2A2E37'} roughness={0.9} />
       </mesh>
 
       {/* Speed Bump (Polisi Tidur Aspal Garis Kuning Miring) */}
       <group position={[-9.3, 0.03, 2.1]}>
         <mesh castShadow receiveShadow position={[0, 0.02, 0]}>
           <boxGeometry args={[0.38, 0.04, 2.2]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#1E293B'} roughness={0.9} />
+          <meshStandardMaterial color={'#1E293B'} roughness={0.9} />
         </mesh>
         {[-0.8, -0.4, 0, 0.4, 0.8].map((offsetZ, idx) => (
           <mesh
@@ -234,45 +232,45 @@ export const HarperFence: React.FC = () => {
       <group position={[-9.9, 0, 0.9]}>
         <mesh castShadow position={[0, 0.32, 0]}>
           <boxGeometry args={[0.22, 0.64, 0.22]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+          <meshStandardMaterial color={'#334155'} roughness={0.4} />
         </mesh>
         <mesh position={[0, 0.66, 0]}>
           <sphereGeometry args={[0.05, 12, 12]} />
-          <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+          <meshBasicMaterial color={'#FEF08A'} />
         </mesh>
       </group>
 
       <group position={[-9.9, 0, 3.3]}>
         <mesh castShadow position={[0, 0.32, 0]}>
           <boxGeometry args={[0.22, 0.64, 0.22]} />
-          <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+          <meshStandardMaterial color={'#334155'} roughness={0.4} />
         </mesh>
         <mesh position={[0, 0.66, 0]}>
           <sphereGeometry args={[0.05, 12, 12]} />
-          <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+          <meshBasicMaterial color={'#FEF08A'} />
         </mesh>
       </group>
 
       {/* ================= COMPACT LOW PERIMETER BASE CURBS ================= */}
       <mesh receiveShadow castShadow position={[-19.1, 0.05, 2.25]}>
         <boxGeometry args={[0.1, 0.1, 4.5]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-14.5, 0.05, 4.5]}>
         <boxGeometry args={[9.2, 0.1, 0.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-14.5, 0.05, 0.0]}>
         <boxGeometry args={[9.2, 0.1, 0.1]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-9.9, 0.05, 0.45]}>
         <boxGeometry args={[0.1, 0.1, 0.9]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
       <mesh receiveShadow castShadow position={[-9.9, 0.05, 3.8]}>
         <boxGeometry args={[0.1, 0.1, 1.2]} />
-        <meshStandardMaterial color={isNightMode ? '#1E293B' : '#475569'} roughness={0.6} />
+        <meshStandardMaterial color={'#475569'} roughness={0.6} />
       </mesh>
 
       {/* ================= TOP FENCE RAILS ================= */}
@@ -310,11 +308,11 @@ export const HarperFence: React.FC = () => {
         <group key={`harper-corner-${idx}`} position={[cx, 0, cz]}>
           <mesh castShadow position={[0, 0.32, 0]}>
             <boxGeometry args={[0.22, 0.64, 0.22]} />
-            <meshStandardMaterial color={isNightMode ? '#0F172A' : '#334155'} roughness={0.4} />
+            <meshStandardMaterial color={'#334155'} roughness={0.4} />
           </mesh>
           <mesh position={[0, 0.66, 0]}>
             <sphereGeometry args={[0.05, 12, 12]} />
-            <meshBasicMaterial color={isNightMode ? '#38BDF8' : '#FEF08A'} />
+            <meshBasicMaterial color={'#FEF08A'} />
           </mesh>
         </group>
       ))}

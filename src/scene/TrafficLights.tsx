@@ -3,13 +3,11 @@ import React from 'react';
 interface TrafficLightsProps {
   nsLightState: 'GREEN' | 'YELLOW' | 'RED';
   ewLightState: 'GREEN' | 'YELLOW' | 'RED';
-  isNightMode: boolean;
 }
 
 export const TrafficLights: React.FC<TrafficLightsProps> = ({
   nsLightState,
   ewLightState,
-  isNightMode,
 }) => {
   // 4 Main Intersections: [-6.5, -6.5], [6.5, -6.5], [-6.5, 6.5], [6.5, 6.5]
   const intersections: [number, number][] = [
@@ -84,7 +82,7 @@ export const TrafficLights: React.FC<TrafficLightsProps> = ({
                   <pointLight
                     position={[0, 2.68, 0.65]}
                     color="#FF1744"
-                    intensity={isNightMode ? 1.5 : 0.8}
+                    intensity={0.8}
                     distance={3.0}
                   />
                 )}
@@ -98,7 +96,7 @@ export const TrafficLights: React.FC<TrafficLightsProps> = ({
                   <pointLight
                     position={[0, 2.45, 0.65]}
                     color="#FFEA00"
-                    intensity={isNightMode ? 1.5 : 0.8}
+                    intensity={0.8}
                     distance={3.0}
                   />
                 )}
@@ -112,7 +110,7 @@ export const TrafficLights: React.FC<TrafficLightsProps> = ({
                   <pointLight
                     position={[0, 2.22, 0.65]}
                     color="#00E676"
-                    intensity={isNightMode ? 1.5 : 0.8}
+                    intensity={0.8}
                     distance={3.0}
                   />
                 )}
