@@ -7,7 +7,7 @@ import {
   MapPin,
   BarChart3,
   Moon,
-  Search,
+
   CheckCircle2,
   Sparkles,
   Layers,
@@ -22,7 +22,7 @@ interface FeatureStep {
   description: string;
   icon: React.ReactNode;
   badge: string;
-  arrowPosition: 'top-center' | 'top-right' | 'right-center' | 'center';
+  arrowPosition: 'top-center' | 'top-right' | 'bottom-right' | 'right-center' | 'center';
 }
 
 export const OnboardingTour: React.FC = () => {
@@ -38,6 +38,7 @@ export const OnboardingTour: React.FC = () => {
     width: number;
     height: number;
   } | null>(null);
+
 
   // 5 Step Onboarding Tour: Welcome Greeting & Key Application Features
   const steps: FeatureStep[] = [
@@ -71,16 +72,7 @@ export const OnboardingTour: React.FC = () => {
       badge: 'Kontrol 3D',
       arrowPosition: 'center',
     },
-    {
-      targetId: 'tour-search-button',
-      title: 'Pencarian Gedung Publik',
-      subtitle: 'Cari cepat gedung di Purwakarta',
-      description:
-        'Fitur search ini digunakan untuk mencari cepat gedung publik yang ada di Purwakarta. Klik ikon ini untuk membuka pencarian dan temukan bangunan publik secara langsung.',
-      icon: <Search className="w-5 h-5 text-indigo-500" />,
-      badge: 'Pencarian',
-      arrowPosition: 'top-right',
-    },
+
     {
       targetId: 'tour-analytics-panel',
       title: 'Panel Telemetri Real-Time',
@@ -182,10 +174,8 @@ export const OnboardingTour: React.FC = () => {
   let tooltipStyleClass = 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2';
   if (currentStep.targetId === 'tour-navbar-tabs') {
     tooltipStyleClass = 'top-20 left-1/2 -translate-x-1/2';
-  } else if (currentStep.targetId === 'tour-search-button') {
-    tooltipStyleClass = 'top-20 right-4 sm:right-16';
   } else if (currentStep.targetId === 'tour-analytics-panel') {
-    tooltipStyleClass = 'top-24 right-3 sm:right-[410px]';
+    tooltipStyleClass = 'top-28 left-4 sm:left-auto sm:right-[430px]';
   }
 
   return (
@@ -198,6 +188,7 @@ export const OnboardingTour: React.FC = () => {
 
       {/* Contextual Floating Tooltip Balloon */}
       <div
+        key={tourStep}
         className={`fixed z-[70] w-[90vw] sm:w-[360px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-white/60 dark:border-slate-800 rounded-3xl p-5 shadow-2xl transition-all duration-300 animate-in fade-in zoom-in-95 ${tooltipStyleClass}`}
       >
         {/* Pointer Arrow indicator */}
@@ -206,6 +197,9 @@ export const OnboardingTour: React.FC = () => {
         )}
         {currentStep.arrowPosition === 'top-right' && (
           <div className="absolute -top-2 right-8 w-4 h-4 bg-white dark:bg-slate-900 border-t border-l border-white/60 dark:border-slate-800 rotate-45" />
+        )}
+        {currentStep.arrowPosition === 'bottom-right' && (
+          <div className="absolute -top-2 right-6 w-4 h-4 bg-white dark:bg-slate-900 border-t border-l border-white/60 dark:border-slate-800 rotate-45" />
         )}
         {currentStep.arrowPosition === 'right-center' && (
           <div className="absolute top-8 -right-2 w-4 h-4 bg-white dark:bg-slate-900 border-t border-r border-white/60 dark:border-slate-800 rotate-45" />

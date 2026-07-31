@@ -66,11 +66,11 @@ const GLTFModelRenderer: React.FC<{
       const scaleZ = targetD / (size.z || 1);
       const scaleY = targetH / (size.y || 1);
       scaleFactor = Math.min(scaleX, scaleZ, scaleY);
-    } else if (url.includes('harper')) {
-      const scaleY = (targetH * 1.45) / (size.y || 1);
-      const scaleXZ = Math.max((targetW * 1.35) / (size.x || 1), (targetD * 1.35) / (size.z || 1));
+    } else if (url.includes('harper') || url.includes('hotel')) {
+      const scaleY = (targetH * 1.0) / (size.y || 1);
+      const scaleXZ = Math.max((targetW * 0.88) / (size.x || 1), (targetD * 0.88) / (size.z || 1));
       scaleFactor = Math.min(scaleY, scaleXZ);
-    } else if (url.includes('wikara')) {
+    } else if (url.includes('politeknik')) {
       // Balanced scaling for Politeknik Enjinering Indorama
       const scaleX = (targetW * 1.05) / (size.x || 1);
       const scaleZ = (targetD * 1.05) / (size.z || 1);
@@ -197,13 +197,13 @@ const GLTFModelRenderer: React.FC<{
 // Preload models that actually exist in public/models for instant rendering
 useGLTF.preload('/models/kantor_bupati.optimized.glb');
 useGLTF.preload('/models/disnakertrans.optimized.glb');
-useGLTF.preload('/models/harper.optimized.glb');
+useGLTF.preload('/models/hotel.optimized.glb');
 useGLTF.preload('/models/masjid_agungg.optimized.glb');
 useGLTF.preload('/models/panyawangan.optimized.glb');
 useGLTF.preload('/models/puskesmas.optimized.glb');
 useGLTF.preload('/models/rsud.optimized.glb');
 useGLTF.preload('/models/sadang.optimized.glb');
-useGLTF.preload('/models/wikara.optimized.glb');
+useGLTF.preload('/models/politeknik.optimized.glb');
 
 export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.memo(({ building, onContextMenu }) => {
   const meshRef = useRef<THREE.Group>(null);
