@@ -8,8 +8,8 @@ import { BuildingData } from '../types/city';
 function getRoofHeight(b: BuildingData): number {
   const h = b.dimensions[1];
   if (b.architectureType === 'gltf') {
-    // Tuned roof top clearance height for custom 3D GLTF building models
-    return h * 0.65 + 0.2;
+    // Group is at halfH above ground, model top = halfH + halfH = h (full building height)
+    return h + 0.1;
   }
   return h + 0.35;
 }
