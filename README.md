@@ -51,7 +51,7 @@ Melalui pendekatan **3D Digital Twin Spatial Visualization**, SIGAP menyatukan p
 | :--- | :--- | :--- |
 | **Bahasa Pemrograman** | TypeScript / JavaScript (ES6+) | Menjamin keamanan tipe data (*Type Safety*) dan logika aplikasi |
 | **Framework Front-end** | React 18 + Vite | Component-based UI library & bundler super cepat |
-| **Engine 3D & Render** | Three.js, React Three Fiber, Drei, Sketchfab | Rendering 3D Digital Twin, pencahayaan, & inspeksi model |
+| **Engine 3D & Render** | Three.js, React Three Fiber, Drei, Copilot Labs | Rendering 3D Digital Twin, pencahayaan, & inspeksi model |
 | **Styling & Desain** | Tailwind CSS + Framer Motion | Design system responsif, animasi glassmorphism, & tema modern |
 | **State Management** | Zustand | Pengelolaan state terpusat (auth, telemetri gedung, insiden) |
 | **Visualisasi Data** | Apache ECharts & Recharts | Grafik tren konsumsi daya, distribusi beban, & indikator hijau |
