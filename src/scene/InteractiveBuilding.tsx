@@ -530,7 +530,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
       )}
 
       {/* Building Status Light Beacon */}
-      <mesh position={[0, archType === 'gltf' ? 0.35 : (halfH + 0.3), 0]}>
+      <mesh position={[0, halfH + 0.3, 0]}>
         <sphereGeometry args={[0.15, 12, 12]} />
         <meshBasicMaterial
           color={
@@ -547,7 +547,7 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = React.mem
 
       {/* Compact Sleek Hover Tooltip Badge */}
       {isHovered && !isSelected && (
-        <Html position={[0, archType === 'gltf' ? 1.0 : (halfH + 1.2), 0]} center distanceFactor={22} style={{ pointerEvents: 'none' }}>
+        <Html position={[0, halfH + 1.2, 0]} center distanceFactor={22} style={{ pointerEvents: 'none' }}>
           <div className="bg-slate-900/90 text-white font-sans backdrop-blur-md px-3 py-1 rounded-full shadow-xl border border-blue-400/40 text-[11px] font-semibold whitespace-nowrap flex items-center space-x-1.5 animate-in fade-in zoom-in-95 duration-150">
             <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
             <span className="text-blue-300 font-mono">{building.code}</span>
